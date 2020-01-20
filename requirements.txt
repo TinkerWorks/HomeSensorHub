@@ -1,0 +1,2 @@
+paho-mqtt
+adafruit-circuitpython-bme280
