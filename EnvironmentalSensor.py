@@ -26,34 +26,51 @@ class EnvironmentalSensor:
         """
         for address in self.ADDRESSES:
             try:
-                self.sensor = adafruit_bme280.Adafruit_BME280_I2C(self.I2C, self.ADDRESSES)
+                self.sensor = adafruit_bme280.Adafruit_BME280_I2C(self.I2C, address)
                 print("Sensor found at 0x%x" % address)
                 print(type(self.sensor))
             except ValueError as ve:
                 print(ve)
+            except RuntimeError as re:
+                print("These are not the sensors you're looking for.\n" + str(re))
 
             try:
-                self.sensor = adafruit_bme680.Adafruit_BME680_I2C(self.I2C, self.ADDRESSES)
+                self.sensor = adafruit_bme680.Adafruit_BME680_I2C(self.I2C, address)
                 print("Sensor found at 0x%x" % address)
                 print(type(self.sensor))
             except ValueError as ve:
                 print(ve)
+            except RuntimeError as re:
+                print("These are not the sensors you're looking for.\n" + str(re))
 
-    def collect_data(self) -> None:
+    def collect_data(self) -> dict:
         """
         Collect environmental data from the sensor and update self.data_packet
         :return: None
         """
-        self.data_packet['TEMPERATURE'] = self.sensor.temperature
-        self.data_packet['HUMIDITY'] = self.sensor.humidity
-        self.data_packet['PRESSURE'] = self.sensor.pressure
-        self.data_packet['ALTITUDE'] = self.sensor.altitude
+        data_packet = {}
 
-        try:
-            self.data_packet['GAS'] = self.sensor.gas
-        except AttributeError:
-            self.data_packet['GAS'] = None
+        if self.sensor is not None:
+            data_packet['temperature'] = self.sensor.temperature
+            data_packet['humidity'] = self.sensor.humidity
+            data_packet['pressure'] = self.sensor.pressure
+            data_packet['altitude'] = self.sensor.altitude
+
+            try:
+                data_packet['gas'] = self.sensor.gas
+            except AttributeError:
+                pass
+
+        else:
+            print("Sensor not correctly set.")
+
+        return data_packet
 
 
 if __name__ == "__main__":
-    pass
+    test = EnvironmentalSensor()
+
+    while True:
+        data = test.collect_data()
+        print(data)
+        time.sleep(2)
