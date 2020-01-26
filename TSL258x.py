@@ -250,11 +250,9 @@ def main():
   TSL2581_config()
   time.sleep(1)
 
-  # while True:
-  readBME280All()
-
-
-    #time.sleep(2)
+  while True:
+      readBME280All()
+      time.sleep(2)
 
 if __name__=="__main__":
    main()
