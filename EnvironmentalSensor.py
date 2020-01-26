@@ -3,44 +3,57 @@ import time
 import board
 import busio
 import adafruit_bme280
+import adafruit_bme680
 
-addresses = [0x77, 0x76]
 
-sensors = []
+class EnvironmentalSensor:
+    I2C = busio.I2C(board.SCL, board.SDA)
+    ADDRESSES = [0x77, 0x76]
+    SEA_LEVEL_PRESSURE = 1013.25
 
-# Create library object using our Bus I2C port
-i2c = busio.I2C(board.SCL, board.SDA)
+    def __init__(self):
+        self.sensor = None
+        self.probe_sensor()
+        self.data_packet = {}
 
-def probeBME280():
-    for addr in addresses:
+        if self.sensor is not None:
+            self.sensor.sea_level_pressure = self.SEA_LEVEL_PRESSURE
+
+    def probe_sensor(self):
+        """
+        Method which probes the addresses for finding the correct bme280 sensor.
+        :return: The sensor, None if not found at the provided adresses.
+        """
+        for address in self.ADDRESSES:
+            try:
+                self.sensor = adafruit_bme280.Adafruit_BME280_I2C(self.I2C, self.ADDRESSES)
+                print("Sensor found at 0x%x" % address)
+                print(type(self.sensor))
+            except ValueError as ve:
+                print(ve)
+
+            try:
+                self.sensor = adafruit_bme680.Adafruit_BME680_I2C(self.I2C, self.ADDRESSES)
+                print("Sensor found at 0x%x" % address)
+                print(type(self.sensor))
+            except ValueError as ve:
+                print(ve)
+
+    def collect_data(self) -> None:
+        """
+        Collect environmental data from the sensor and update self.data_packet
+        :return: None
+        """
+        self.data_packet['TEMPERATURE'] = self.sensor.temperature
+        self.data_packet['HUMIDITY'] = self.sensor.humidity
+        self.data_packet['PRESSURE'] = self.sensor.pressure
+        self.data_packet['ALTITUDE'] = self.sensor.altitude
+
         try:
-            bme280 = adafruit_bme280.Adafruit_BME280_I2C(i2c, addr)
-            print ("Sensor found at 0x%x" % addr)
-            return bme280
-        except ValueError as ve:
-            print(ve)
-    return None
-
-sensor = probeBME280()
+            self.data_packet['GAS'] = self.sensor.gas
+        except AttributeError:
+            self.data_packet['GAS'] = None
 
 
-# OR create library object using our Bus SPI port
-#spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
-#bme_cs = digitalio.DigitalInOut(board.D10)
-#bme280 = adafruit_bme280.Adafruit_BME280_SPI(spi, bme_cs)
-
-# change this to match the location's pressure (hPa) at sea level
-sensor.sea_level_pressure = 1013.25
-
-while True:
-    print("\nTemperature: %0.1f C" % sensor.temperature)
-    print("Humidity: %0.1f %%" % sensor.humidity)
-    print("Pressure: %0.1f hPa" % sensor.pressure)
-    print("Altitude = %0.2f meters" % sensor.altitude)
-
-    try:
-        print("Gas = %0.2f" % sensor.gas)
-    except AttributeError as ae:
-        print (ae)
-
-    time.sleep(2)
+if __name__ == "__main__":
+    pass

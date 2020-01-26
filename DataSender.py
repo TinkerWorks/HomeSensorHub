@@ -1,6 +1,7 @@
 import paho.mqtt.client as mqtt
 import socket
 
+
 class DataSender:
     host = "unknown"
     temperature_topic = "temperature"
