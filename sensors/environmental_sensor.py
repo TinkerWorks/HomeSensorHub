@@ -1,3 +1,5 @@
+import time
+
 import board
 import busio
 import adafruit_bme280
@@ -41,3 +43,12 @@ class EnvironmentalSensor:
             except RuntimeError as re:
                 print("These are not the sensors you're looking for.\n" + str(re))
 
+
+if __name__ == "__main__":
+    test = EnvironmentalSensor()
+
+    while True:
+        for sensor in test.sensors:
+            data = sensor.get_data()
+            print(data)
+            time.sleep(2)
