@@ -17,7 +17,7 @@ class EnvironmentalSensor:
 
     def probe_sensors(self) -> None:
         """
-        Function which iterated over multiple I2C addresses and sensors probing in the case we have multiple
+        Function which iterates over multiple I2C addresses and sensors probing in the case we have multiple
         types on the same device (eg. BME280, BME680, etc.). In case multiple sensors are connected to the same
         device, we need to correctly assign the sensor to its I2C address.
         :return: None
