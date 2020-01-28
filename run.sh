@@ -17,6 +17,9 @@ case "$1" in
     "light")
         ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/sensors/light_sensor.py
         ;;
+    "mqtt")
+        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/data_sender.py
+        ;;
     *)
         exit 4
         ;;
