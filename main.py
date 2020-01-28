@@ -1,7 +1,6 @@
 import time
 
 from sensors.environmental_sensor import EnvironmentalSensor
-from sensors.sensor import Sensor
 
 if __name__ == "__main__":
     environmental = EnvironmentalSensor()
