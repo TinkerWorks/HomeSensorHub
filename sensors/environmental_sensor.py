@@ -15,10 +15,12 @@ class EnvironmentalSensor:
 
         self.probe_sensors()
 
-    def probe_sensors(self):
+    def probe_sensors(self) -> None:
         """
-        Method which probes each address in order to find the location of the mounted sensor device.
-        :return: The sensor, None if not found at the provided addresses.
+        Function which iterated over multiple I2C addresses and sensors probing in the case we have multiple
+        types on the same device (eg. BME280, BME680, etc.). In case multiple sensors are connected to the same
+        device, we need to correctly assign the sensor to its I2C address.
+        :return: None
         """
         for address in self.ADDRESSES:
             try:
