@@ -1,13 +1,9 @@
-import time
-import sys
 import board
 import busio
 import adafruit_bme280
 import adafruit_bme680
 
-from sensors.Sensor import Sensor
-
-sys.path.append("..")
+from sensors.sensor import Sensor
 
 
 class EnvironmentalSensor:
@@ -21,14 +17,13 @@ class EnvironmentalSensor:
 
     def probe_sensors(self):
         """
-        Method which probes the addresses for finding the correct bme280 sensor.
-        :return: The sensor, None if not found at the provided adresses.
+        Method which probes each address in order to find the location of the mounted sensor device.
+        :return: The sensor, None if not found at the provided addresses.
         """
         for address in self.ADDRESSES:
             try:
                 found_sensor = adafruit_bme280.Adafruit_BME280_I2C(self.I2C, address)
-                new_sensor = Sensor(found_sensor, "bme280")
-                self.sensors.append(new_sensor)
+                self.sensors.append(Sensor(found_sensor, "bme280"))
                 print("Sensor found at 0x%x" % address)
             except ValueError as ve:
                 print(ve)
@@ -36,8 +31,8 @@ class EnvironmentalSensor:
                 print("These are not the sensors you're looking for.\n" + str(re))
 
             try:
-                sensor = adafruit_bme680.Adafruit_BME680_I2C(self.I2C, address)
-                self.sensors.append(Sensor(sensor, "bme680"))
+                found_sensor = adafruit_bme680.Adafruit_BME680_I2C(self.I2C, address)
+                self.sensors.append(Sensor(found_sensor, "bme680"))
                 print("Sensor found at 0x%x" % address)
             except ValueError as ve:
                 print(ve)
