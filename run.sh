@@ -6,13 +6,13 @@ rsync -aAv --progress --delete `pwd`/ pi@raspberry-sensor-dev:~/HomeSensorHub_$U
 
 case "$1" in
     "env")
-        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/EnvironmentalSensor.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/main.py
         ;;
     "motion")
-        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/MotionSensor.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/sensors/motion_sensor.py
         ;;
     "light")
-        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/LightSensor.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/sensors/light_sensor.py
         ;;
     *)
         exit 4
