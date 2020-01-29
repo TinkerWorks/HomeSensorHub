@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from TSL258x import *
+from sensors.drivers.TSL258x import *
 import time
 
 
