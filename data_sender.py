@@ -3,30 +3,28 @@ import socket
 
 
 class DataSender:
-    host = "unknown"
-    temperature_topic = "temperature"
-    humidity_topic = "humidity"
+    HOST = "unknown"
+    TEMPERATURE_TOPIC = "temperature"
+    HUMIDITY_TOPIC = "humidity"
+    CURRENT_TOPIC = "current"
 
-    current_topic = "current"
-
-    def __init__(self, broker_url = "mqtt", broker_port = 1883):
+    def __init__(self, broker_url="mqtt", broker_port=1883):
         self.client = mqtt.Client()
         self.client.connect(broker_url, broker_port)
 
-        self.host = socket.gethostname()
+        self.HOST = socket.gethostname()
 
-    def sendCurrent(self, value, topic):
-        topic = self.host + "/" + topic + "/" + self.current_topic
+    def send_current(self, value, topic):
+        topic = self.HOST + "/" + topic + "/" + self.CURRENT_TOPIC
         pld = f'{value:.3f}'
-        #pld = str(value)
+        # pld = str(value)
         self.client.publish(topic=topic, payload=pld, qos=0, retain=False)
 
+    def send_temperature(self, value):
+        self.send_current(value, self.TEMPERATURE_TOPIC)
 
-    def sendTemperature(self, value):
-        self.sendCurrent(value, self.temperature_topic)
-
-    def sendHumidity(self, value):
-        self.sendCurrent(value, self.humidity_topic)
+    def send_humidity(self, value):
+        self.send_current(value, self.HUMIDITY_TOPIC)
 
 
 if __name__ == "__main__":
@@ -36,6 +34,6 @@ if __name__ == "__main__":
 
     while True:
         sleep(1)
-        ds.sendTemperature (temp)
-        ds.sendHumidity (temp * 2)
+        ds.send_temperature(temp)
+        ds.send_humidity(temp * 2)
         temp += 0.2
