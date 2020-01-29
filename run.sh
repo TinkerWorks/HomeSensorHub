@@ -18,10 +18,10 @@ case "$1" in
         ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/sensors/light_sensor.py
         ;;
     "mqtt")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/data_sender.py
+        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/communication/data_sender.py
         ;;
     "hub")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/sensors/sensor_hub.py
+        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/communication/sensor_hub.py
         ;;
     *)
         exit 4
