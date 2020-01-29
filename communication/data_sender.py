@@ -4,9 +4,11 @@ import socket
 
 class DataSender:
     HOST = "unknown"
+    METRIC_TOPICS = ["temperature", "humidity"]
+    CURRENT_TOPIC = "current"
+
     TEMPERATURE_TOPIC = "temperature"
     HUMIDITY_TOPIC = "humidity"
-    CURRENT_TOPIC = "current"
 
     def __init__(self, broker_url="mqtt", broker_port=1883):
         self.client = mqtt.Client()
