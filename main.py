@@ -1,12 +1,6 @@
-import time
-
-from sensors.environmental_sensor import EnvironmentalSensor
+from communication.data_sender import DataSender
+from communication.sensor_hub import SensorHub
 
 if __name__ == "__main__":
-    environmental = EnvironmentalSensor()
-
-    while True:
-        for sensor in environmental.sensors:
-            data = sensor.get_data()
-            print(data)
-            time.sleep(2)
+    sh = SensorHub()
+    ds = DataSender()
