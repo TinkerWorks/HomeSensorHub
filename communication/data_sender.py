@@ -1,3 +1,5 @@
+import time
+
 import paho.mqtt.client as mqtt
 import socket
 
@@ -16,10 +18,13 @@ class DataSender:
 
         self.HOST = socket.gethostname()
 
+    def send_data(self, data):
+        for topic, value in data.items():
+            self.send_current(value, topic)
+
     def send_current(self, value, topic):
         topic = self.HOST + "/" + topic + "/" + self.CURRENT_TOPIC
         pld = f'{value:.3f}'
-        # pld = str(value)
         self.client.publish(topic=topic, payload=pld, qos=0, retain=False)
 
     def send_temperature(self, value):

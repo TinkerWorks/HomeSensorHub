@@ -10,7 +10,6 @@ if __name__ == "__main__":
     while True:
         sh.collect_all_data()
         data = sh.get_data()
-
-        for topic, value in data.items():
-            ds.send_current(value, topic)
+        ds.send_data(data)
         time.sleep(2)
+
