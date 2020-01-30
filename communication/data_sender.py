@@ -1,7 +1,9 @@
-import time
+import logging
 
 import paho.mqtt.client as mqtt
 import socket
+
+logging.basicConfig(level=logging.INFO)
 
 
 class DataSender:
@@ -22,8 +24,9 @@ class DataSender:
 
     def send_current(self, value, topic):
         topic = self.HOST + "/" + topic + "/current"
-        pld = f'{value:.3f}'
-        self.client.publish(topic=topic, payload=pld, qos=0, retain=False)
+        payload = f'{value:.3f}'
+        logging.info("Sending data:" + topic + " " + str(payload))
+        self.client.publish(topic=topic, payload=payload, qos=0, retain=False)
 
     def send_temperature(self, value):
         self.send_current(value, self.TEMPERATURE_TOPIC)

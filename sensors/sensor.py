@@ -7,14 +7,12 @@ class Sensor:
     def set_sea_level_pressure(self, sea_level_pressure) -> None:
         """
         Used for altitude determination.
-        :return: None
         """
         self.sensor.sea_level_pressure = sea_level_pressure
 
     def get_sensor_name(self) -> str:
         """
         Function which returns the actual name of the sensor (eg. BME280, BME680 etc.).
-        :return:
         """
         return self.name
 

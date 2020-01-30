@@ -1,3 +1,4 @@
+import logging
 import time
 
 import board
@@ -6,6 +7,8 @@ import adafruit_bme280
 import adafruit_bme680
 
 from sensors.sensor import Sensor
+
+logging.basicConfig(level=logging.INFO)
 
 
 class EnvironmentalSensor:
@@ -28,20 +31,22 @@ class EnvironmentalSensor:
             try:
                 found_sensor = adafruit_bme280.Adafruit_BME280_I2C(self.I2C, address)
                 self.sensors.append(Sensor(found_sensor, "bme280"))
-                print("Sensor found at 0x%x" % address)
+                logging.info("Sensor found at 0x%x" % address + ".")
             except ValueError as ve:
-                print(ve)
+                logging.debug(ve)
             except RuntimeError as re:
-                print("These are not the sensors you're looking for.\n" + str(re))
+                logging.info("These are not the sensors you're looking for.\n")
+                logging.debug(re)
 
             try:
                 found_sensor = adafruit_bme680.Adafruit_BME680_I2C(self.I2C, address)
                 self.sensors.append(Sensor(found_sensor, "bme680"))
-                print("Sensor found at 0x%x" % address)
+                logging.info("Sensor found at 0x%x" % address + ".")
             except ValueError as ve:
-                print(ve)
+                logging.debug(ve)
             except RuntimeError as re:
-                print("These are not the sensors you're looking for.\n" + str(re))
+                logging.info("These are not the sensors you're looking for.\n")
+                logging.debug(re)
 
 
 if __name__ == "__main__":
@@ -50,5 +55,5 @@ if __name__ == "__main__":
     while True:
         for sensor in test.sensors:
             data = sensor.get_data()
-            print(data)
+            logging.info(data)
             time.sleep(2)
