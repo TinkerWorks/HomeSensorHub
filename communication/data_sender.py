@@ -6,8 +6,6 @@ import socket
 
 class DataSender:
     HOST = "unknown"
-    METRIC_TOPICS = ["temperature", "humidity"]
-    CURRENT_TOPIC = "current"
 
     TEMPERATURE_TOPIC = "temperature"
     HUMIDITY_TOPIC = "humidity"
@@ -23,7 +21,7 @@ class DataSender:
             self.send_current(value, topic)
 
     def send_current(self, value, topic):
-        topic = self.HOST + "/" + topic + "/" + self.CURRENT_TOPIC
+        topic = self.HOST + "/" + topic + "/current"
         pld = f'{value:.3f}'
         self.client.publish(topic=topic, payload=pld, qos=0, retain=False)
 
