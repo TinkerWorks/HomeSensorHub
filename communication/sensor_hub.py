@@ -1,5 +1,6 @@
 import time
 
+from communication.data_sender import DataSender
 from sensors.environmental_sensor import EnvironmentalSensor
 
 
@@ -36,12 +37,17 @@ class SensorHub:
             self.collect_data_from(sensor)
 
 
-if __name__ == "__main__":
-    se = SensorHub()
+def start_sniffin(interval):
+    sh = SensorHub()
+    ds = DataSender()
 
+    print("Started sniffin...")
     while True:
-        se.collect_all_data()
-        data = se.get_data()
-        print(data)
+        sh.collect_all_data()
+        data = sh.get_data()
+        ds.send_data(data)
+        time.sleep(interval)
 
-        time.sleep(1)
+
+if __name__ == "__main__":
+    start_sniffin(3)
