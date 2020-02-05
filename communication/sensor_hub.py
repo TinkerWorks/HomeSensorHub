@@ -40,18 +40,13 @@ class SensorHub:
         for sensor in self.all_sensors:
             self.collect_data_from(sensor)
 
+    def start_sniffin(self, interval):
+        ds = DataSender()
 
-def start_sniffin(interval):
-    sh = SensorHub()
-    ds = DataSender()
+        logging.info("Started sniffin...")
+        while True:
+            self.collect_all_data()
+            data = self.get_data()
+            ds.send_data(data)
+            time.sleep(interval)
 
-    logging.info("Started sniffin...")
-    while True:
-        sh.collect_all_data()
-        data = sh.get_data()
-        ds.send_data(data)
-        time.sleep(interval)
-
-
-if __name__ == "__main__":
-    start_sniffin(3)

@@ -20,6 +20,9 @@ case "$1" in
     "hub")
         ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/communication/sensor_hub.py
         ;;
+    "main")
+        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/main.py
+        ;;
     *)
         exit 4
         ;;
