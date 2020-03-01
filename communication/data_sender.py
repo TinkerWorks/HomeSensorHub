@@ -1,5 +1,5 @@
 import logging
-
+import time
 import paho.mqtt.client as mqtt
 import socket
 
@@ -12,21 +12,53 @@ class DataSender:
     TEMPERATURE_TOPIC = "temperature"
     HUMIDITY_TOPIC = "humidity"
 
-    def __init__(self, broker_url="mqtt", broker_port=1883):
+    def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.client = mqtt.Client()
-        self.client.connect(broker_url, broker_port)
 
+        self.broker_url_ = broker_url
+        self.broker_port_ = broker_port
         self.HOST = socket.gethostname()
+
+        self.client.enable_logger(logging)
+
+        self.connect()
+
+    def connect(self, retry = 5):
+        while (retry > 0):
+            try:
+                cnct = self.client.connect(self.broker_url_, self.broker_port_)
+                logging.debug("connect result: " + str(cnct))
+                if cnct is 0:
+                    return True
+
+            except ConnectionRefusedError as e:
+                logging.error("connect refused: " + str(e))
+
+            retry-=1
+
+
+        return False
 
     def send_data(self, data):
         for topic, value in data.items():
             self.send_current(value, topic)
+            logging.info("Sending data:" + str(data))
 
     def send_current(self, value, topic):
         topic = self.HOST + "/" + topic + "/current"
         payload = f'{value:.3f}'
-        logging.info("Sending data:" + topic + " " + str(payload))
-        self.client.publish(topic=topic, payload=payload, qos=0, retain=False)
+        logging.info("Sending data to :" + topic + " --> " + str(payload))
+
+        result = (mqtt.MQTT_ERR_AGAIN,0)
+        while result[0] != mqtt.MQTT_ERR_SUCCESS:
+            result = self.client.publish(topic=topic, payload=payload, qos=0, retain=False)
+
+            if(result[0] == mqtt.MQTT_ERR_NO_CONN):
+                logging.warn("MQTT bus unresponsive, trying to reconnect ...")
+                self.connect()
+                time.sleep(1)
+
+
 
     def send_temperature(self, value):
         self.send_current(value, self.TEMPERATURE_TOPIC)
