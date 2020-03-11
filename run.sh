@@ -6,22 +6,22 @@ rsync -aAv --progress --delete "$(pwd)/" pi@raspberry-sensor-dev:~/HomeSensorHub
 
 case "$1" in
     "env")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER//sensors/environmental_sensor.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER//sensors/environmental_sensor.py
         ;;
     "motion")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/sensors/motion_sensor.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/sensors/motion_sensor.py
         ;;
     "light")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/sensors/light_sensor.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/sensors/light_sensor.py
         ;;
     "mqtt")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/communication/data_sender.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/communication/data_sender.py
         ;;
     "hub")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/communication/sensor_hub.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/communication/sensor_hub.py
         ;;
     "main")
-        ssh -t pi@raspberry-sensor-dev PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/main.py
+        ssh -t pi@raspberry-sensor-dev python3 /home/pi/HomeSensorHub_$USER/__init__.py
         ;;
     *)
         exit 4
