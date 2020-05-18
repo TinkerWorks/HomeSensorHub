@@ -3,6 +3,10 @@ from sensors.drivers.TSL258x import *
 import time
 
 
+class LightSensor:
+    def __init__(self, name):
+        self.name = name
+
 if __name__=="__main__":
 
     logging.basicConfig(level=logging.DEBUG)

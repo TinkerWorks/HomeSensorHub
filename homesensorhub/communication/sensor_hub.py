@@ -2,7 +2,7 @@ import logging
 import time
 
 from communication.data_sender import DataSender
-from sensors.environmental_sensor import EnvironmentalSensor
+from sensors.environmental_sensor import EnvironmentalSensorProbe
 
 logging.basicConfig(level=logging.INFO)
 
@@ -16,7 +16,7 @@ class SensorHub:
     def __init__(self):
         self.data = {}
 
-        self.environmental_sensors = EnvironmentalSensor()
+        self.environmental_sensors = EnvironmentalSensorProbe()
 
         self.all_sensors = [self.environmental_sensors]
         # TODO use getattr to iterate only over the sensors instead of hardcoding them into a list.
@@ -30,8 +30,11 @@ class SensorHub:
         from all the type's sensors, for now.
         """
         for sensor in sensor_type.sensors:
+            print("Sensor in for: {}".format(sensor))
             data = sensor.get_data()
             self.data.update(data)
+
+        print("Data after for: {}".format(self.data))
 
     def collect_all_data(self) -> None:
         # TODO Fix the multiple sensors data. When a sensor type has multiple sensors, it actually overwrites the last
@@ -49,4 +52,3 @@ class SensorHub:
             data = self.get_data()
             ds.send_data(data)
             time.sleep(interval)
-

@@ -28,7 +28,7 @@ class DataSender:
             try:
                 cnct = self.client.connect(self.broker_url_, self.broker_port_)
                 logging.debug("connect result: " + str(cnct))
-                if cnct is 0:
+                if cnct == 0:
                     return True
 
             except ConnectionRefusedError as e:
@@ -40,9 +40,10 @@ class DataSender:
         return False
 
     def send_data(self, data):
+        logging.info("Sending data:" + str(data))
+
         for topic, value in data.items():
             self.send_current(value, topic)
-            logging.info("Sending data:" + str(data))
 
     def send_current(self, value, topic):
         topic = self.HOST + "/" + topic + "/current"
