@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 class MotionSensor:
     ms_dict = {}
 
-    def __init__(self, gpio = 7, callback):
+    def __init__(self, gpio = 7, callback = None):
         self.MOTION_GPIO = gpio
         self.callback = None
 
