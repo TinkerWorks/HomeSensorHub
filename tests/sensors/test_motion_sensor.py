@@ -17,7 +17,31 @@ class MotionSensorTests(unittest.TestCase):
 
     PIN = 3
 
+    def test_GetState(self):
+        cases = {
+            (0, False),
+            (1, True),
+        }
+
+        for case in cases:
+            gpio_value = case[0]
+            get_value = case[1]
+
+            GPIO.input.return_value = gpio_value
+            motionCallback = Mock()
+            ms = MotionSensor(self.PIN, motionCallback)
+            ms.initialize()
+            #Record GPIO callback method
+            GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
+
+            self.assertEqual(ms.get(), get_value)
+
+
+
     def test_NormalTransitions(self):
+        # initial state is false
+        GPIO.input.return_value = False
+
         motionCallback = Mock()
         ms = MotionSensor(self.PIN, motionCallback)
         ms.initialize()
@@ -44,6 +68,9 @@ class MotionSensorTests(unittest.TestCase):
             motionCallback.assert_called_with(next_state)
 
     def test_BadTransitions(self):
+        # initial state is false
+        GPIO.input.return_value = False
+
         motionCallback = Mock()
         ms = MotionSensor(self.PIN, motionCallback)
         ms.initialize()
@@ -71,3 +98,4 @@ class MotionSensorTests(unittest.TestCase):
                 motionCallback.assert_called()
             else:
                 motionCallback.assert_not_called()
+

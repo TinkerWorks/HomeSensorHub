@@ -9,10 +9,16 @@ class MotionSensor:
     ms_dict = {}
 
     def __init__(self, gpio = 7, callback = None):
+        self.logger = logging.getLogger(__name__)
         self.MOTION_GPIO = gpio
         self.callback = callback
-        self.motion = False
-        self.logger = logging.getLogger(__name__)
+
+        #Read initial state
+        self.motion = None
+        self.__motionChanged(self.MOTION_GPIO)
+
+    def get(self):
+        return self.motion
 
     def initialize(self):
         GPIO.setmode(GPIO.BOARD)
@@ -32,8 +38,8 @@ class MotionSensor:
             next_motion = False
             self.logger.debug ("Motion Ended %d" % gpio)
 
-        if(self.motion == next_motion):
-            self.logger.warning("Motion Transitioned from {} to {}".format(self.motion, next_motion))
+        if(next_motion == self.motion):
+            self.logger.error("Motion Transitioned from {} to {}".format(self.motion, next_motion))
         else:
             self.motion = next_motion
 
