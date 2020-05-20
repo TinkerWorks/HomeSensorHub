@@ -6,7 +6,7 @@ import RPi.GPIO as GPIO
 class MotionSensor:
     ms_dict = {}
 
-    def __init__(self, gpio = 7, callback):
+    def __init__(self, gpio = 7, callback = None):
         self.MOTION_GPIO = gpio
         self.callback = None
 
@@ -30,15 +30,3 @@ class MotionSensor:
 
         if(self.callback is not None):
             self.callback(motion)
-
-
-if __name__ == "__main__":
-    ms = MotionSensor()
-    ms.initialize()
-
-    while True:
-        try:
-            sleep(1)
-            print("sleep")
-        except KeyboardInterrupt:
-            exit(1)
