@@ -46,7 +46,7 @@ class DataSender:
 
     def send_current(self, value, topic):
         topic = self.HOST + "/" + topic + "/current"
-        payload = f'{value:.3f}'
+        payload = value #TODO: This give us invalid syntax: f'{value:.3f}'
         logging.info("Sending data to :" + topic + " --> " + str(payload))
 
         result = (mqtt.MQTT_ERR_AGAIN,0)
