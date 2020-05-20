@@ -6,4 +6,4 @@ prepare-test: prepare
 	pip3 install --user -r tests/requirements.txt
 
 nosetest: prepare-test
-	$(NT) --with-coverage --cover-html --cover-package=homesensorhub tests
+	$(NT) --with-coverage --cover-html --with-xunit --cover-package=homesensorhub tests

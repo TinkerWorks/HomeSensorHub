@@ -7,15 +7,14 @@ pipeline {
         stage('... Environment preparation ...') {
             steps {
                 echo "... preparing python environment required for project ..."
-                sh "pip3 install -r requirements.txt"
-                sh "pip3 install -r test/requirements.txt"
+                sh "make prepare-test"
             }
         }
         stage('UnitTest') {
             steps {
                 ansiColor('xterm') {
                     echo '... Testing ...'
-                    sh "~/.local/bin/nosetests . --with-xunit"
+                    sh "make nosetest"
                 }
             }
             post {
