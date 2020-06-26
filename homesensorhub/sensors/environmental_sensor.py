@@ -11,10 +11,10 @@ logging.basicConfig(level=logging.INFO)
 
 
 class EnvironmentalSensor:
-    def __init__(self, sensor, name):
+    def __init__(self, sensor="undefined", name="undefined"):
         self.sensor = sensor
         self.name = name
-        self.data_packet = None
+        self.data = {}
 
     def set_sea_level_pressure(self, sea_level_pressure) -> None:
         """
@@ -30,17 +30,17 @@ class EnvironmentalSensor:
 
     def get_data(self) -> dict:
         self.collect_data()
-        return self.data_packet
+        return self.data
 
     def collect_data(self) -> None:
-        self.data_packet = {'temperature': self.sensor.temperature,
+        self.data = {'temperature': self.sensor.temperature,
                             'humidity': self.sensor.humidity,
                             'pressure': self.sensor.pressure,
                             'altitude': self.sensor.altitude
                             }
 
         try:
-            self.data_packet['gas'] = self.sensor.gas
+            self.data['gas'] = self.sensor.gas
         except AttributeError:
             pass
 
@@ -81,6 +81,7 @@ class EnvironmentalSensorProbe:
                     logging.debug(re)
 
         print(str(self.sensors))
+
 
 if __name__ == "__main__":
     test = EnvironmentalSensorProbe()
