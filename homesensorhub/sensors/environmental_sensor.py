@@ -1,4 +1,6 @@
 """Module which implements the environmantal sensors functionality."""
+from sensors.sensor import Sensor
+
 import logging
 import time
 
@@ -11,7 +13,7 @@ import adafruit_bme680
 logging.basicConfig(level=logging.INFO)
 
 
-class EnvironmentalSensor:
+class EnvironmentalSensor(Sensor):
     """Class which implements the environmantal sensor functionality."""
 
     def __init__(self, sensor="undefined", name="undefined"):
@@ -23,30 +25,11 @@ class EnvironmentalSensor:
 
         :return: None
         """
-        self.sensor = sensor
-        self.name = name
-        self.data = {}
+        super().__init__(sensor, name)
 
     def set_sea_level_pressure(self, sea_level_pressure) -> None:
         """Determine altitude based on this."""
         self.sensor.sea_level_pressure = sea_level_pressure
-
-    def get_sensor_name(self) -> str:
-        """
-        Return the actual name of the sensor (eg. BME280, BME680 etc.).
-
-        :return: string
-        """
-        return self.name
-
-    def get_data(self) -> dict:
-        """
-        Return the collected data from this environmental sensor.
-
-        :return: dictionary
-        """
-        self.collect_data()
-        return self.data
 
     def collect_data(self) -> None:
         """

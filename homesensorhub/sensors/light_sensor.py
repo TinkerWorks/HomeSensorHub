@@ -1,6 +1,7 @@
 """Module which implements the light sensor functionality."""
 # !/usr/bin/env python3
 from drivers.TSL258x import TSL258x
+from sensor import Sensor
 import logging
 import time
 
@@ -8,7 +9,7 @@ import time
 logging.basicConfig(level=logging.DEBUG)
 
 
-class LightSensor:
+class LightSensor(Sensor):
     """Class which implements the light sensor functionality."""
 
     def __init__(self, sensor="undefined", name="undefined"):
@@ -17,9 +18,7 @@ class LightSensor:
 
         By setting up the sensor, its name and the data gathered from it.
         """
-        self.name = name
-        self.data = {}
-        self.sensor = sensor
+        super().__init__(sensor, name)
 
     def collect_data(self) -> bool:
         """
@@ -37,11 +36,6 @@ class LightSensor:
         except AttributeError:
             print("The sensor was not set up.")
             return False
-
-    def get_data(self) -> dict:
-        """Return the collected light sensor data as a dictionary."""
-        self.collect_data()
-        return self.data
 
 
 class LightSensorProbe:
