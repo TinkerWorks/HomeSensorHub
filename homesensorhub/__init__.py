@@ -1,3 +1,4 @@
+"""Entry point for the application."""
 from communication.sensor_sink import SensorSink
 
 if __name__ == "__main__":
