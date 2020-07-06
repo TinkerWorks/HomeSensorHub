@@ -12,13 +12,21 @@ class LightSensor:
     """Class which implements the light sensor functionality."""
 
     def __init__(self, sensor="undefined", name="undefined"):
+        """
+        Initialise the light sensor class.
+
+        By setting up the sensor, its name and the data gathered from it.
+        """
         self.name = name
         self.data = {}
         self.sensor = sensor
 
     def collect_data(self) -> bool:
-        # logging.debug("(ligt) collect data sensor: {}; self: {}" \
-        #   .format(self.sensor, self))
+        """
+        Collect data from light sensor.
+
+        The data from the sensor hub is measured in lux.
+        """
         try:
             sensor_lux = self.sensor.read()
             self.data = {
@@ -31,6 +39,7 @@ class LightSensor:
             return False
 
     def get_data(self) -> dict:
+        """Return the collected light sensor data as a dictionary."""
         self.collect_data()
         return self.data
 
@@ -61,14 +70,10 @@ class LightSensorProbe:
                                    name="light")
 
         sensors.append(light_sensor)
-
-        # logging.debug("(light) PART NO: {}".format(self.sensor.part_no))
-        # logging.debug("(light) REV NO: {}".format(self.sensor.rev_no))
-        # logging.debug("(ligt) sensor: {},self: {}".format(self.sensor, self))
-
         return sensors
 
     def get_sensors(self):
+        """Return the list of found sensors."""
         return self.__sensors
 
 

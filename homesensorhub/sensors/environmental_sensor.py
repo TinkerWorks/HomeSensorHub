@@ -1,3 +1,4 @@
+"""Module which implements the environmantal sensors functionality."""
 import logging
 import time
 
@@ -11,33 +12,56 @@ logging.basicConfig(level=logging.INFO)
 
 
 class EnvironmentalSensor:
+    """Class which implements the environmantal sensor functionality."""
+
     def __init__(self, sensor="undefined", name="undefined"):
+        """
+        Initialise the environmental sensor data.
+
+        Each type of this sensor has a name, the actual sensor which was
+        discovered after probing and the data which will be collected using it.
+
+        :return: None
+        """
         self.sensor = sensor
         self.name = name
         self.data = {}
 
     def set_sea_level_pressure(self, sea_level_pressure) -> None:
-        """
-        Used for altitude determination.
-        """
+        """Determine altitude based on this."""
         self.sensor.sea_level_pressure = sea_level_pressure
 
     def get_sensor_name(self) -> str:
         """
-        Function which returns the actual name of the sensor (eg. BME280, BME680 etc.).
+        Return the actual name of the sensor (eg. BME280, BME680 etc.).
+
+        :return: string
         """
         return self.name
 
     def get_data(self) -> dict:
+        """
+        Return the collected data from this environmental sensor.
+
+        :return: dictionary
+        """
         self.collect_data()
         return self.data
 
     def collect_data(self) -> None:
+        """
+        Collect the data from this sensor.
+
+        The data is formed of a set of temperature, humidity, pressure and
+        altitude values.
+
+        :return: None
+        """
         self.data = {'temperature': self.sensor.temperature,
-                            'humidity': self.sensor.humidity,
-                            'pressure': self.sensor.pressure,
-                            'altitude': self.sensor.altitude
-                            }
+                     'humidity': self.sensor.humidity,
+                     'pressure': self.sensor.pressure,
+                     'altitude': self.sensor.altitude
+                     }
 
         try:
             self.data['gas'] = self.sensor.gas
@@ -46,19 +70,29 @@ class EnvironmentalSensor:
 
 
 class EnvironmentalSensorProbe:
+    """Class which implements proving for multiple environmantal sensors."""
+
     I2C = busio.I2C(board.SCL, board.SDA)
     ADDRESSES = [0x77, 0x76]
 
-    def __init__(self):
+    def __init__(self) -> None:
+        """Initialise the list of sensors for the probing.
+
+        :return: None
+        """
         self.sensors = []
 
         self.probe_sensors()
 
     def probe_sensors(self) -> None:
         """
-        Function which iterates over multiple I2C addresses and sensors probing in the case we have multiple
-        types on the same device (eg. BME280, BME680, etc.). In case multiple sensors are connected to the same
+        Probe for multiple possible sensors.
+
+        Function which iterates over multiple I2C addresses and sensors probing
+        in the case we have multiple types on the same device (eg. BME280,
+        BME680, etc.). In case multiple sensors are connected to the same
         device, we need to correctly assign the sensor to its I2C address.
+
         :return: None
         """
         sensor_choices = {
@@ -69,15 +103,19 @@ class EnvironmentalSensorProbe:
         for address in self.ADDRESSES:
             for sensor in sensor_choices:
                 sensor_probe_function = sensor[0]
-                sensor_pretty_name = sensor[0]
+                sensor_name = sensor[0]
                 try:
                     found_sensor = sensor_probe_function(self.I2C, address)
-                    self.sensors.append(EnvironmentalSensor(found_sensor, sensor_pretty_name))
-                    logging.info("Environmental Sensor {} found at {}".format(sensor_pretty_name, hex(address)))
+                    environmental_sensor = EnvironmentalSensor(found_sensor,
+                                                               sensor_name)
+                    self.sensors.append(environmental_sensor)
+                    logging.info("Environmental Sensor {} found at {}".format(
+                        sensor_name, hex(address)))
                 except ValueError as ve:
                     logging.debug(ve)
                 except RuntimeError as re:
-                    logging.info("These are not the sensors you're looking for.\n")
+                    logging.info("These are not the sensors"
+                                 "you're looking for")
                     logging.debug(re)
 
         print(str(self.sensors))
