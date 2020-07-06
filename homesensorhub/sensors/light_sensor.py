@@ -36,8 +36,8 @@ class LightSensor(Sensor):
             }
 
             return True
-        except AttributeError:
-            print("The sensor was not set up.")
+        except AttributeError as ae:
+            print("The sensor was not set up: {}".format(ae))
             return False
 
 
@@ -61,6 +61,7 @@ class LightSensorProbe:
         """
         sensor = TSL258x.probe()
         sensor.config()
+
         sensors = []
 
         light_sensor = LightSensor(sensor=sensor,
