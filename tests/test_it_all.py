@@ -1,7 +1,7 @@
-from communication.sensor_hub import SensorHub
+from communication.sensor_sink import SensorSink
 import unittest
 
 class TestItAll(unittest.TestCase):
     def test_it_all(self):
-        sensor_hub = SensorHub()
-        sensor_hub.start_sniffin(interval=3)
+        sensor_sink = SensorSink()
+        sensor_sink.sink(interval=3)

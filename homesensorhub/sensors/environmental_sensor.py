@@ -63,7 +63,7 @@ class EnvironmentalSensorProbe:
 
         :return: None
         """
-        self.sensors = []
+        self.__sensors = []
 
         self.probe_sensors()
 
@@ -91,7 +91,7 @@ class EnvironmentalSensorProbe:
                     found_sensor = sensor_probe_function(self.I2C, address)
                     environmental_sensor = EnvironmentalSensor(found_sensor,
                                                                sensor_name)
-                    self.sensors.append(environmental_sensor)
+                    self.__sensors.append(environmental_sensor)
                     logging.info("Environmental Sensor {} found at {}".format(
                         sensor_name, hex(address)))
                 except ValueError as ve:
@@ -101,7 +101,9 @@ class EnvironmentalSensorProbe:
                                  "you're looking for")
                     logging.debug(re)
 
-        print(str(self.sensors))
+    def get_sensors(self):
+        """Return the list of found sensors."""
+        return self.__sensors
 
 
 if __name__ == "__main__":

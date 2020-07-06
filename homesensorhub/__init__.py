@@ -1,5 +1,5 @@
-from communication.sensor_hub import SensorHub
+from communication.sensor_sink import SensorSink
 
 if __name__ == "__main__":
-    sensor_hub = SensorHub()
-    sensor_hub.start_sniffin(3)
+    sensor_sink = SensorSink()
+    sensor_sink.sink_and_send(3)

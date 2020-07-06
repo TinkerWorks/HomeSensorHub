@@ -20,7 +20,7 @@ case "$2" in
         ssh -t pi@$HOST PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/homesensorhub/communication/data_sender.py
         ;;
     "hub")
-        ssh -t pi@$HOST PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/homesensorhub/communication/sensor_hub.py
+        ssh -t pi@$HOST PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/homesensorhub/communication/sensor_sink.py
         ;;
     "main")
         ssh -t pi@$HOST PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/homesensorhub/__init__.py
