@@ -1,12 +1,15 @@
 """Module which implements the light sensor functionality."""
 # !/usr/bin/env python3
-from drivers.TSL258x import TSL258x
-from sensor import Sensor
+from sensors.drivers.TSL258x import TSL258x
+from sensors.sensor import Sensor
 import logging
 import time
 
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.DEBUG,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 
 class LightSensor(Sensor):

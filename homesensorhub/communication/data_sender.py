@@ -3,7 +3,10 @@ import time
 import paho.mqtt.client as mqtt
 import socket
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format='%(asctime)s %(levelname)-8s %(message)s',
+    level=logging.INFO,
+    datefmt='%Y-%m-%d %H:%M:%S')
 
 
 class DataSender:
@@ -40,8 +43,6 @@ class DataSender:
         return False
 
     def send_data(self, data):
-        logging.info("Sending data:" + str(data))
-
         for topic, value in data.items():
             self.send_current(value, topic)
 
