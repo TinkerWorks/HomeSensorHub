@@ -1,25 +1,43 @@
 
 import sys
-print(str(sys.path))
 
-from sensors.light_sensor import LightSensor
+from mock import Mock
+if 'sensors.drivers.TSL258x' not in sys.modules.keys():
+    sys.modules['sensors.drivers.TSL258x'] = Mock()
+if 'sensors.drivers' not in sys.modules.keys():
+    sys.modules['sensors.drivers'] = Mock()
+
+from sensors.drivers.TSL258x import TSL258x
+from sensors.light_sensor import LightSensor, LightSensorProbe
+
 import unittest
 import time
-
+import random
 
 
 class TestLightSensors(unittest.TestCase):
 
     def test_light_sensor_sent_value(self):
-        time_end = time.time() + 60
-        collecetd_data = []
+
+        ls = TSL258x()
+        TSL258x.probe.return_value = ls
+
+        time_end = time.time() + 1
+        collected_data = []
 
         while time.time() < time_end:
-            light_sensor = LightSensor("test_light")
+            ls_probe = LightSensorProbe()
+            ls_probe.probe_sensors()
 
-            collecetd_data.append(light_sensor.get_data(interval=1))
+            for sensor in ls_probe.get_sensors():
+                ls.read.return_value = random.randint(0, sys.maxsize * 2 + 1)
 
-            time.sleep(1)
+                collected_data.append(sensor.get_data())
 
-        if len(collecetd_data) == 0:
+                actual_data = sensor.get_data()['lux']
+                self.assertEquals(actual_data, ls.read.return_value)
+
+            time.sleep(0.1)
+
+        if len(collected_data) == 0:
             raise Exception("No value gathered from light sensor.")
