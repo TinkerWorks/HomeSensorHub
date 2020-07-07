@@ -11,9 +11,8 @@ class Sensor:
         Each sensor has a name and data which will be collected. Each sensor
         will be detected by probing by each type (light, motion, environment).
         """
-        self.sensor = sensor
-        self.name = name
-        self.data = None
+        self.__sensor = sensor
+        self.__name = name
 
     def get_sensor_name(self) -> str:
         """
@@ -21,13 +20,8 @@ class Sensor:
 
         :return: string
         """
-        return self.name
+        return self.__name
 
-    def get_data(self) -> dict:
-        """
-        Return the collected data from this sensor.
-
-        :return: dictionary
-        """
-        self.collect_data()
-        return self.data
+    def get_sensor(self):
+        """Return the physical sensor attached to this object."""
+        return self.__sensor

@@ -33,39 +33,13 @@ class SensorSink:
 
         :return: None
         """
-        self.data = {}
+        self.environmental_probe = EnvironmentalSensorProbe()
+        self.light_probe = LightSensorProbe()
 
-        self.environmental_sensors = EnvironmentalSensorProbe()
-        self.light_sensors = LightSensorProbe()
+        self.probes = [self.environmental_probe,
+                       self.light_probe]
 
-        self.all_sensors = [self.environmental_sensors,
-                            self.light_sensors]
-        # TODO use getattr to iterate only over the sensors instead of
-        # hardcoding them into a list.
-
-    def get_data(self) -> dict:
-        """
-        Return the collected data.
-
-        :return directory
-        """
-        return self.data
-
-    def collect_data_from(self, sensor_type) -> None:
-        """
-        Collect data from a specified sensor.
-
-        Since all of the types (eg. environmental, motion, light) can have
-        multiple sensors, over a call we get the data from all the selected
-        type's sensors (for now).
-
-        :return: None
-        """
-        for sensor in sensor_type.get_sensors():
-            data = sensor.get_data()
-            self.data.update(data)
-
-    def sink(self) -> None:
+    def sink(self) -> dict:
         """
         Collect all the data from all the sensors.
 
@@ -75,8 +49,15 @@ class SensorSink:
         # sensors, it actually overwrites the last value rather than having
         # different values for different sensors
         logging.debug("Collecting and sinking all data.")
-        for sensor in self.all_sensors:
-            self.collect_data_from(sensor)
+
+        sinked_data = {}
+
+        for probe in self.probes:
+            for sensor in probe.get_sensors():
+                data = sensor.collect_data()
+                sinked_data.update(data)
+
+        return sinked_data
 
     def sink_and_send(self, interval) -> None:
         """
@@ -88,6 +69,6 @@ class SensorSink:
         sender = DataSender()
 
         while True:
-            self.sink()
-            sender.send_data(self.data)
+            sinked_data = self.sink()
+            sender.send_data(sinked_data)
             time.sleep(interval)

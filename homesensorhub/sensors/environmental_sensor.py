@@ -2,7 +2,6 @@
 from sensors.sensor import Sensor
 
 import logging
-import time
 
 import board
 import busio
@@ -31,25 +30,28 @@ class EnvironmentalSensor(Sensor):
         """Determine altitude based on this."""
         self.sensor.sea_level_pressure = sea_level_pressure
 
-    def collect_data(self) -> None:
+    def collect_data(self) -> dict:
         """
         Collect the data from this sensor.
 
         The data is formed of a set of temperature, humidity, pressure and
-        altitude values.
+        altitude values. If possible, gas is also read.
 
         :return: None
         """
-        self.data = {'temperature': self.sensor.temperature,
-                     'humidity': self.sensor.humidity,
-                     'pressure': self.sensor.pressure,
-                     'altitude': self.sensor.altitude
+        sensor_data = {
+                     'temperature': self.get_sensor().temperature,
+                     'humidity': self.get_sensor().humidity,
+                     'pressure': self.get_sensor().pressure,
+                     'altitude': self.get_sensor().altitude
                      }
 
         try:
-            self.data['gas'] = self.sensor.gas
+            sensor_data['gas'] = self.get_sensor().gas
         except AttributeError:
             pass
+
+        return sensor_data
 
 
 class EnvironmentalSensorProbe:
@@ -63,11 +65,9 @@ class EnvironmentalSensorProbe:
 
         :return: None
         """
-        self.__sensors = []
+        self.__sensors = self.__probe_sensors()
 
-        self.probe_sensors()
-
-    def probe_sensors(self) -> None:
+    def __probe_sensors(self) -> list:
         """
         Probe for multiple possible sensors.
 
@@ -83,6 +83,8 @@ class EnvironmentalSensorProbe:
             (adafruit_bme680.Adafruit_BME680_I2C, "bme680")
         }
 
+        probed_sensors = []
+
         for address in self.ADDRESSES:
             for sensor in sensor_choices:
                 sensor_probe_function = sensor[0]
@@ -91,7 +93,7 @@ class EnvironmentalSensorProbe:
                     found_sensor = sensor_probe_function(self.I2C, address)
                     environmental_sensor = EnvironmentalSensor(found_sensor,
                                                                sensor_name)
-                    self.__sensors.append(environmental_sensor)
+                    probed_sensors.append(environmental_sensor)
                     logging.info("Environmental Sensor {} found at {}".format(
                         sensor_name, hex(address)))
                 except ValueError as ve:
@@ -101,7 +103,8 @@ class EnvironmentalSensorProbe:
                                  "you're looking for")
                     logging.debug(re)
 
+        return probed_sensors
+
     def get_sensors(self):
         """Return the list of found sensors."""
         return self.__sensors
-

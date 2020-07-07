@@ -22,22 +22,25 @@ class LightSensor(Sensor):
         """
         super().__init__(sensor, name)
 
-    def collect_data(self) -> bool:
+    def collect_data(self) -> dict:
         """
         Collect data from light sensor.
 
-        The data from the sensor hub is measured in lux.
+        The data from the sensor hub is measured in lux. If reading the sensor
+        fails, return None.
         """
         try:
-            sensor_lux = self.sensor.read()
-            self.data = {
+            sensor_lux = self.get_sensor().read()
+            sensor_data = {
                 'lux': sensor_lux
             }
 
-            return True
+            return sensor_data
         except AttributeError as ae:
-            print("The sensor was not set up: {}".format(ae))
-            return False
+            print("The light sensor was not set up: {}".format(ae))
+            # Not sure if it should actually return None in case of failure.
+            # I'll check this.
+            return None
 
 
 class LightSensorProbe:
@@ -50,14 +53,15 @@ class LightSensorProbe:
         In case there will be more than one light sensor, each will be found
         here.
         """
-        self.__sensors = self.probe_sensors()
+        self.__sensors = self.__probe_sensors()
 
-    def probe_sensors(self) -> list:
+    def __probe_sensors(self) -> list:
         """
         Probe and configure light sensors.
 
         For now there is only one option, using TSL258x.
         """
+        # TODO This code smells. Not sure why...
         sensor = TSL258x.probe()
         sensor.config()
 
