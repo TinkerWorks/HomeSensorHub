@@ -27,14 +27,13 @@ class TestLightSensors(unittest.TestCase):
 
         while time.time() < time_end:
             ls_probe = LightSensorProbe()
-            ls_probe.probe_sensors()
 
             for sensor in ls_probe.get_sensors():
-                ls.read.return_value = random.randint(0, sys.maxsize * 2 + 1)
+                ls.read.return_value = random.randint(0, 200.000)
 
-                collected_data.append(sensor.get_data())
+                collected_data.append(sensor.collect_data())
 
-                actual_data = sensor.get_data()['lux']
+                actual_data = sensor.collect_data()['lux']
                 self.assertEquals(actual_data, ls.read.return_value)
 
             time.sleep(0.1)
