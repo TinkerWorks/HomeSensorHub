@@ -3,7 +3,6 @@
 from sensors.drivers.TSL258x import TSL258x
 from sensors.sensor import Sensor
 import logging
-import time
 
 
 logging.basicConfig(
@@ -73,14 +72,3 @@ class LightSensorProbe:
     def get_sensors(self):
         """Return the list of found sensors."""
         return self.__sensors
-
-
-if __name__ == "__main__":
-    ls_probe = LightSensorProbe()
-    ls_probe.probe_sensors()
-
-    while True:
-        for sensor in ls_probe.get_sensors():
-            data = sensor.get_data()
-            logging.info(data)
-            time.sleep(2)
