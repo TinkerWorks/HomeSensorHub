@@ -105,12 +105,3 @@ class EnvironmentalSensorProbe:
         """Return the list of found sensors."""
         return self.__sensors
 
-
-if __name__ == "__main__":
-    test = EnvironmentalSensorProbe()
-
-    while True:
-        for sensor in test.sensors:
-            data = sensor.get_data()
-            logging.info(data)
-            time.sleep(2)
