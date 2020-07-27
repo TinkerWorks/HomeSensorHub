@@ -1,33 +1,27 @@
-class Sensor:
-    def __init__(self, sensor, name):
-        self.sensor = sensor
-        self.name = name
-        self.data_packet = None
+"""Module which implements a basic sensor."""
 
-    def set_sea_level_pressure(self, sea_level_pressure) -> None:
+
+class Sensor:
+    """Class which implements a basic sensor functionality."""
+
+    def __init__(self, sensor, name):
         """
-        Used for altitude determination.
+        Initialise the ingredients for a basic sensor skeleton.
+
+        Each sensor has a name and data which will be collected. Each sensor
+        will be detected by probing by each type (light, motion, environment).
         """
-        self.sensor.sea_level_pressure = sea_level_pressure
+        self.__sensor = sensor
+        self.__name = name
 
     def get_sensor_name(self) -> str:
         """
-        Function which returns the actual name of the sensor (eg. BME280, BME680 etc.).
+        Return the actual name of the sensor (eg. BME280, BME680 etc.).
+
+        :return: string
         """
-        return self.name
+        return self.__name
 
-    def get_data(self) -> dict:
-        self.collect_data()
-        return self.data_packet
-
-    def collect_data(self) -> None:
-        self.data_packet = {'temperature': self.sensor.temperature,
-                            'humidity': self.sensor.humidity,
-                            'pressure': self.sensor.pressure,
-                            'altitude': self.sensor.altitude
-                            }
-
-        try:
-            self.data_packet['gas'] = self.sensor.gas
-        except AttributeError:
-            pass
+    def get_sensor(self):
+        """Return the physical sensor attached to this object."""
+        return self.__sensor

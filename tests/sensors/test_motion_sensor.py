@@ -98,4 +98,3 @@ class MotionSensorTests(unittest.TestCase):
                 motionCallback.assert_called()
             else:
                 motionCallback.assert_not_called()
-
