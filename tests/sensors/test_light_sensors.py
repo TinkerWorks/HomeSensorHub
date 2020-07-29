@@ -23,7 +23,6 @@ class TestLightSensors(unittest.TestCase):
         TSL258x.probe.return_value = ls
 
         time_end = time.time() + 1
-        collected_data = []
 
         while time.time() < time_end:
             ls_probe = LightSensorProbe()
@@ -31,10 +30,10 @@ class TestLightSensors(unittest.TestCase):
             for sensor in ls_probe.get_sensors():
                 ls.read.return_value = random.randint(0, 200.000)
 
-                collected_data.append(sensor.collect_data())
+                collected_data = sensor.collect_data()
+                actual_value = collected_data['lux']['value']
 
-                actual_data = sensor.collect_data()['lux']
-                self.assertEquals(actual_data, ls.read.return_value)
+                self.assertEquals(actual_value, ls.read.return_value)
 
             time.sleep(0.1)
 
