@@ -3,6 +3,7 @@
 from sensors.drivers.TSL258x import TSL258x
 from sensors.sensor import Sensor
 import logging
+import datetime
 
 
 logging.basicConfig(
@@ -30,9 +31,13 @@ class LightSensor(Sensor):
         fails, return None.
         """
         try:
-            sensor_lux = self.get_sensor().read()
+            lux = self.get_sensor().read()
+
             sensor_data = {
-                'lux': sensor_lux
+                'lux': self.build_sensor_packet('light',
+                                                lux,
+                                                datetime.datetime.now(),
+                                                'lux')
             }
 
             return sensor_data
@@ -68,7 +73,7 @@ class LightSensorProbe:
         sensors = []
 
         light_sensor = LightSensor(sensor=sensor,
-                                   name="light")
+                                   name="TSL258x")
 
         sensors.append(light_sensor)
         return sensors

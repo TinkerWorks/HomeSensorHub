@@ -1,6 +1,7 @@
 """Module which implements the environmantal sensors functionality."""
 from sensors.sensor import Sensor
 
+import datetime
 import logging
 
 import board
@@ -39,11 +40,26 @@ class EnvironmentalSensor(Sensor):
 
         :return: None
         """
+        sensor = self.get_sensor()
+
         sensor_data = {
-                     'temperature': self.get_sensor().temperature,
-                     'humidity': self.get_sensor().humidity,
-                     'pressure': self.get_sensor().pressure,
-                     'altitude': self.get_sensor().altitude
+            'temperature': self.build_sensor_packet('temperature',
+                                                    sensor.temperature,
+                                                    datetime.datetime.now(),
+                                                    'celsius'
+                                                    ),
+            'humidity': self.build_sensor_packet('humidity',
+                                                 sensor.humidity,
+                                                 datetime.datetime.now(),
+                                                 'percent'),
+            'pressure': self.build_sensor_packet('pressure',
+                                                 sensor.pressure,
+                                                 datetime.datetime.now(),
+                                                 'UF/USA'),
+            'altitude': self.build_sensor_packet('altitude',
+                                                 sensor.altitude,
+                                                 datetime.datetime.now(),
+                                                 'not sure'),
                      }
 
         try:
