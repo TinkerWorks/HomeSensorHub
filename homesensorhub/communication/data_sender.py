@@ -48,9 +48,7 @@ class DataSender:
 
     def send_current(self, value, topic):
         topic = self.HOST + "/" + topic + "/current"
-        payload = value #TODO: This give us invalid syntax: f'{value:.3f}'
-        logging.info("Sending data to :" + topic + " --> " + str(payload))
-
+        payload = str(value)  # TODO: This give us invalid syntax: f'{value:.3f}
         result = (mqtt.MQTT_ERR_AGAIN,0)
         while result[0] != mqtt.MQTT_ERR_SUCCESS:
             result = self.client.publish(topic=topic, payload=payload, qos=0, retain=False)
