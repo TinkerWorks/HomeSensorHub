@@ -55,11 +55,11 @@ class EnvironmentalSensor(Sensor):
             'pressure': self.build_sensor_packet('pressure',
                                                  sensor.pressure,
                                                  datetime.datetime.now(),
-                                                 'UF/USA'),
+                                                 'hectoPascal'),
             'altitude': self.build_sensor_packet('altitude',
                                                  sensor.altitude,
                                                  datetime.datetime.now(),
-                                                 'not sure'),
+                                                 'meters'),
                      }
 
         try:
