@@ -16,7 +16,6 @@ class Sensor:
 
     def build_sensor_packet(self, type, value, timestamp, measurement):
         """Build a packet with information taken from each sensor."""
-        print(self.__name)
 
         packet = {
             'type': type,
