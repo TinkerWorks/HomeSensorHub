@@ -50,13 +50,16 @@ class DataSender:
 
     def send_current(self, topic, packet):
         topic = "{}/{}/current".format(self.__host, topic)
-        payload = str(value)  # TODO: This give us invalid syntax: f'{value:.3f}
-        result = (mqtt.MQTT_ERR_AGAIN,0)
+        payload = p.Payload(packet)
+        result = (mqtt.MQTT_ERR_AGAIN, 0)
+
         while result[0] != mqtt.MQTT_ERR_SUCCESS:
-            result = self.client.publish(topic=topic, payload=payload, qos=0, retain=False)
+            result = self.client.publish(topic=topic,
+                                         payload=payload.get_mqtt_payload(),
+                                         qos=0,
+                                         retain=False)
 
             if(result[0] == mqtt.MQTT_ERR_NO_CONN):
                 logging.warn("MQTT bus unresponsive, trying to reconnect ...")
                 self.connect()
                 time.sleep(1)
-
