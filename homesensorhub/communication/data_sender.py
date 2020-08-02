@@ -1,3 +1,7 @@
+
+"""Module which implements the classes for sending collected data to MQTT."""
+from . import payload as p
+
 import logging
 import time
 import paho.mqtt.client as mqtt
@@ -10,44 +14,42 @@ logging.basicConfig(
 
 
 class DataSender:
-    HOST = "unknown"
-
-    TEMPERATURE_TOPIC = "temperature"
-    HUMIDITY_TOPIC = "humidity"
+    """Class which implements the MQTT send functionality."""
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
+        """Set up and connect to MQTT."""
         self.client = mqtt.Client()
 
-        self.broker_url_ = broker_url
-        self.broker_port_ = broker_port
-        self.HOST = socket.gethostname()
+        self.__broker_url = broker_url
+        self.__broker_port = broker_port
+        self.__host = socket.gethostname()
 
         self.client.enable_logger(logging)
 
-        self.connect()
+        self.connect_mqtt()
 
-    def connect(self, retry = 5):
+    def connect_mqtt(self, retry=5):
+        """Set up the MQTT connection with the host."""
         while (retry > 0):
             try:
-                cnct = self.client.connect(self.broker_url_, self.broker_port_)
-                logging.debug("connect result: " + str(cnct))
-                if cnct == 0:
+                connection = self.client.connect(self.__broker_url,
+                                                 self.__broker_port)
+                logging.debug("MQTT connection result: {}".format(connection))
+                if connection == 0:
                     return True
+            except ConnectionRefusedError as error:
+                logging.error("MQTT connect refused: {}".format(error))
 
-            except ConnectionRefusedError as e:
-                logging.error("connect refused: " + str(e))
-
-            retry-=1
-
+            retry -= 1
 
         return False
 
     def send_data(self, data):
-        for topic, value in data.items():
-            self.send_current(value, topic)
+        for topic, packet in data.items():
+            self.send_current(topic, packet)
 
-    def send_current(self, value, topic):
-        topic = self.HOST + "/" + topic + "/current"
+    def send_current(self, topic, packet):
+        topic = "{}/{}/current".format(self.__host, topic)
         payload = str(value)  # TODO: This give us invalid syntax: f'{value:.3f}
         result = (mqtt.MQTT_ERR_AGAIN,0)
         while result[0] != mqtt.MQTT_ERR_SUCCESS:
@@ -58,22 +60,3 @@ class DataSender:
                 self.connect()
                 time.sleep(1)
 
-
-
-    def send_temperature(self, value):
-        self.send_current(value, self.TEMPERATURE_TOPIC)
-
-    def send_humidity(self, value):
-        self.send_current(value, self.HUMIDITY_TOPIC)
-
-
-if __name__ == "__main__":
-    from time import sleep
-    ds = DataSender()
-    temp = 3.14
-
-    while True:
-        sleep(1)
-        ds.send_temperature(temp)
-        ds.send_humidity(temp * 2)
-        temp += 0.2
