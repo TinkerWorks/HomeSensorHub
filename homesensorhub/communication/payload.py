@@ -23,7 +23,7 @@ class Payload:
 
         The accepted values for MQTT payload are None, Int, Float and str, so
         before trying to send the raw data from the sensors through MQTT, it
-        needs to be refined into a readable string form.
+        needs to be refined into an accepted form.
         """
         payload = {
             'type': self.__get_str_type(),
@@ -39,17 +39,17 @@ class Payload:
                                   sort_keys=True)
         return json_payload
 
-    def __get_str_type(self):
+    def __get_str_type(self) -> str:
         return str(self.__type)
 
-    def __get_str_name(self):
+    def __get_str_name(self) -> str:
         return str(self.__name)
 
-    def __get_str_value(self):
+    def __get_str_value(self) -> str:
         return "{}".format(round(self.__value, 2))
 
-    def __get_str_timestamp(self):
+    def __get_str_timestamp(self) -> str:
         return str(self.__timestamp)
 
-    def __get_str_measurement(self):
+    def __get_str_measurement(self) -> str:
         return str(self.__measurement)

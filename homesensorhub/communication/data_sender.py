@@ -44,11 +44,37 @@ class DataSender:
 
         return False
 
-    def send_data(self, data):
-        for topic, packet in data.items():
-            self.send_current(topic, packet)
+    def send_data_to_mqtt(self, data):
+        """
+        Send the collected sensor data to mqtt.
 
-    def send_current(self, topic, packet):
+        The topic represents the type of the sensor. The data paremeter will be
+        of the form:
+
+        {'temperature':
+            {
+            'type': 'temperature',
+             'name': <class 'adafruit_bme280.Adafruit_BME280_I2C'>,
+             'value': 28.0955078125,
+             'timestamp': datetime.datetime(2020, 8, 2, 22, 18, 1, 744014),
+             'measurement': 'celsius'
+             }
+        }
+
+        The topic is collected from the outer most key of the dictionary, in
+        this case, 'temperature'. The packet represents the colleced data from
+        this type of sensor.
+        """
+        for topic, packet in data.items():
+            self.send_current_to_mqtt(topic, packet)
+
+    def send_current_to_mqtt(self, topic, packet):
+        """
+        Send the current packet of information collected by the sensors.
+
+        For now only the "current" topic is implemented. Others as "goal" will
+        also be set in place.
+        """
         topic = "{}/{}/current".format(self.__host, topic)
         payload = p.Payload(packet)
         result = (mqtt.MQTT_ERR_AGAIN, 0)

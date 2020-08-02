@@ -70,5 +70,5 @@ class SensorSink:
 
         while True:
             sinked_data = self.sink()
-            sender.send_data(sinked_data)
+            sender.send_data_to_mqtt(sinked_data)
             time.sleep(interval)
