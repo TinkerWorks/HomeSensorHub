@@ -17,9 +17,9 @@ class Payload:
             print("The requested key is not available in the packet:\n{}"
                   .format(error))
 
-    def get_mqtt_payload(self) -> json.dumps:
+    def get_json_payload(self) -> json.dumps:
         """
-        Construct the MQTT payload based on the received packet.
+        Construct the json payload based on the collected data.
 
         The accepted values for MQTT payload are None, Int, Float and str, so
         before trying to send the raw data from the sensors through MQTT, it

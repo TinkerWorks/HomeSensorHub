@@ -81,7 +81,7 @@ class DataSender:
 
         while result[0] != mqtt.MQTT_ERR_SUCCESS:
             result = self.client.publish(topic=topic,
-                                         payload=payload.get_mqtt_payload(),
+                                         payload=payload.get_json_payload(),
                                          qos=0,
                                          retain=False)
 
