@@ -1,6 +1,5 @@
 
 """Module which implements the classes for sending collected data to MQTT."""
-from . import payload as p
 
 import logging
 import time
@@ -62,21 +61,20 @@ class DataSender:
         }
 
         The topic is collected from the outer most key of the dictionary, in
-        this case, 'temperature'. The packet represents the colleced data from
+        this case, 'temperature'. The payload represents the colleced data from
         this type of sensor.
         """
-        for topic, packet in data.items():
-            self.send_current_to_mqtt(topic, packet)
+        for topic, payload in data.items():
+            self.send_current_to_mqtt(topic, payload)
 
-    def send_current_to_mqtt(self, topic, packet):
+    def send_current_to_mqtt(self, topic, payload):
         """
-        Send the current packet of information collected by the sensors.
+        Send the current payload of information collected by the sensors.
 
         For now only the "current" topic is implemented. Others as "goal" will
         also be set in place.
         """
         topic = "{}/{}/current".format(self.__host, topic)
-        payload = p.Payload(packet)
         result = (mqtt.MQTT_ERR_AGAIN, 0)
 
         while result[0] != mqtt.MQTT_ERR_SUCCESS:

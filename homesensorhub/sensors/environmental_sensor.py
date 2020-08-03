@@ -43,23 +43,22 @@ class EnvironmentalSensor(Sensor):
         sensor = self.get_sensor()
 
         sensor_data = {
-            'temperature': self.build_sensor_packet('temperature',
-                                                    sensor.temperature,
-                                                    datetime.datetime.now(),
-                                                    'celsius'
-                                                    ),
-            'humidity': self.build_sensor_packet('humidity',
-                                                 sensor.humidity,
-                                                 datetime.datetime.now(),
-                                                 'percent'),
-            'pressure': self.build_sensor_packet('pressure',
-                                                 sensor.pressure,
-                                                 datetime.datetime.now(),
-                                                 'hectoPascal'),
-            'altitude': self.build_sensor_packet('altitude',
-                                                 sensor.altitude,
-                                                 datetime.datetime.now(),
-                                                 'meters'),
+            'temperature': self.build_sensor_payload('temperature',
+                                                     sensor.temperature,
+                                                     datetime.datetime.now(),
+                                                     'celsius'),
+            'humidity': self.build_sensor_payload('humidity',
+                                                  sensor.humidity,
+                                                  datetime.datetime.now(),
+                                                  'percent'),
+            'pressure': self.build_sensor_payload('pressure',
+                                                  sensor.pressure,
+                                                  datetime.datetime.now(),
+                                                  'hectoPascal'),
+            'altitude': self.build_sensor_payload('altitude',
+                                                  sensor.altitude,
+                                                  datetime.datetime.now(),
+                                                  'meters'),
                      }
 
         try:

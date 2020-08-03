@@ -34,10 +34,10 @@ class LightSensor(Sensor):
             lux = self.get_sensor().read()
 
             sensor_data = {
-                'lux': self.build_sensor_packet('light',
-                                                lux,
-                                                datetime.datetime.now(),
-                                                'lux')
+                'lux': self.build_sensor_payload('light',
+                                                 lux,
+                                                 datetime.datetime.now(),
+                                                 'lux')
             }
 
             return sensor_data
