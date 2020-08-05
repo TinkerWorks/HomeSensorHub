@@ -1,7 +1,5 @@
 """Module which implements a basic sensor."""
 
-from communication.payload import Payload
-
 
 class Sensor:
     """Class which implements a basic sensor functionality."""
@@ -15,23 +13,6 @@ class Sensor:
         """
         self.__sensor = sensor
         self.__name = name
-
-    def build_sensor_payload(self,
-                             type,
-                             value,
-                             timestamp,
-                             measurement) -> Payload:
-        """Build a payload with information taken from each sensor."""
-        data = {
-            'type': type,
-            'name': self.__name,
-            'value': value,
-            'timestamp': timestamp,
-            'measurement': measurement
-        }
-
-        payload = Payload(data)
-        return payload
 
     def get_sensor_name(self) -> str:
         """

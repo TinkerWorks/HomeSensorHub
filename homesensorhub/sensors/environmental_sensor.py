@@ -1,5 +1,6 @@
 """Module which implements the environmantal sensors functionality."""
 from sensors.sensor import Sensor
+from communication.payload import Payload
 
 import datetime
 import logging
@@ -43,23 +44,26 @@ class EnvironmentalSensor(Sensor):
         sensor = self.get_sensor()
 
         sensor_data = {
-            'temperature': self.build_sensor_payload('temperature',
-                                                     sensor.temperature,
-                                                     datetime.datetime.now(),
-                                                     'celsius'),
-            'humidity': self.build_sensor_payload('humidity',
-                                                  sensor.humidity,
-                                                  datetime.datetime.now(),
-                                                  'percent'),
-            'pressure': self.build_sensor_payload('pressure',
-                                                  sensor.pressure,
-                                                  datetime.datetime.now(),
-                                                  'hectoPascal'),
-            'altitude': self.build_sensor_payload('altitude',
-                                                  sensor.altitude,
-                                                  datetime.datetime.now(),
-                                                  'meters'),
-                     }
+            'temperature': Payload('temperature',
+                                   self.get_sensor_name(),
+                                   sensor.temperature,
+                                   datetime.datetime.now(),
+                                   'celsius'),
+            'humidity': Payload('humidity',
+                                self.get_sensor_name(),
+                                sensor.humidity,
+                                datetime.datetime.now(),
+                                'percent'),
+            'pressure': Payload('pressure',
+                                self.get_sensor_name(),
+                                sensor.pressure,
+                                datetime.datetime.now(),
+                                'hectoPascal'),
+            'altitude': Payload('altitude',
+                                self.get_sensor_name(),
+                                sensor.altitude,
+                                datetime.datetime.now(),
+                                'meters')}
 
         try:
             sensor_data['gas'] = self.get_sensor().gas

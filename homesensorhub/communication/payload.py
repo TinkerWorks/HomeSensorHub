@@ -5,17 +5,13 @@ import json
 class Payload:
     """Class which implements the configuration of the payload for MQTT."""
 
-    def __init__(self, payload):
-        """Extract and structure the data from the payload."""
-        try:
-            self.__type = payload['type']
-            self.__name = payload['name']
-            self.__value = payload['value']
-            self.__timestamp = payload['timestamp']
-            self.__measurement = payload['measurement']
-        except KeyError as error:
-            print("The requested key is not available in the payload:\n{}"
-                  .format(error))
+    def __init__(self, type, name, value, timestamp, measurement):
+        """Extract and structure the data received from the sensors."""
+        self.__type = type
+        self.__name = name
+        self.__value = value
+        self.__timestamp = timestamp
+        self.__measurement = measurement
 
     def get_json_payload(self) -> json.dumps:
         """
