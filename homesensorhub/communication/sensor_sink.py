@@ -32,7 +32,7 @@ class SensorSink:
         :return: None
         """
         self.__sensors = sensors
-        self.__collected = {}
+        self.__collected = []
 
     def sink(self) -> None:
         """
@@ -47,9 +47,9 @@ class SensorSink:
 
         for type_sensor in self.__sensors:
             for sensor in type_sensor.get_sensors():
-                collected = sensor.get_data()
-                for type, payload in collected.items():
-                    self.__collected[type] = payload
+                data = sensor.get_data()
+                for payload in data:
+                    self.__collected.append(payload)
 
     def sink_and_send(self, interval) -> None:
         """

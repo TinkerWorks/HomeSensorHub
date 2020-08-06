@@ -44,42 +44,26 @@ class DataSender:
         return False
 
     def send_data_to_mqtt(self, data):
-        """
-        Send the collected sensor data to mqtt.
+        """Send the collected sensor data to mqtt."""
+        for payload in data:
+            self.send_current_to_mqtt(payload)
 
-        The topic represents the type of the sensor. The data paremeter will be
-        of the form:
-
-        {'temperature':
-            {
-            'type': 'temperature',
-             'name': <class 'adafruit_bme280.Adafruit_BME280_I2C'>,
-             'value': 28.0955078125,
-             'timestamp': datetime.datetime(2020, 8, 2, 22, 18, 1, 744014),
-             'measurement': 'celsius'
-             }
-        }
-
-        The topic is collected from the outer most key of the dictionary, in
-        this case, 'temperature'. The payload represents the colleced data from
-        this type of sensor.
-        """
-        for topic, payload in data.items():
-            self.send_current_to_mqtt(topic, payload)
-
-    def send_current_to_mqtt(self, topic, payload):
+    def send_current_to_mqtt(self, payload):
         """
         Send the current payload of information collected by the sensors.
 
         For now only the "current" topic is implemented. Others as "goal" will
         also be set in place.
         """
-        topic = "{}/{}/current".format(self.__host, topic)
+        json_payload = payload.get_json_payload()
+        type = payload.get_type()
+
+        topic = "{}/{}/current".format(self.__host, type)
         result = (mqtt.MQTT_ERR_AGAIN, 0)
 
         while result[0] != mqtt.MQTT_ERR_SUCCESS:
             result = self.client.publish(topic=topic,
-                                         payload=payload.get_json_payload(),
+                                         payload=json_payload,
                                          qos=0,
                                          retain=False)
 

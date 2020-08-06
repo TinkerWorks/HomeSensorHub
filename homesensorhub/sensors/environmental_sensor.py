@@ -32,41 +32,44 @@ class EnvironmentalSensor(Sensor):
         """Determine altitude based on this."""
         self.sensor.sea_level_pressure = sea_level_pressure
 
-    def get_data(self) -> dict:
+    def get_data(self) -> list:
         """
         Collect the data from this sensor.
 
         The data is formed of a set of temperature, humidity, pressure and
         altitude values. If possible, gas is also read.
 
-        :return: None
+        :return: list
         """
         sensor = self.get_sensor()
 
-        sensor_data = {
-            'temperature': Payload('temperature',
-                                   self.get_sensor_name(),
-                                   sensor.temperature,
-                                   datetime.datetime.now(),
-                                   'celsius'),
-            'humidity': Payload('humidity',
-                                self.get_sensor_name(),
-                                sensor.humidity,
-                                datetime.datetime.now(),
-                                'percent'),
-            'pressure': Payload('pressure',
-                                self.get_sensor_name(),
-                                sensor.pressure,
-                                datetime.datetime.now(),
-                                'hectoPascal'),
-            'altitude': Payload('altitude',
-                                self.get_sensor_name(),
-                                sensor.altitude,
-                                datetime.datetime.now(),
-                                'meters')}
+        sensor_data = [Payload('temperature',
+                               self.get_sensor_name(),
+                               sensor.temperature,
+                               datetime.datetime.now(),
+                               'celsius'),
+                       Payload('humidity',
+                               self.get_sensor_name(),
+                               sensor.humidity,
+                               datetime.datetime.now(),
+                               'percent'),
+                       Payload('pressure',
+                               self.get_sensor_name(),
+                               sensor.pressure,
+                               datetime.datetime.now(),
+                               'hectoPascal'),
+                       Payload('altitude',
+                               self.get_sensor_name(),
+                               sensor.altitude,
+                               datetime.datetime.now(),
+                               'meters')]
 
         try:
-            sensor_data['gas'] = self.get_sensor().gas
+            sensor_data.append(Payload('gas',
+                                       self.get_sensor_name(),
+                                       sensor.gas,
+                                       datetime.datetime.now(),
+                                       'gas_resistance'))
         except AttributeError:
             pass
 

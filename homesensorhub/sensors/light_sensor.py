@@ -25,7 +25,7 @@ class LightSensor(Sensor):
         """
         super().__init__(sensor, name)
 
-    def get_data(self) -> dict:
+    def get_data(self) -> list:
         """
         Collect data from light sensor.
 
@@ -35,13 +35,11 @@ class LightSensor(Sensor):
         try:
             lux = self.get_sensor().read()
 
-            sensor_data = {
-                'lux': Payload('light',
-                               self.get_sensor_name(),
-                               lux,
-                               datetime.datetime.now(),
-                               'lux')}
-
+            sensor_data = [Payload('light',
+                           self.get_sensor_name(),
+                           lux,
+                           datetime.datetime.now(),
+                           'lux')]
             return sensor_data
         except AttributeError as ae:
             print("The light sensor was not set up: {}".format(ae))
