@@ -69,7 +69,7 @@ class EnvironmentalSensor(Sensor):
                                        self.get_sensor_name(),
                                        sensor.gas,
                                        datetime.datetime.now(),
-                                       'gas_resistance'))
+                                       'gas resistance in ohms'))
         except AttributeError:
             pass
 
