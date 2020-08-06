@@ -8,8 +8,6 @@ import logging
 import time
 
 from communication.data_sender import DataSender
-from sensors.environmental_sensor import EnvironmentalSensorProbe
-from sensors.light_sensor import LightSensorProbe
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -25,7 +23,7 @@ class SensorSink:
     to the data sender class.
     """
 
-    def __init__(self) -> None:
+    def __init__(self, sensors) -> None:
         """
         Initialise the necessary objects for sinking collected data.
 
@@ -33,32 +31,25 @@ class SensorSink:
 
         :return: None
         """
-        self.environmental_probe = EnvironmentalSensorProbe()
-        self.light_probe = LightSensorProbe()
+        self.__sensors = sensors
+        self.__collected = {}
 
-        self.probes = [self.environmental_probe,
-                       self.light_probe]
-
-    def sink(self) -> dict:
+    def sink(self) -> None:
         """
         Collect all the data from all the sensors.
 
+        For each type (environmental, light and motion for now) we request data
+        from their attached sensors.
+
         :return: None
         """
-        # TODO Fix the multiple sensors data. When a sensor type has multiple
-        # sensors, it actually overwrites the last value rather than having
-        # different values for different sensors
         logging.debug("Collecting and sinking all data.")
 
-        sensors_data = {}
-
-        for probe in self.probes:
-            for sensor in probe.get_sensors():
-                sensor_data = sensor.collect_data()
-                for type, payload in sensor_data.items():
-                    sensors_data[type] = payload
-
-        return sensors_data
+        for type_sensor in self.__sensors:
+            for sensor in type_sensor.get_sensors():
+                collected = sensor.collect_data()
+                for type, payload in collected.items():
+                    self.__collected[type] = payload
 
     def sink_and_send(self, interval) -> None:
         """
@@ -70,6 +61,6 @@ class SensorSink:
         sender = DataSender()
 
         while True:
-            sinked_data = self.sink()
-            sender.send_data_to_mqtt(sinked_data)
+            self.sink()
+            sender.send_data_to_mqtt(self.__collected)
             time.sleep(interval)
