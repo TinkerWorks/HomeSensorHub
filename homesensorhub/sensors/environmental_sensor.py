@@ -43,26 +43,27 @@ class EnvironmentalSensor(Sensor):
         """
         sensor = self.get_sensor()
 
-        sensor_data = [Payload('temperature',
-                               self.get_sensor_name(),
-                               sensor.temperature,
-                               datetime.datetime.now(),
-                               'celsius'),
-                       Payload('humidity',
-                               self.get_sensor_name(),
-                               sensor.humidity,
-                               datetime.datetime.now(),
-                               'percent'),
-                       Payload('pressure',
-                               self.get_sensor_name(),
-                               sensor.pressure,
-                               datetime.datetime.now(),
-                               'hectoPascal'),
-                       Payload('altitude',
-                               self.get_sensor_name(),
-                               sensor.altitude,
-                               datetime.datetime.now(),
-                               'meters')]
+        sensor_data = []
+        sensor_data.append(Payload('temperature',
+                           self.get_sensor_name(),
+                           sensor.temperature,
+                           datetime.datetime.now(),
+                           'celsius'))
+        sensor_data.append(Payload('humidity',
+                           self.get_sensor_name(),
+                           sensor.humidity,
+                           datetime.datetime.now(),
+                           '% RH'))
+        sensor_data.append(Payload('pressure',
+                           self.get_sensor_name(),
+                           sensor.pressure,
+                           datetime.datetime.now(),
+                           'hectoPascal'))
+        sensor_data.append(Payload('altitude',
+                           self.get_sensor_name(),
+                           sensor.altitude,
+                           datetime.datetime.now(),
+                           'meters'))
 
         try:
             sensor_data.append(Payload('gas',
