@@ -1,5 +1,6 @@
 """Entry point for the application."""
-from communication.sensor_sink import SensorSink
+from routing.sensor_sink import SourceAndSink
+from routing.data_sender import DataSender
 from sensors.environmental_sensor import EnvironmentalSensorProbe
 from sensors.light_sensor import LightSensorProbe
 

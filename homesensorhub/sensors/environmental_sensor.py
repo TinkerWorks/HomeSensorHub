@@ -1,6 +1,6 @@
 """Module which implements the environmantal sensors functionality."""
 from sensors.sensor import Sensor
-from communication.payload import Payload
+from routing.payload import Payload
 
 import datetime
 import logging

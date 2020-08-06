@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 from sensors.drivers.TSL258x import TSL258x
 from sensors.sensor import Sensor
-from communication.payload import Payload
+from routing.payload import Payload
 
 import logging
 import datetime

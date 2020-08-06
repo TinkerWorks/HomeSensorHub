@@ -7,7 +7,7 @@ data sender module.
 import logging
 import time
 
-from communication.data_sender import DataSender
+from routing.data_sender import DataSender
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
