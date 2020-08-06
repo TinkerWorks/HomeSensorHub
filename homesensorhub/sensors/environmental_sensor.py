@@ -32,7 +32,7 @@ class EnvironmentalSensor(Sensor):
         """Determine altitude based on this."""
         self.sensor.sea_level_pressure = sea_level_pressure
 
-    def collect_data(self) -> dict:
+    def get_data(self) -> dict:
         """
         Collect the data from this sensor.
 

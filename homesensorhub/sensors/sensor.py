@@ -16,7 +16,7 @@ class Sensor:
         self.__sensor = sensor
         self.__name = name
 
-    def collect_data(self):
+    def get_data(self):
         """
         Collect the data from each sensor type.
 

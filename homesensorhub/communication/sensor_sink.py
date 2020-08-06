@@ -47,7 +47,7 @@ class SensorSink:
 
         for type_sensor in self.__sensors:
             for sensor in type_sensor.get_sensors():
-                collected = sensor.collect_data()
+                collected = sensor.get_data()
                 for type, payload in collected.items():
                     self.__collected[type] = payload
 

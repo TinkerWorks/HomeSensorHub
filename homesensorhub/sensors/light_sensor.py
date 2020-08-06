@@ -25,7 +25,7 @@ class LightSensor(Sensor):
         """
         super().__init__(sensor, name)
 
-    def collect_data(self) -> dict:
+    def get_data(self) -> dict:
         """
         Collect data from light sensor.
 
