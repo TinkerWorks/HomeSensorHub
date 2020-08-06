@@ -6,5 +6,7 @@ from sensors.light_sensor import LightSensorProbe
 
 sensors = [EnvironmentalSensorProbe(),
            LightSensorProbe()]
-sensor_sink = SensorSink(sensors)
+sender = [DataSender()]
+
+sensor_sink = SourceAndSink(sensors, sender)
 sensor_sink.sink_and_send(3)

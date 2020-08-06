@@ -15,7 +15,7 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S')
 
 
-class SensorSink:
+class SourceAndSink:
     """
     Class which implements the sink for the sensors.
 
@@ -23,7 +23,7 @@ class SensorSink:
     to the data sender class.
     """
 
-    def __init__(self, sensors) -> None:
+    def __init__(self, sensors, senders) -> None:
         """
         Initialise the necessary objects for sinking collected data.
 
@@ -32,6 +32,7 @@ class SensorSink:
         :return: None
         """
         self.__sensors = sensors
+        self.__senders = senders
         self.__collected = []
 
     def sink(self) -> None:
