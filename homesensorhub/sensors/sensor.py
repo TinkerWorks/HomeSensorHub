@@ -14,19 +14,6 @@ class Sensor:
         self.__sensor = sensor
         self.__name = name
 
-    def build_sensor_packet(self, type, value, timestamp, measurement):
-        """Build a packet with information taken from each sensor."""
-
-        packet = {
-            'type': type,
-            'name': self.__name,
-            'value': value,
-            'timestamp': timestamp,
-            'measurement': measurement
-        }
-
-        return packet
-
     def get_sensor_name(self) -> str:
         """
         Return the actual name of the sensor (eg. BME280, BME680 etc.).

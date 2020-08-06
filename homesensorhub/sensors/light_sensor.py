@@ -2,6 +2,8 @@
 # !/usr/bin/env python3
 from sensors.drivers.TSL258x import TSL258x
 from sensors.sensor import Sensor
+from communication.payload import Payload
+
 import logging
 import datetime
 
@@ -34,11 +36,11 @@ class LightSensor(Sensor):
             lux = self.get_sensor().read()
 
             sensor_data = {
-                'lux': self.build_sensor_packet('light',
-                                                lux,
-                                                datetime.datetime.now(),
-                                                'lux')
-            }
+                'lux': Payload('light',
+                               self.get_sensor_name(),
+                               lux,
+                               datetime.datetime.now(),
+                               'lux')}
 
             return sensor_data
         except AttributeError as ae:

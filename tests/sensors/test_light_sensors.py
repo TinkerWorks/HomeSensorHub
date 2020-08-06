@@ -31,9 +31,9 @@ class TestLightSensors(unittest.TestCase):
                 ls.read.return_value = random.randint(0, 200.000)
 
                 collected_data = sensor.collect_data()
-                actual_value = collected_data['lux']['value']
+                actual_data = collected_data['lux'].get_value()
 
-                self.assertEquals(actual_value, ls.read.return_value)
+                self.assertEquals(actual_data, ls.read.return_value)
 
             time.sleep(0.1)
 

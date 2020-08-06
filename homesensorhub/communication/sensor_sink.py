@@ -50,14 +50,15 @@ class SensorSink:
         # different values for different sensors
         logging.debug("Collecting and sinking all data.")
 
-        sinked_data = {}
+        sensors_data = {}
 
         for probe in self.probes:
             for sensor in probe.get_sensors():
-                data = sensor.collect_data()
-                sinked_data.update(data)
+                sensor_data = sensor.collect_data()
+                for type, payload in sensor_data.items():
+                    sensors_data[type] = payload
 
-        return sinked_data
+        return sensors_data
 
     def sink_and_send(self, interval) -> None:
         """
@@ -70,5 +71,5 @@ class SensorSink:
 
         while True:
             sinked_data = self.sink()
-            sender.send_data(sinked_data)
+            sender.send_data_to_mqtt(sinked_data)
             time.sleep(interval)
