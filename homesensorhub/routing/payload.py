@@ -53,3 +53,11 @@ class Payload:
     def get_value(self):
         """Return the value of the sensor."""
         return self.__value
+
+    def get_type(self):
+        """
+        Return the type of the sensor.
+
+        Needed for topic creation in MQTT.
+        """
+        return self.__type

@@ -2,7 +2,7 @@
 # !/usr/bin/env python3
 from sensors.drivers.TSL258x import TSL258x
 from sensors.sensor import Sensor
-from communication.payload import Payload
+from routing.payload import Payload
 
 import logging
 import datetime
@@ -25,7 +25,7 @@ class LightSensor(Sensor):
         """
         super().__init__(sensor, name)
 
-    def collect_data(self) -> dict:
+    def get_data(self) -> list:
         """
         Collect data from light sensor.
 
@@ -35,13 +35,11 @@ class LightSensor(Sensor):
         try:
             lux = self.get_sensor().read()
 
-            sensor_data = {
-                'lux': Payload('light',
-                               self.get_sensor_name(),
-                               lux,
-                               datetime.datetime.now(),
-                               'lux')}
-
+            sensor_data = [Payload('light',
+                           self.get_sensor_name(),
+                           lux,
+                           datetime.datetime.now(),
+                           'lux')]
             return sensor_data
         except AttributeError as ae:
             print("The light sensor was not set up: {}".format(ae))
