@@ -7,7 +7,7 @@ data sender module.
 import logging
 import time
 
-from routing.data_sender import DataSender
+from routing.mqtt_sender import MQTTDataSender
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -59,9 +59,9 @@ class SourceAndSink:
         :return: None
         """
         logging.info("Sinking and sending data.")
-        sender = DataSender()
+        sender = MQTTDataSender()
 
         while True:
             self.sink()
-            sender.send_data_to_mqtt(self.__collected)
+            sender.send(self.__collected)
             time.sleep(interval)
