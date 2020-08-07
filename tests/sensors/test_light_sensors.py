@@ -32,9 +32,9 @@ class TestLightSensors(unittest.TestCase):
 
                 collected_data = sensor.get_data()
                 payload = collected_data[0]
-                actual_data = payload.get_value()
+                actual_data = payload.get_str_value()
 
-                self.assertEquals(actual_data, ls.read.return_value)
+                self.assertEquals(actual_data, str(ls.read.return_value))
 
             time.sleep(0.1)
 

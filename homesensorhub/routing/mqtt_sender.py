@@ -42,25 +42,69 @@ class MQTTDataSender(DataSender):
 
     def send(self, data):
         """
-        Send the current payload of information collected by the sensors.
+        Send all collected data to MQTT.
 
-        For now only the "current" topic is implemented. Others as "goal" will
-        also be set in place.
+        This sends the json payload, as well as simple values.
         """
         for payload in data:
-            json_payload = payload.get_json_payload()
-            type = payload.get_type()
+            self.__send_json_payload(payload)
+            self.__send_simple_values(payload)
 
-            topic = "{}/{}/current".format(self.__host, type)
-            result = (mqtt.MQTT_ERR_AGAIN, 0)
+    def __send_json_payload(self, payload):
+        """
+        Send the current payload of information collected by the sensors.
 
-            while result[0] != mqtt.MQTT_ERR_SUCCESS:
-                result = self.__client.publish(topic=topic,
-                                               payload=json_payload,
-                                               qos=0,
-                                               retain=False)
+        This contains the payload with all its gained information, of the
+        following form:
 
-                if(result[0] == mqtt.MQTT_ERR_NO_CONN):
-                    logging.warn("MQTT bus unresponsive, reconnecting...")
-                    self.connect()
-                    time.sleep(1)
+        sensors-office/temperature/current {
+            "measurement" = "celsius".
+            "name" = "<class 'adafruit_bme280.Adafruit_BME280_I2C'>".
+            "timestamp" = "2020-08-07 15:28:40.180167".
+            "type" = "temperature".
+            "value" = "27.28"
+        }
+        """
+        json_payload = payload.get_json_payload()
+        type = payload.get_str_type()
+        topic = "{}/{}/current".format(self.__host, type)
+
+        self.__publish(topic, json_payload)
+
+    def __send_simple_values(self, payload):
+        """
+        Send simple collected values to MQTT.
+
+        Each publish contains the type of the sensor, what type of attribute of
+        the payload it represents and its value, as the following example:
+
+        sensors-office/temperature/current/value 27.68
+        """
+        payload_attributes = {
+            'type': payload.get_str_type(),
+            'name': payload.get_str_name(),
+            'value': payload.get_str_value(),
+            'timestamp': payload.get_str_timestamp(),
+            'measurement': payload.get_str_measurement()
+        }
+
+        for attribute, collected in payload_attributes.items():
+            type = payload.get_str_type()
+            topic = "{}/{}/current/{}".format(self.__host,
+                                              type,
+                                              attribute)
+            self.__publish(topic, collected)
+
+    def __publish(self, topic, payload):
+        result = (mqtt.MQTT_ERR_AGAIN, 0)
+
+        while result[0] != mqtt.MQTT_ERR_SUCCESS:
+            result = self.__client.publish(topic=topic,
+                                           payload=payload,
+                                           qos=0,
+                                           retain=False)
+
+            if(result[0] == mqtt.MQTT_ERR_NO_CONN):
+                logging.warn("MQTT bus unresponsive, reconnecting...")
+                self.connect()
+                time.sleep(1)
