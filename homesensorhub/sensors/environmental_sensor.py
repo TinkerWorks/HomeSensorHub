@@ -17,6 +17,17 @@ logging.basicConfig(level=logging.INFO)
 class EnvironmentalSensor(Sensor):
     """Class which implements the environmantal sensor functionality."""
 
+    TEMPERATURE_TYPE = 'Temperature'
+    TEMPERATURE_MEASURE = 'Celsius'
+    HUMIDITY_TYPE = 'Humidity'
+    HUMIDITY_MEASURE = '% RH'
+    PRESSURE_TYPE = 'Pressure'
+    PRESSURE_MEASURE = 'HectoPascal'
+    ALTITUTDE_TYPE = 'Altitute'
+    ALTITUTDE_MEASURE = 'Meters'
+    GAS_TYPE = 'Gas'
+    GAS_MEASURE = 'Gas resistance in ohms'
+
     def __init__(self, sensor="undefined", name="undefined"):
         """
         Initialise the environmental sensor data.
@@ -27,6 +38,12 @@ class EnvironmentalSensor(Sensor):
         :return: None
         """
         super().__init__(sensor, name)
+        self.sensors = []
+
+    def set_sensors(self):
+        pass
+
+    def set_sensor(self, type, measure)
 
     def set_sea_level_pressure(self, sea_level_pressure) -> None:
         """Determine altitude based on this."""
@@ -44,33 +61,33 @@ class EnvironmentalSensor(Sensor):
         sensor = self.get_sensor()
 
         sensor_data = []
-        sensor_data.append(Payload('temperature',
+        sensor_data.append(Payload(self.TEMPERATURE_TYPE,
                            self.get_sensor_name(),
                            sensor.temperature,
                            datetime.datetime.now(),
-                           'celsius'))
-        sensor_data.append(Payload('humidity',
+                           self.TEMPERATURE_MEASURE))
+        sensor_data.append(Payload(self.HUMIDITY_TYPE,
                            self.get_sensor_name(),
                            sensor.humidity,
                            datetime.datetime.now(),
-                           '% RH'))
-        sensor_data.append(Payload('pressure',
+                           self.HUMIDITY_MEASURE))
+        sensor_data.append(Payload(self.PRESSURE_TYPE,
                            self.get_sensor_name(),
                            sensor.pressure,
                            datetime.datetime.now(),
-                           'hectoPascal'))
-        sensor_data.append(Payload('altitude',
+                           self.PRESSURE_MEASURE))
+        sensor_data.append(Payload(self.ALTITUTDE_TYPE,
                            self.get_sensor_name(),
                            sensor.altitude,
                            datetime.datetime.now(),
-                           'meters'))
+                           self.ALTITUTDE_MEASURE))
 
         try:
-            sensor_data.append(Payload('gas',
+            sensor_data.append(Payload(self.GAS_TYPE,
                                        self.get_sensor_name(),
                                        sensor.gas,
                                        datetime.datetime.now(),
-                                       'gas resistance in ohms'))
+                                       self.GAS_MEASURE))
         except AttributeError:
             pass
 

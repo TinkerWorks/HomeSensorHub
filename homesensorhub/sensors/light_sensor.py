@@ -17,6 +17,9 @@ logging.basicConfig(
 class LightSensor(Sensor):
     """Class which implements the light sensor functionality."""
 
+    LIGHT_TYPE = 'Light'
+    LIGHT_MEASURE = 'Lux'
+
     def __init__(self, sensor="undefined", name="undefined"):
         """
         Initialise the light sensor class.
@@ -35,11 +38,11 @@ class LightSensor(Sensor):
         try:
             lux = self.get_sensor().read()
 
-            sensor_data = [Payload('light',
+            sensor_data = [Payload(self.LIGHT_TYPE,
                            self.get_sensor_name(),
                            lux,
                            datetime.datetime.now(),
-                           'lux')]
+                           self.LIGHT_MEASURE)]
             return sensor_data
         except AttributeError as ae:
             print("The light sensor was not set up: {}".format(ae))
