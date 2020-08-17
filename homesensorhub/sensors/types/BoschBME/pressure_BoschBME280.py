@@ -1,16 +1,16 @@
-"""Module which implements the Bosch280BME temperature sensor module logic."""
-from sensors.types.temperature import Temperature
+"""Module which implements the Bosch280BME pressure sensor module logic."""
+from sensors.types.pressure import Pressure
 
 
-class TemperatureAdafruitBME280(Temperature):
-    """Class which implements the temperature paired with AdafruitBME280."""
+class PressureBoschBME280(Pressure):
+    """Class which implements the pressure paired with AdafruitBME280."""
 
     MEASURE = 'Celsius'
     SENSOR_NAME = 'BoschBME280'
 
     def __init__(self, sensor, sensor_name):
         """
-        Initialise the temperature.
+        Initialise the pressure.
 
         The object could be initialised with the physical sensor responsable
         for providing values of this type and its name. As an example, the name
@@ -33,8 +33,12 @@ class TemperatureAdafruitBME280(Temperature):
 
         :return: float
         """
-        return self.__sensor.temperature
+        return self.__sensor.pressure
 
-    def get_physical_sensor(self):
-        """Return the physical found sensor."""
-        return self.___sensor
+    def get_sensor_measure(self) -> str:
+        """
+        Return the unit of measurement for the pressure for this sensor module.
+
+        :return: string
+        """
+        return PressureBoschBME280.MEASURE

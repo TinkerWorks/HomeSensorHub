@@ -1,18 +1,19 @@
-"""Module which contains the temperature type class."""
+"""Module which contains the humidity type class."""
 from routing.payload import Payload
 import datetime
 
 
-class Temperature():
+class Humidity():
     """Class which represents a type of value collected by a sensor."""
 
-    TYPE = 'Temperature'
+    TYPE = 'Humidity'
+    MEASURE = '% RH'
 
     def get_payload(self) -> Payload:
         """
-        Collect payload for this sensor type.
+        Collect payload for the humidity.
 
-        Trigger a data collection for this type.
+        Triggers a data read on the sensor for this type.
         """
         payload = Payload(self.TYPE,
                           self.get_sensor_name(),

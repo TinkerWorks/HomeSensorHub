@@ -1,7 +1,6 @@
 """Entry point for the application."""
 from routing.sensor_sink import SourceAndSink
 from routing.data_sender import DataSender
-from sensors.types.temperature_BoschBME280 import TemperatureAdafruitBME280
 from sensors.probes.probe_BoschBME280 import ProbeAdafruitBME280
 
 sensor_types_BoschBME280 = ProbeAdafruitBME280.probe()

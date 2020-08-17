@@ -1,12 +1,12 @@
-"""Module which contains the temperature type class."""
+"""Module which contains the pressure type class."""
 from routing.payload import Payload
 import datetime
 
 
-class Temperature():
+class Pressure():
     """Class which represents a type of value collected by a sensor."""
 
-    TYPE = 'Temperature'
+    TYPE = 'Pressure'
 
     def get_payload(self) -> Payload:
         """

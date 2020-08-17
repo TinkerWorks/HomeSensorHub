@@ -1,6 +1,9 @@
 """Module which implements the probing for the BoschBME280 sensor."""
 from sensors.probes.probe_BoschBME import ProbeAdafruitBME
-from sensors.types.temperature_BoschBME280 import TemperatureAdafruitBME280
+from sensors.types.BoschBME.temperature_BoschBME280 import TemperatureBoschBME280
+from sensors.types.BoschBME.altitude_BoschBME280 import AltitudeBoschBME280
+from sensors.types.BoschBME.humidity_BoschBME280 import HumidityBoschBME280
+from sensors.types.BoschBME.pressure_BoschBME280 import PressureBoschBME280
 
 import adafruit_bme280
 import logging
@@ -21,4 +24,7 @@ class ProbeAdafruitBME280(ProbeAdafruitBME):
         return "BoschBME280"
 
     def generate_sensor_types(sensor, sensor_name):
-        return [TemperatureAdafruitBME280(sensor, sensor_name)]
+        return [TemperatureBoschBME280(sensor, sensor_name),
+                AltitudeBoschBME280(sensor, sensor_name),
+                HumidityBoschBME280(sensor, sensor_name),
+                PressureBoschBME280(sensor, sensor_name)]
