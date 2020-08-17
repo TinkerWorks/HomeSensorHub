@@ -32,9 +32,9 @@ class ProbeAdafruitBME():
                                                      hex(address)))
                 return cls.generate_sensor_types(sensor)
             except ValueError as ve:
-                logging.debug(ve)
-                print("Found no {} sensor at address {}.".format(cls.get_sensor_name(),
-                                                                 hex(address)))
+                logging.info("Found no {} sensor at address {}.".format(cls.get_sensor_name(),
+                                                                        hex(address)))
             except RuntimeError as re:
-                logging.info("These are not the sensors you're looking for.")
-                logging.debug(re)
+                logging.info("The chip found at {} address has a different ID than {}." \
+                             "These are not the sensors you're looking for."
+                             .format(address, cls.get_sensor_name()))
