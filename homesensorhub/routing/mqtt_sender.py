@@ -80,13 +80,7 @@ class MQTTDataSender(DataSender):
 
         sensors-office/temperature/current/value 27.68
         """
-        payload_attributes = {
-            'type': payload.get_str_type(),
-            'name': payload.get_str_name(),
-            'value': payload.get_str_value(),
-            'timestamp': payload.get_str_timestamp(),
-            'measurement': payload.get_str_measurement()
-        }
+        payload_attributes = payload.get_string_payload()
 
         for attribute, collected in payload_attributes.items():
             type = payload.get_str_type()
