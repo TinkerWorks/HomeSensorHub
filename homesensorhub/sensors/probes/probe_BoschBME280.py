@@ -23,8 +23,8 @@ class ProbeAdafruitBME280(ProbeAdafruitBME):
         """Return the name of the sensor."""
         return "BoschBME280"
 
-    def generate_sensor_types(sensor, sensor_name):
-        return [TemperatureBoschBME280(sensor, sensor_name),
-                AltitudeBoschBME280(sensor, sensor_name),
-                HumidityBoschBME280(sensor, sensor_name),
-                PressureBoschBME280(sensor, sensor_name)]
+    def generate_sensor_types(sensor):
+        return [TemperatureBoschBME280(sensor),
+                AltitudeBoschBME280(sensor),
+                HumidityBoschBME280(sensor),
+                PressureBoschBME280(sensor)]

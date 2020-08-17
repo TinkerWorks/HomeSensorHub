@@ -18,5 +18,5 @@ class Altitude():
                           self.get_sensor_name(),
                           self.get_sensor_value(),
                           datetime.datetime.now(),
-                          self.MEASURE)
+                          self.get_sensor_measure())
         return payload

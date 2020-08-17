@@ -30,7 +30,7 @@ class ProbeAdafruitBME():
                                                          address)
                 logging.info("{} found at {}".format(cls.get_sensor_name(),
                                                      hex(address)))
-                return cls.generate_sensor_types(sensor, cls.get_sensor_name())
+                return cls.generate_sensor_types(sensor)
             except ValueError as ve:
                 logging.debug(ve)
                 print("Found no {} sensor at address {}.".format(cls.get_sensor_name(),

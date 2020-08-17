@@ -8,16 +8,14 @@ class PressureBoschBME280(Pressure):
     MEASURE = 'Celsius'
     SENSOR_NAME = 'BoschBME280'
 
-    def __init__(self, sensor, sensor_name):
+    def __init__(self, sensor):
         """
         Initialise the pressure.
 
-        The object could be initialised with the physical sensor responsable
-        for providing values of this type and its name. As an example, the name
-        can be "adafruit_bme280".
+        The object is initialised with the physical sensor responsable for providing values of this
+        type. As an example, the name can be "BoschBME280".
         """
         self.__sensor = sensor
-        self.__sensor_name = sensor_name
 
     def get_sensor_name(self) -> str:
         """
@@ -25,7 +23,7 @@ class PressureBoschBME280(Pressure):
 
         :return: string
         """
-        return self.__sensor_name
+        return self.SENSOR_NAME
 
     def get_sensor_value(self) -> float:
         """

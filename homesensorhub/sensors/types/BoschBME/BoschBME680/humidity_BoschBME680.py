@@ -1,24 +1,29 @@
-"""Module which implements the Bosch280BME humidity sensor module set up."""
+"""Module which implements the Bosch680BME humidity sensor module set up."""
 from sensors.types.humidity import Humidity
 
 
-class HumidityBoschBME280(Humidity):
-    """Class which implements the humidity collected from BoschBME280 sensor module."""
+class HumidityBoschBME680(Humidity):
+    """Class which implements the humidity collected from BoschBME680 sensor module."""
 
     MEASURE = '% RH'
-    SENSOR_NAME = 'BoschBME280'
+    SENSOR_NAME = 'BoschBME680'
 
-    def __init__(self, sensor, sensor_name):
+    def __init__(self, sensor):
+        """
+        Initialise the humidity.
+
+        The object is initialised with the physical sensor responsable for providing values of this
+        type. As an example, the name can be "BoschBME680".
+        """
         self.__sensor = sensor
-        self.__sensor_name = sensor_name
 
     def get_sensor_name(self) -> str:
         """
-        Return the actual name of the sensor (eg. BME280, BME680 etc.).
+        Return the actual name of the sensor (eg. BME680, BME680 etc.).
 
         :return: string
         """
-        return self.__sensor_name
+        return self.SENSOR_NAME
 
     def get_sensor_value(self) -> int:
         """
@@ -34,4 +39,4 @@ class HumidityBoschBME280(Humidity):
 
         :return: string
         """
-        return HumidityBoschBME280.MEASURE
+        return HumidityBoschBME680.MEASURE

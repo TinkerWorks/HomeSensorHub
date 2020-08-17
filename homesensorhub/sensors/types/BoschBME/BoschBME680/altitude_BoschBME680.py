@@ -8,9 +8,14 @@ class AltitudeBoschBME680(Altitude):
     MEASURE = 'Meters'
     SENSOR_NAME = 'BoschBME680'
 
-    def __init__(self, sensor, sensor_name):
+    def __init__(self, sensor):
+        """
+        Initialise the altitude.
+
+        The object is initialised with the physical sensor responsable for providing values of this
+        type. As an example, the name can be "BoschBME680".
+        """
         self.__sensor = sensor
-        self.__sensor_name = sensor_name
 
     def get_sensor_name(self) -> str:
         """
@@ -18,7 +23,7 @@ class AltitudeBoschBME680(Altitude):
 
         :return: string
         """
-        return self.__sensor_name
+        return self.SENSOR_NAME
 
     def get_sensor_value(self) -> int:
         """

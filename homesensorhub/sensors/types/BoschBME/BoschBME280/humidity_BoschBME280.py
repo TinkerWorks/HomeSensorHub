@@ -8,9 +8,14 @@ class HumidityBoschBME280(Humidity):
     MEASURE = '% RH'
     SENSOR_NAME = 'BoschBME280'
 
-    def __init__(self, sensor, sensor_name):
+    def __init__(self, sensor):
+        """
+        Initialise the humidity.
+
+        The object is initialised with the physical sensor responsable for providing values of this
+        type. As an example, the name can be "BoschBME280".
+        """
         self.__sensor = sensor
-        self.__sensor_name = sensor_name
 
     def get_sensor_name(self) -> str:
         """
@@ -18,7 +23,7 @@ class HumidityBoschBME280(Humidity):
 
         :return: string
         """
-        return self.__sensor_name
+        return self.SENSOR_NAME
 
     def get_sensor_value(self) -> int:
         """
