@@ -1,4 +1,4 @@
-"""Module which implements the Bosch280BME sensor module logic."""
+"""Module which implements the Bosch280BME temperature sensor module logic."""
 from sensors.types.temperature import Temperature
 
 
@@ -18,7 +18,6 @@ class TemperatureAdafruitBME280(Temperature):
         """
         self.__sensor = sensor
         self.__sensor_name = sensor_name
-        self.__name = TemperatureAdafruitBME280.SENSOR_NAME
 
     def get_sensor_name(self) -> str:
         """
@@ -26,7 +25,7 @@ class TemperatureAdafruitBME280(Temperature):
 
         :return: string
         """
-        return self.__name
+        return self.__sensor_name
 
     def get_sensor_value(self) -> float:
         """
