@@ -33,7 +33,6 @@ class SourceAndSink:
         """
         self.__sensors = type_sensors
         self.__senders = senders
-        self.__collected = []
 
     def sink(self) -> None:
         """
@@ -45,10 +44,13 @@ class SourceAndSink:
         :return: None
         """
         logging.debug("Started sinking...")
+        collected = []
 
         for type_sensor in self.__sensors:
             data = type_sensor.get_payload()
-            self.__collected.append(data)
+            collected.append(data)
+
+        return collected
 
     def sink_and_send(self, interval) -> None:
         """
@@ -60,6 +62,6 @@ class SourceAndSink:
         sender = MQTTDataSender()
 
         while True:
-            self.sink()
-            sender.send(self.__collected)
+            collected = self.sink()
+            sender.send(collected)
             time.sleep(interval)
