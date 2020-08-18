@@ -2,10 +2,12 @@
 
 import logging
 
+from sensors.sensor_types import Motion
+
 import RPi.GPIO as GPIO
 
 
-class MotionSensorRCWL0515:
+class MotionSensorRCWL0515(Motion):
     ms_dict = {}
 
     def __init__(self, gpio, callback=None):
@@ -18,9 +20,16 @@ class MotionSensorRCWL0515:
         self.initialize_gpio()
         self.__motionChanged(self.MOTION_GPIO)
 
-        print("Motion initialized !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-
         self.install_callback()
+
+    def get_sensor_name(self):
+        return "RCWL-0515"
+
+    def get_sensor_value(self):
+        return self.motion
+
+    def get_sensor_measure(self):
+        return "None"
 
     def get(self):
         return self.motion
@@ -41,10 +50,10 @@ class MotionSensorRCWL0515:
         self.logger.debug("Motion Changed %d" % gpio)
         if GPIO.input(self.MOTION_GPIO):
             next_motion = True
-            self.logger.debug("Motion Started %d" % gpio)
+            self.logger.info("Motion Started %d" % gpio)
         else:
             next_motion = False
-            self.logger.debug("Motion Ended %d" % gpio)
+            self.logger.info("Motion Ended %d" % gpio)
 
         if(next_motion == self.motion):
             self.logger.error("Motion Transitioned from {} to {}".format(self.motion, next_motion))
