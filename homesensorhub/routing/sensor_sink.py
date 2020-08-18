@@ -43,7 +43,7 @@ class SourceAndSink:
 
         :return: None
         """
-        logging.debug("Started sinking...")
+        logging.debug("Collecting data ...")
         collected = []
 
         for type_sensor in self.__sensors:
@@ -58,7 +58,7 @@ class SourceAndSink:
 
         :return: None
         """
-        logging.info("Sinking and sending data.")
+        logging.info("Sinking and sending data...")
         sender = MQTTDataSender()
 
         while True:
