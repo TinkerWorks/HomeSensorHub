@@ -1,12 +1,11 @@
-#!/bin/env python3
-import datetime
+#!/usr/bin/env python3
+
 import logging
 
-from time import sleep
 import RPi.GPIO as GPIO
 
 
-class MotionSensor:
+class MotionSensorRCWL0515:
     ms_dict = {}
 
     def __init__(self, gpio=7, callback=None):
@@ -16,21 +15,25 @@ class MotionSensor:
 
         # Read initial state
         self.motion = None
+        self.initialize_gpio()
         self.__motionChanged(self.MOTION_GPIO)
+
+        print("Motion initialized !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 
     def get(self):
         return self.motion
 
-    def initialize(self):
+    def initialize_gpio(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(self.MOTION_GPIO, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-        MotionSensor.ms_dict[self.MOTION_GPIO] = self
+    def install_callback(self):
+        MotionSensorRCWL0515.ms_dict[self.MOTION_GPIO] = self
         GPIO.add_event_detect(self.MOTION_GPIO, GPIO.BOTH,
-                              callback=MotionSensor.__motionChangedStatic)
+                              callback=MotionSensorRCWL0515.__motionChangedStatic)
 
     def __motionChangedStatic(gpio):
-        MotionSensor.ms_dict[gpio].__motionChanged(gpio)
+        MotionSensorRCWL0515.ms_dict[gpio].__motionChanged(gpio)
 
     def __motionChanged(self, gpio):
         if GPIO.input(self.MOTION_GPIO):
