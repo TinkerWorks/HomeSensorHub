@@ -13,7 +13,7 @@ class ProbeRCWL0515(Probe):
     """Class which implements probing for BoschBME sensors."""
 
     # This should come from a settings file (read-only prefferably)
-    GPIO = 7
+    GPIO = 4 # BCM notation for GPIO 7
 
     @classmethod
     def probe(cls) -> list:
