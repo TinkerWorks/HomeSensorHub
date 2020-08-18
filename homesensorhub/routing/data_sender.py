@@ -5,14 +5,10 @@
 class DataSender:
     """Class which acts as a virtual class for a sink."""
 
-    def __init__(self):
-        """Will be overwritten by child."""
-        pass
-
     def connect(self, retry):
         """Set up connection with a sink."""
-        pass
+        raise NotImplementedError("The child sender must implement the connect function.")
 
     def send(self, data):
         """Send the collected data to a sink."""
-        pass
+        raise NotImplementedError("The child sender must implement the send function.")
