@@ -1,6 +1,6 @@
-from sensors.drivers.TSL258x import TSL258x as sensor_driver
-from sensors.types.TSL258x.TSL258x_type import LightTSL258x
-from sensors.probes.probe import Probe
+from sensors.TSL258x.driver import TSL258x
+from sensors.TSL258x.type import LightTSL258x
+from sensors.probe import Probe
 
 import logging
 
@@ -21,7 +21,7 @@ class ProbeTSL258x(Probe):
 
         For now there is only one option, using TSL258x.
         """
-        sensor = sensor_driver.probe()
+        sensor = TSL258x.probe()
         sensor.config()
 
         logging.debug("Found {} sensor.".format(cls.SENSOR_NAME))

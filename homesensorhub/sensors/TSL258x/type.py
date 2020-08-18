@@ -1,4 +1,4 @@
-from sensors.types.sensor_types import Light
+from sensors.sensor_types import Light
 
 
 class TSL258xType:

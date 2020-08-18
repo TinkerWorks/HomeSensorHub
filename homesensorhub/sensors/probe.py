@@ -4,7 +4,6 @@
 class Probe:
     """Class which implements the interface for sensor probing."""
 
-    @staticmethod
     def probe() -> list:
         """Probe for a specific sensor on the board."""
         raise NotImplementedError("Probing must be implemented in each child probe class.")

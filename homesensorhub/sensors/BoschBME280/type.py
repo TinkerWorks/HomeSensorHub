@@ -1,4 +1,4 @@
-from sensors.types.sensor_types import Humidity, Pressure, Altitude, Temperature
+from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature
 
 
 class BoschBME280Type:

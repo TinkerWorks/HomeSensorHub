@@ -1,16 +1,20 @@
-"""Module which contains sketch the probing the BoschBME sensors."""
-from sensors.probes.probe import Probe
+"""Module which implements the probing for the BoschBME280 sensor."""
+from sensors.BoschBME280.type import TemperatureBoschBME280
+from sensors.BoschBME280.type import AltitudeBoschBME280
+from sensors.BoschBME280.type import HumidityBoschBME280
+from sensors.BoschBME280.type import PressureBoschBME280
 
-import board
+import adafruit_bme280
 import busio
+import board
 import logging
 
 
 logging.basicConfig(level=logging.INFO)
 
 
-class ProbeBoschBME(Probe):
-    """Class which implements probing for BoschBME sensors."""
+class ProbeBoschBME280():
+    """Class which implements probing for BME280 sensor."""
 
     ADDRESSES = [0x77, 0x76]
     I2C = busio.I2C(board.SCL, board.SDA)
@@ -24,9 +28,9 @@ class ProbeBoschBME(Probe):
         sensors of the type BoschBME. In case the sensor is not found at any
         of the specified I2C address, None is returned.
         """
-        for address in ProbeBoschBME.ADDRESSES:
+        for address in ProbeBoschBME280.ADDRESSES:
             try:
-                sensor = cls.get_sensor_probe_function()(ProbeBoschBME.I2C,
+                sensor = cls.get_sensor_probe_function()(ProbeBoschBME280.I2C,
                                                          address)
                 logging.info("{} found at {}".format(cls.get_sensor_name(),
                                                      hex(address)))
@@ -38,3 +42,20 @@ class ProbeBoschBME(Probe):
                 logging.info("The chip found at {} address has a different ID than {}." \
                              "These are not the sensors you're looking for."
                              .format(address, cls.get_sensor_name()))
+
+    @staticmethod
+    def get_sensor_probe_function():
+        """Return the function used for probing the sensor."""
+        return adafruit_bme280.Adafruit_BME280_I2C
+
+    @staticmethod
+    def get_sensor_name():
+        """Return the name of the sensor."""
+        return "BoschBME280"
+
+    @staticmethod
+    def generate_sensor_types(sensor):
+        return [TemperatureBoschBME280(sensor),
+                AltitudeBoschBME280(sensor),
+                HumidityBoschBME280(sensor),
+                PressureBoschBME280(sensor)]

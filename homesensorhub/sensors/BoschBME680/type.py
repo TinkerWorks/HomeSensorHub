@@ -1,4 +1,4 @@
-from sensors.types.sensor_types import Humidity, Pressure, Altitude, Temperature, Gas
+from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature, Gas
 
 
 class BoschBME680Type:
@@ -13,7 +13,7 @@ class BoschBME680Type:
         return self.SENSOR_NAME
 
     def get_sensor_value(self):
-        return self.SENSOR_NAME
+        raise NotImplementedError("The value read for this sensor must be implemented.")
 
     def get_sensor_measure(self):
         """Return the measurement unit for the sensor."""
