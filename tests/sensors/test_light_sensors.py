@@ -2,13 +2,13 @@
 import sys
 
 from mock import Mock
-if 'sensors.drivers.TSL258x' not in sys.modules.keys():
-    sys.modules['sensors.drivers.TSL258x'] = Mock()
-if 'sensors.drivers' not in sys.modules.keys():
-    sys.modules['sensors.drivers'] = Mock()
+if 'sensors.TSL258x.driver' not in sys.modules.keys():
+    sys.modules['sensors.TSL258x.driver'] = Mock()
+    
 
-from sensors.drivers.TSL258x import TSL258x
-from sensors.light_sensor import LightSensor, LightSensorProbe
+from sensors.TSL258x.driver import TSL258x
+from sensors.TSL258x.type import LightTSL258x
+from sensors.TSL258x.probe import ProbeTSL258x
 
 import unittest
 import time
@@ -25,18 +25,15 @@ class TestLightSensors(unittest.TestCase):
         time_end = time.time() + 1
 
         while time.time() < time_end:
-            ls_probe = LightSensorProbe()
+            # ls_probe = LightSensorProbe()
+            sensors = ProbeTSL258x().probe()
 
-            for sensor in ls_probe.get_sensors():
+            for sensor in sensors:
                 ls.read.return_value = random.randint(0, 200.000)
-
-                collected_data = sensor.get_data()
-                payload = collected_data[0]
-                actual_data = payload.get_str_value()
-
+                actual_data = str(sensor.get_sensor_value())
                 self.assertEquals(actual_data, str(ls.read.return_value))
 
             time.sleep(0.1)
 
-        if len(collected_data) == 0:
+        if len(actual_data) == 0:
             raise Exception("No value gathered from light sensor.")

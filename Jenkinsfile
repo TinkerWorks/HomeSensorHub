@@ -6,6 +6,8 @@ pipeline {
     stages {
         stage('... Environment preparation ...') {
             steps {
+                echo " ... cleaning up git repo ... "
+                sh "git clean -xdf"
                 echo "... preparing python environment required for project ..."
                 sh "make prepare-test"
             }

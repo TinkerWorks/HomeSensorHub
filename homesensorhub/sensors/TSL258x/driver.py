@@ -235,4 +235,3 @@ class TSL258x:
       temp = temp + 32768               # round lsb (2^(LUX_SCALE-1))
       lux_temp = temp >> self.LUX_SCALE      # strip off fractional portion
       return (lux_temp)                 # Signal I2C had no errors
-

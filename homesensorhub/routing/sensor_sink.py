@@ -23,7 +23,7 @@ class SourceAndSink:
     to the data sender class.
     """
 
-    def __init__(self, sensors, senders) -> None:
+    def __init__(self, type_sensors, senders) -> None:
         """
         Initialise the necessary objects for sinking collected data.
 
@@ -31,9 +31,8 @@ class SourceAndSink:
 
         :return: None
         """
-        self.__sensors = sensors
+        self.__sensors = type_sensors
         self.__senders = senders
-        self.__collected = []
 
     def sink(self) -> None:
         """
@@ -44,13 +43,14 @@ class SourceAndSink:
 
         :return: None
         """
-        logging.debug("Collecting and sinking all data.")
+        logging.debug("Collecting data ...")
+        collected = []
 
         for type_sensor in self.__sensors:
-            for sensor in type_sensor.get_sensors():
-                data = sensor.get_data()
-                for payload in data:
-                    self.__collected.append(payload)
+            data = type_sensor.get_payload()
+            collected.append(data)
+
+        return collected
 
     def sink_and_send(self, interval) -> None:
         """
@@ -58,10 +58,10 @@ class SourceAndSink:
 
         :return: None
         """
-        logging.info("Sinking and sending data.")
+        logging.info("Sinking and sending data...")
         sender = MQTTDataSender()
 
         while True:
-            self.sink()
-            sender.send(self.__collected)
+            collected = self.sink()
+            sender.send(collected)
             time.sleep(interval)
