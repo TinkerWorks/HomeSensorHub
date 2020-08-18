@@ -2,14 +2,13 @@
 import sys
 
 from mock import Mock
-if 'sensors.drivers.TSL258x' not in sys.modules.keys():
-    sys.modules['sensors.drivers.TSL258x'] = Mock()
-if 'sensors.drivers' not in sys.modules.keys():
-    sys.modules['sensors.drivers'] = Mock()
+if 'sensors.TSL258x.driver' not in sys.modules.keys():
+    sys.modules['sensors.TSL258x.driver'] = Mock()
+    
 
-from sensors.drivers.TSL258x import TSL258x
-from sensors.types.TSL258x.light_TSL258x import LightTSL258x
-from sensors.probes.probe_TSL258x import ProbeTSL258x
+from sensors.TSL258x.driver import TSL258x
+from sensors.TSL258x.type import LightTSL258x
+from sensors.TSL258x.probe import ProbeTSL258x
 
 import unittest
 import time

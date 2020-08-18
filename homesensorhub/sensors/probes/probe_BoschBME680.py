@@ -1,10 +1,10 @@
 """Module which implements the probing for the BoschBME680 sensor."""
 from sensors.probes.probe_BoschBME import ProbeBoschBME
-from sensors.types.BoschBME.BoschBME680.temperature_BoschBME680 import TemperatureBoschBME680
-from sensors.types.BoschBME.BoschBME680.altitude_BoschBME680 import AltitudeBoschBME680
-from sensors.types.BoschBME.BoschBME680.humidity_BoschBME680 import HumidityBoschBME680
-from sensors.types.BoschBME.BoschBME680.pressure_BoschBME680 import PressureBoschBME680
-from sensors.types.BoschBME.BoschBME680.gas_BoschBME680 import GasBoschBME680
+from sensors.types.BoschBME.BoschBME680_type import TemperatureBoschBME680
+from sensors.types.BoschBME.BoschBME680_type import AltitudeBoschBME680
+from sensors.types.BoschBME.BoschBME680_type import HumidityBoschBME680
+from sensors.types.BoschBME.BoschBME680_type import PressureBoschBME680
+from sensors.types.BoschBME.BoschBME680_type import GasBoschBME680
 
 import adafruit_bme680
 import logging

@@ -1,5 +1,5 @@
 from sensors.drivers.TSL258x import TSL258x as sensor_driver
-from sensors.types.TSL258x.light_TSL258x import LightTSL258x
+from sensors.types.TSL258x.TSL258x_type import LightTSL258x
 from sensors.probes.probe import Probe
 
 import logging

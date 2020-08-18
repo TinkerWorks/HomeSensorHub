@@ -1,9 +1,9 @@
 """Module which implements the probing for the BoschBME280 sensor."""
 from sensors.probes.probe_BoschBME import ProbeBoschBME
-from sensors.types.BoschBME.BoschBME280.temperature_BoschBME280 import TemperatureBoschBME280
-from sensors.types.BoschBME.BoschBME280.altitude_BoschBME280 import AltitudeBoschBME280
-from sensors.types.BoschBME.BoschBME280.humidity_BoschBME280 import HumidityBoschBME280
-from sensors.types.BoschBME.BoschBME280.pressure_BoschBME280 import PressureBoschBME280
+from sensors.types.BoschBME.BoschBME280_type import TemperatureBoschBME280
+from sensors.types.BoschBME.BoschBME280_type import AltitudeBoschBME280
+from sensors.types.BoschBME.BoschBME280_type import HumidityBoschBME280
+from sensors.types.BoschBME.BoschBME280_type import PressureBoschBME280
 
 import adafruit_bme280
 import logging
