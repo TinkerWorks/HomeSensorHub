@@ -1,9 +1,11 @@
 """Module which contains the light type class."""
 from routing.payload import Payload
+from sensors.types.sensor_type import SensorType
+
 import datetime
 
 
-class Light():
+class Light(SensorType):
     """Class which represents a type of light value collected by light sensor modules."""
 
     TYPE = 'Light'

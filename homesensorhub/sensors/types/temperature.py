@@ -1,9 +1,11 @@
 """Module which contains the temperature type class."""
 from routing.payload import Payload
+from sensors.types.sensor_type import SensorType
+
 import datetime
 
 
-class Temperature():
+class Temperature(SensorType):
     """Class which represents a type of value collected by a sensor."""
 
     TYPE = 'Temperature'

@@ -1,13 +1,14 @@
 """Module which contains the humidity type class."""
 from routing.payload import Payload
+from sensors.types.sensor_type import SensorType
+
 import datetime
 
 
-class Humidity():
+class Humidity(SensorType):
     """Class which represents a type of value collected by a sensor."""
 
     TYPE = 'Humidity'
-    MEASURE = '% RH'
 
     def get_payload(self) -> Payload:
         """
