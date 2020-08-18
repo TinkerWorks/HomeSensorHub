@@ -1,5 +1,5 @@
 """Module which implements the Bosch680BME gas sensor module set up."""
-from sensors.types.gas import Gas
+from sensors.types.sensor_type import Gas
 
 
 class GasBoschBME680(Gas):

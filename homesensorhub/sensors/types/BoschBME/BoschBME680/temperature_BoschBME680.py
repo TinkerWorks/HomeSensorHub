@@ -1,5 +1,5 @@
 """Module which implements the Bosch680BME temperature sensor module logic."""
-from sensors.types.temperature import Temperature
+from sensors.types.sensor_type import Temperature
 
 
 class TemperatureBoschBME680(Temperature):

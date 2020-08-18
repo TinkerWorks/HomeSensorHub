@@ -1,5 +1,5 @@
 """Module which implements the Bosch680BME humidity sensor module set up."""
-from sensors.types.humidity import Humidity
+from sensors.types.sensor_type import Humidity
 
 
 class HumidityBoschBME680(Humidity):

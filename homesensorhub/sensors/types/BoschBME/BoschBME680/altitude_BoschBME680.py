@@ -1,5 +1,5 @@
 """Module which implements the Bosch680BME altitude sensor module set up."""
-from sensors.types.altitude import Altitude
+from sensors.types.sensor_type import Altitude
 
 
 class AltitudeBoschBME680(Altitude):

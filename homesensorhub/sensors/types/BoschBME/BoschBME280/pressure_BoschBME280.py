@@ -1,5 +1,5 @@
 """Module which implements the Bosch280BME pressure sensor module logic."""
-from sensors.types.pressure import Pressure
+from sensors.types.sensor_type import Pressure
 
 
 class PressureBoschBME280(Pressure):
