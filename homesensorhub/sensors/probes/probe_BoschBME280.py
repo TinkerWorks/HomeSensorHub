@@ -1,5 +1,5 @@
 """Module which implements the probing for the BoschBME280 sensor."""
-from sensors.probes.probe_BoschBME import ProbeAdafruitBME
+from sensors.probes.probe_BoschBME import ProbeBoschBME
 from sensors.types.BoschBME.BoschBME280.temperature_BoschBME280 import TemperatureBoschBME280
 from sensors.types.BoschBME.BoschBME280.altitude_BoschBME280 import AltitudeBoschBME280
 from sensors.types.BoschBME.BoschBME280.humidity_BoschBME280 import HumidityBoschBME280
@@ -12,7 +12,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-class ProbeAdafruitBME280(ProbeAdafruitBME):
+class ProbeBoschBME280(ProbeBoschBME):
     """Class which implements probing for BME280 sensor."""
 
     def get_sensor_probe_function():

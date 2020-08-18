@@ -1,4 +1,5 @@
 """Module which contains sketch the probing the BoschBME sensors."""
+from sensors.probes.probe import Probe
 
 import board
 import busio
@@ -8,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO)
 
 
-class ProbeAdafruitBME():
+class ProbeBoschBME(Probe):
     """Class which implements probing for BoschBME sensors."""
 
     ADDRESSES = [0x77, 0x76]
@@ -23,10 +24,9 @@ class ProbeAdafruitBME():
         sensors of the type BoschBME. In case the sensor is not found at any
         of the specified I2C address, None is returned.
         """
-
-        for address in ProbeAdafruitBME.ADDRESSES:
+        for address in ProbeBoschBME.ADDRESSES:
             try:
-                sensor = cls.get_sensor_probe_function()(ProbeAdafruitBME.I2C,
+                sensor = cls.get_sensor_probe_function()(ProbeBoschBME.I2C,
                                                          address)
                 logging.info("{} found at {}".format(cls.get_sensor_name(),
                                                      hex(address)))

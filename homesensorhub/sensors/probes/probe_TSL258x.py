@@ -1,5 +1,7 @@
 from sensors.drivers.TSL258x import TSL258x as sensor_driver
 from sensors.types.TSL258x.light_TSL258x import LightTSL258x
+from sensors.probes.probe import Probe
+
 import logging
 
 logging.basicConfig(
@@ -8,7 +10,7 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S')
 
 
-class ProbeTSL258x:
+class ProbeTSL258x(Probe):
 
     SENSOR_NAME = 'TSL258x'
 
