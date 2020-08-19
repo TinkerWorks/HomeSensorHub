@@ -7,6 +7,6 @@
 
 # Top level architecture
 
-![TLA](https://github.com/TinkerWorks/HomeSensorHub/blob/improvements/docs/top_level_architecture.png)
+![TLA](https://github.com/TinkerWorks/HomeSensorHub/blob/master/docs/top_level_architecture.png)
 
 ---
