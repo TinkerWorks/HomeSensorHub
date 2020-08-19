@@ -15,7 +15,7 @@ class ProbeTSL258x(Probe):
     SENSOR_NAME = 'TSL258x'
 
     @classmethod
-    def probe(cls) -> list:
+    def probe(cls, send_payload_callback=None) -> list:
         """Probe board for TSL258x sensor."""
         sensor = TSL258x.probe()
         sensor.config()

@@ -61,4 +61,4 @@ class MotionSensorRCWL0515(Motion):
             self.motion = next_motion
 
             if(self.callback is not None):
-                self.callback(self.motion)
+                self.callback(self.get_payload())

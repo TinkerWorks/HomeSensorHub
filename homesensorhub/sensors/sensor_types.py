@@ -39,6 +39,6 @@ class Altitude(SensorType):
 class Temperature(SensorType):
     TYPE = 'Temperature'
 
-    
+
 class Motion(SensorType):
     TYPE = 'Motion'

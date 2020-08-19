@@ -7,6 +7,9 @@ from sensors.BoschBME680.probe import ProbeBoschBME680
 from sensors.TSL258x.probe import ProbeTSL258x
 from sensors.RCWL0515.probe import ProbeRCWL0515
 
+mds = MQTTDataSender()
+sender = [mds]
+
 probefunctions = []
 probefunctions.append(ProbeBoschBME280.probe)
 probefunctions.append(ProbeBoschBME680.probe)
@@ -16,13 +19,11 @@ probefunctions.append(ProbeRCWL0515.probe)
 sensor_types = []
 
 for function in probefunctions:
-    sensor_list = function()
+    sensor_list = function(mds.send_payload)  # TODO: Send a more generic data sender callback.
     try:
         sensor_types += sensor_list
     except TypeError:
         pass
-
-sender = [MQTTDataSender()]
 
 sensor_sink = SourceAndSink(sensor_types, sender)
 sensor_sink.sink_and_send(3)

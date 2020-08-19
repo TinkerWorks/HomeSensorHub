@@ -45,8 +45,11 @@ class MQTTDataSender(DataSender):
         This sends the json payload, as well as simple values.
         """
         for payload in data:
-            self.__send_json_payload(payload)
-            self.__send_simple_values(payload)
+            self.send_payload(payload)
+
+    def send_payload(self, payload):
+        self.__send_json_payload(payload)
+        self.__send_simple_values(payload)
 
     def __send_json_payload(self, payload):
         """

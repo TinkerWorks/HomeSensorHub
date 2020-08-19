@@ -16,7 +16,7 @@ class ProbeRCWL0515(Probe):
     GPIO = 4  # BCM notation for GPIO 7
 
     @classmethod
-    def probe(cls) -> list:
+    def probe(cls, send_payload_callback=None) -> list:
         """
         Probe for Bosch BME type sensors to the possible I2C addresses.
 
@@ -24,5 +24,4 @@ class ProbeRCWL0515(Probe):
         sensors of the type BoschBME. In case the sensor is not found at any
         of the specified I2C address, None is returned.
         """
-
-        return [MotionSensorRCWL0515(gpio=cls.GPIO)]
+        return [MotionSensorRCWL0515(gpio=cls.GPIO, callback=send_payload_callback)]
