@@ -16,7 +16,6 @@ class MQTTDataSender(DataSender):
     """Class which implements data routing to MQTT."""
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
-        """Set up and connect to MQTT."""
         self.__client = mqtt.Client()
         self.__broker_url = broker_url
         self.__broker_port = broker_port
@@ -25,7 +24,6 @@ class MQTTDataSender(DataSender):
         self.connect()
 
     def connect(self, retry=5):
-        """Set up the MQTT connection with the host."""
         while (retry > 0):
             try:
                 connection = self.__client.connect(self.__broker_url,

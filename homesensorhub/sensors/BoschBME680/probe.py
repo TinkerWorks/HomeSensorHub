@@ -36,11 +36,11 @@ class ProbeBoschBME680():
                 logging.info("{} found at {}".format(cls.get_sensor_name(),
                                                      hex(address)))
                 return cls.generate_sensor_types(sensor)
-            except ValueError as ve:
+            except ValueError:
                 logging.info("Found no {} sensor at address {}.".format(cls.get_sensor_name(),
                                                                         hex(address)))
-            except RuntimeError as re:
-                logging.info("The chip found at {} address has a different ID than {}." \
+            except RuntimeError:
+                logging.info("The chip found at {} address has a different ID than {}."
                              "These are not the sensors you're looking for."
                              .format(address, cls.get_sensor_name()))
 

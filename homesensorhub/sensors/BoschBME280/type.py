@@ -21,8 +21,6 @@ class BoschBME280Type:
 
 
 class HumidityBoschBME280(BoschBME280Type, Humidity):
-    """Class which implements the humidity collected from BoschBME280 sensor module."""
-
     MEASURE = '% RH'
 
     def __init__(self, sensor):
@@ -37,8 +35,6 @@ class HumidityBoschBME280(BoschBME280Type, Humidity):
 
 
 class PressureBoschBME280(BoschBME280Type, Pressure):
-    """Class which implements the pressure paired with AdafruitBME280."""
-
     MEASURE = 'Celsius'
 
     def __init__(self, sensor):
@@ -53,8 +49,6 @@ class PressureBoschBME280(BoschBME280Type, Pressure):
 
 
 class AltitudeBoschBME280(BoschBME280Type, Altitude):
-    """Class which implements the altitude collected from BoschBME280 sensor module."""
-
     MEASURE = 'Meters'
 
     def __init__(self, sensor):
@@ -69,8 +63,6 @@ class AltitudeBoschBME280(BoschBME280Type, Altitude):
 
 
 class TemperatureBoschBME280(BoschBME280Type, Temperature):
-    """Class which implements the temperature paired with AdafruitBME280."""
-
     MEASURE = 'Celsius'
 
     def __init__(self, sensor):

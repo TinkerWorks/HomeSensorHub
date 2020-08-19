@@ -2,6 +2,7 @@
 from routing.payload import Payload
 import datetime
 
+
 class SensorType:
     """Interface for creating a sensor type object."""
 
