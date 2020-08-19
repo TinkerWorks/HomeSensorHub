@@ -1,6 +1,6 @@
 """Entry point for the application."""
 from routing.sensor_sink import SourceAndSink
-from routing.data_sender import DataSender
+from routing.mqtt_sender import MQTTDataSender
 
 from sensors.BoschBME280.probe import ProbeBoschBME280
 from sensors.BoschBME680.probe import ProbeBoschBME680
@@ -22,7 +22,7 @@ for function in probefunctions:
     except TypeError:
         pass
 
-sender = [DataSender()]
+sender = [MQTTDataSender()]
 
 sensor_sink = SourceAndSink(sensor_types, sender)
 sensor_sink.sink_and_send(3)
