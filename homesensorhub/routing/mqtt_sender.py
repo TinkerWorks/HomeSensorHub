@@ -5,6 +5,8 @@ import logging
 import paho.mqtt.client as mqtt
 import socket
 import time
+import os
+import getpass
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -20,6 +22,9 @@ class MQTTDataSender(DataSender):
         self.__broker_url = broker_url
         self.__broker_port = broker_port
         self.__host = socket.gethostname()
+        self.__dev = getpass.getuser() + "/"
+        if os.getuid() == 0:
+            self.__dev = ""
 
         self.connect()
 
@@ -68,7 +73,7 @@ class MQTTDataSender(DataSender):
         """
         json_payload = payload.get_json_payload()
         type = payload.get_str_type()
-        topic = "{}/{}/current".format(self.__host, type)
+        topic = "{}{}/{}/current".format(self.__dev, self.__host, type)
 
         self.__publish(topic, json_payload)
 
@@ -85,9 +90,10 @@ class MQTTDataSender(DataSender):
 
         for attribute, collected in payload_attributes.items():
             type = payload.get_str_type()
-            topic = "{}/{}/current/{}".format(self.__host,
-                                              type,
-                                              attribute)
+            topic = "{}{}/{}/current/{}".format(self.__dev,
+                                                self.__host,
+                                                type,
+                                                attribute)
             self.__publish(topic, collected)
 
     def __publish(self, topic, payload):

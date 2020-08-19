@@ -2,13 +2,14 @@
 
 HOST=$1
 
-rsync -aAv --progress --delete "$(pwd)/" pi@$HOST:~/HomeSensorHub_$USER/
-
-# ssh -t pi@$HOST pip3 install -r /home/pi/HomeSensorHub_$USER/requirements.txt
+rsync -aAv --progress --delete "$(pwd)/" $HOST:~/HomeSensorHub/
 
 case "$2" in
     "main")
-        ssh -t pi@$HOST PYTHONPATH=/home/pi/HomeSensorHub_$USER python3 /home/pi/HomeSensorHub_$USER/homesensorhub/__main__.py
+        ssh -t $HOST PYTHONPATH=/home/$USER/HomeSensorHub python3 /home/$USER/HomeSensorHub/homesensorhub/__main__.py
+        ;;
+    "req")
+        ssh -t $HOST pip3 install -r /home/$USER/HomeSensorHub/requirements.txt
         ;;
     *)
         exit 4
