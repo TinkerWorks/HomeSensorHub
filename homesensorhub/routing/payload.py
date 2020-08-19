@@ -41,6 +41,9 @@ class Payload:
     def get_str_value(self) -> str:
         return "{}".format(round(self.__value, 2))
 
+    def get_value(self):
+        return self.__value
+
     def get_str_timestamp(self) -> str:
         return str(self.__timestamp)
 

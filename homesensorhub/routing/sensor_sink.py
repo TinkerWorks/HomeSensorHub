@@ -26,7 +26,7 @@ class SourceAndSink:
         self.__sensors = type_sensors
         self.__senders = senders
 
-    def sink(self) -> None:
+    def sink(self) -> list:
         """Collect all the data from all the found sensors."""
         logging.debug("Collecting data ...")
         collected = []
@@ -40,9 +40,9 @@ class SourceAndSink:
     def sink_and_send(self, interval: int) -> None:
         """Sink all data from the sensors and send at a specified time interval."""
         logging.info("Sinking and sending data...")
-        sender = MQTTDataSender()
 
         while True:
-            collected = self.sink()
-            sender.send(collected)
-            time.sleep(interval)
+            for sender in self.__senders:
+                collected = self.sink()
+                sender.send(collected)
+                time.sleep(interval)

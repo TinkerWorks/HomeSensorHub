@@ -21,7 +21,7 @@ class ProbeBoschBME680():
     I2C = busio.I2C(board.SCL, board.SDA)
 
     @classmethod
-    def probe(cls) -> list:
+    def probe(cls, send_payload_callback=None) -> list:
         """
         Probe for Bosch BME type sensors to the possible I2C addresses.
 
