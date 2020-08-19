@@ -9,7 +9,7 @@ if 'RPi.GPIO' not in sys.modules.keys():
 
 import RPi.GPIO as GPIO
 
-from sensors.motion_sensor import MotionSensor
+from sensors.RCWL0515.driver import MotionSensorRCWL0515
 
 import unittest
 
@@ -29,8 +29,7 @@ class MotionSensorTests(unittest.TestCase):
 
             GPIO.input.return_value = gpio_value
             motionCallback = Mock()
-            ms = MotionSensor(self.PIN, motionCallback)
-            ms.initialize()
+            ms = MotionSensorRCWL0515(self.PIN, motionCallback)
             #Record GPIO callback method
             GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
 
@@ -43,8 +42,7 @@ class MotionSensorTests(unittest.TestCase):
         GPIO.input.return_value = False
 
         motionCallback = Mock()
-        ms = MotionSensor(self.PIN, motionCallback)
-        ms.initialize()
+        ms = MotionSensorRCWL0515(self.PIN, motionCallback)
 
         #Record GPIO callback method
         GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
@@ -65,15 +63,15 @@ class MotionSensorTests(unittest.TestCase):
 
             GPIO.input.return_value = gpio_value
             GPIOcallback(self.PIN)
-            motionCallback.assert_called_with(next_state)
+
+            self.assertEqual(motionCallback.call_args.args[0].get_value(), next_state)
 
     def test_BadTransitions(self):
         # initial state is false
         GPIO.input.return_value = False
 
         motionCallback = Mock()
-        ms = MotionSensor(self.PIN, motionCallback)
-        ms.initialize()
+        ms = MotionSensorRCWL0515(self.PIN, motionCallback)
 
         #Record GPIO callback method
         GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
