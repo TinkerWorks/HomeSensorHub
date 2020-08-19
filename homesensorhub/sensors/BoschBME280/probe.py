@@ -24,9 +24,8 @@ class ProbeBoschBME280():
         """
         Probe for Bosch BME type sensors to the possible I2C addresses.
 
-        Function which iterates over multiple I2C addresses and look for
-        sensors of the type BoschBME. In case the sensor is not found at any
-        of the specified I2C address, None is returned.
+        Function which iterates over multiple I2C addresses and looks for sensors of the type
+        BoschBME. In case the sensor is not found at the specified I2C address, None is returned.
         """
         for address in ProbeBoschBME280.ADDRESSES:
             try:
@@ -35,11 +34,11 @@ class ProbeBoschBME280():
                 logging.info("{} found at {}".format(cls.get_sensor_name(),
                                                      hex(address)))
                 return cls.generate_sensor_types(sensor)
-            except ValueError as ve:
+            except ValueError:
                 logging.info("Found no {} sensor at address {}.".format(cls.get_sensor_name(),
                                                                         hex(address)))
-            except RuntimeError as re:
-                logging.info("The chip found at {} address has a different ID than {}." \
+            except RuntimeError:
+                logging.info("The chip found at {} address has a different ID than {}."
                              "These are not the sensors you're looking for."
                              .format(address, cls.get_sensor_name()))
 
@@ -50,7 +49,6 @@ class ProbeBoschBME280():
 
     @staticmethod
     def get_sensor_name():
-        """Return the name of the sensor."""
         return "BoschBME280"
 
     @staticmethod

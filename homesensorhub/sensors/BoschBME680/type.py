@@ -21,8 +21,6 @@ class BoschBME680Type:
 
 
 class HumidityBoschBME680(BoschBME680Type, Humidity):
-    """Class which implements the humidity collected from BoschBME680 sensor module."""
-
     MEASURE = '% RH'
 
     def __init__(self, sensor):
@@ -37,8 +35,6 @@ class HumidityBoschBME680(BoschBME680Type, Humidity):
 
 
 class PressureBoschBME680(BoschBME680Type, Pressure):
-    """Class which implements the pressure paired with AdafruitBME680."""
-
     MEASURE = 'Celsius'
 
     def __init__(self, sensor):
@@ -53,8 +49,6 @@ class PressureBoschBME680(BoschBME680Type, Pressure):
 
 
 class AltitudeBoschBME680(BoschBME680Type, Altitude):
-    """Class which implements the altitude collected from BoschBME680 sensor module."""
-
     MEASURE = 'Meters'
 
     def __init__(self, sensor):
@@ -69,8 +63,6 @@ class AltitudeBoschBME680(BoschBME680Type, Altitude):
 
 
 class TemperatureBoschBME680(BoschBME680Type, Temperature):
-    """Class which implements the temperature paired with AdafruitBME680."""
-
     MEASURE = 'Celsius'
 
     def __init__(self, sensor):
@@ -85,8 +77,6 @@ class TemperatureBoschBME680(BoschBME680Type, Temperature):
 
 
 class GasBoschBME680(BoschBME680Type, Gas):
-    """Class which implements the temperature paired with AdafruitBME680."""
-
     MEASURE = 'gas resistance in ohms'
 
     def __init__(self, sensor):
@@ -98,3 +88,4 @@ class GasBoschBME680(BoschBME680Type, Gas):
 
     def get_sensor_measure(self) -> str:
         return GasBoschBME680.MEASURE
+        

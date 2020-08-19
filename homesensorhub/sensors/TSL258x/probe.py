@@ -16,11 +16,7 @@ class ProbeTSL258x(Probe):
 
     @classmethod
     def probe(cls) -> list:
-        """
-        Probe and configure light sensors.
-
-        For now there is only one option, using TSL258x.
-        """
+        """Probe board for TSL258x sensor."""
         sensor = TSL258x.probe()
         sensor.config()
 

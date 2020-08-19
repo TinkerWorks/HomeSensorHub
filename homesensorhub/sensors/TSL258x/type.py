@@ -6,7 +6,7 @@ class TSL258xType:
     SENSOR_NAME = 'TSL258x'
 
     def __init__(self, sensor):
-        """Initialise the BoschBME280 type with the physical sensor."""
+        """Initialise the TSL258x type with the physical sensor."""
         self._sensor = sensor
 
     def get_sensor_name(self):
@@ -21,7 +21,6 @@ class TSL258xType:
 
 
 class LightTSL258x(TSL258xType, Light):
-
     MEASURE = 'Lux'
 
     def __init__(self, sensor):
