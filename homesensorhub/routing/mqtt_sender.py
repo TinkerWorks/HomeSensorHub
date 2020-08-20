@@ -83,5 +83,5 @@ class MQTTSender(DataSender):
 
             if(result[0] == mqtt.MQTT_ERR_NO_CONN):
                 logging.warn("MQTT bus unresponsive, reconnecting...")
-                self.connect()
+                self.__mqtt.connect()
                 time.sleep(1)

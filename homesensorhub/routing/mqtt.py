@@ -39,7 +39,7 @@ class MQTT(metaclass=Singleton):
 
         self.connect()
 
-    def connect(self, retry=5):
+    def connect(self):
         try:
             connection = self.__client.connect_async(self.__broker_url,
                                                      self.__broker_port)

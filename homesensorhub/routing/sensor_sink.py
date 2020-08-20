@@ -6,8 +6,6 @@ The sensor hub collects data from all connected sensors and transmits it to the 
 import logging
 import time
 
-from routing.mqtt_sender import MQTTSender
-
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
     level=logging.INFO,

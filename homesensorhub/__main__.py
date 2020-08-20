@@ -27,5 +27,19 @@ for function in probefunctions:
     except TypeError:
         pass
 
+
+def set_mqtt_subscribers():
+    print("Sensors found: {}".format(sensor_types))
+    sensors_properties = []
+    for sensor in sensor_types:
+        sensor_properties = sensor.get_properties()
+        sensors_properties.append(sensor_properties)
+
+    mqtt_subscriber.set_sensors_subscribe(sensors_properties)
+
+
+set_mqtt_subscribers()
+
+
 sensor_sink = SourceAndSink(sensor_types, sender)
-sensor_sink.sink_and_send(3)
+# sensor_sink.sink_and_send(3)
