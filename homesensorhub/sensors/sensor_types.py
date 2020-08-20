@@ -6,6 +6,9 @@ import datetime
 class SensorType:
     """Interface for creating a sensor type object."""
 
+    def get_properties(self) -> dict:
+        return NotImplementedError("Proprieties function must be implemented by the child class.")
+
     def get_payload(self) -> Payload:
         """Collect payload for sensor measurement."""
         payload = Payload(self.TYPE,
@@ -16,29 +19,48 @@ class SensorType:
         return payload
 
 
-class Gas(SensorType):
-    TYPE = 'Gas'
+class SensorTypePolled(SensorType):
+    """Type of sensor which is polled."""
+
+    def __init__(self, pollrate=3):
+        self.pollrate = pollrate
+
+    def get_properties(self):
+        return {
+            'pollrate': self.pollrate
+        }
 
 
-class Humidity(SensorType):
-    TYPE = 'Humidity'
+class SensorTypeAsynchronous(SensorType):
+    """Type of sensor which is asynchronous."""
+
+    def get_properties(self):
+        return {}
 
 
-class Light(SensorType):
-    TYPE = 'Light'
+class Gas(SensorTypePolled):
+    TYPE = 'gas'
 
 
-class Pressure(SensorType):
-    TYPE = 'Pressure'
+class Humidity(SensorTypePolled):
+    TYPE = 'humidity'
 
 
-class Altitude(SensorType):
-    TYPE = 'Altitude'
+class Light(SensorTypePolled):
+    TYPE = 'light'
 
 
-class Temperature(SensorType):
-    TYPE = 'Temperature'
+class Pressure(SensorTypePolled):
+    TYPE = 'pressure'
 
 
-class Motion(SensorType):
-    TYPE = 'Motion'
+class Altitude(SensorTypePolled):
+    TYPE = 'altitude'
+
+
+class Temperature(SensorTypePolled):
+    TYPE = 'temperature'
+
+
+class Motion(SensorTypeAsynchronous):
+    TYPE = 'motion'
