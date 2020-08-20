@@ -1,12 +1,10 @@
 """Module which implements data routing to MQTT."""
 from routing.data_sender import DataSender
+from routing.mqtt import MQTT
 
 import logging
 import paho.mqtt.client as mqtt
-import socket
 import time
-import os
-import getpass
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -18,30 +16,7 @@ class MQTTDataSender(DataSender):
     """Class which implements data routing to MQTT."""
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
-        self.__client = mqtt.Client()
-        self.__broker_url = broker_url
-        self.__broker_port = broker_port
-        self.__host = socket.gethostname()
-        self.__dev = getpass.getuser() + "/"
-        if os.getuid() == 0:
-            self.__dev = ""
-
-        self.connect()
-
-    def connect(self, retry=5):
-        while (retry > 0):
-            try:
-                connection = self.__client.connect(self.__broker_url,
-                                                   self.__broker_port)
-                logging.debug("MQTT connection result: {}".format(connection))
-                if connection == 0:
-                    return True
-            except ConnectionRefusedError as error:
-                logging.error("MQTT connect refused: {}".format(error))
-
-            retry -= 1
-
-        return False
+        self.__mqtt = MQTT(broker_url, broker_port)
 
     def send(self, data):
         """
@@ -72,8 +47,9 @@ class MQTTDataSender(DataSender):
         }
         """
         json_payload = payload.get_json_payload()
-        type = payload.get_str_type()
-        topic = "{}{}/{}/current".format(self.__dev, self.__host, type)
+        type = payload.get_str_type() + "/"
+        topic_base = self.__mqtt.get_topic_base()
+        topic = "{}{}current".format(topic_base, type)
 
         self.__publish(topic, json_payload)
 
@@ -89,21 +65,21 @@ class MQTTDataSender(DataSender):
         payload_attributes = payload.get_string_payload()
 
         for attribute, collected in payload_attributes.items():
-            type = payload.get_str_type()
-            topic = "{}{}/{}/current/{}".format(self.__dev,
-                                                self.__host,
-                                                type,
-                                                attribute)
+            type = payload.get_str_type() + "/"
+            topic_base = self.__mqtt.get_topic_base()
+            topic = "{}{}current/{}".format(topic_base, type, attribute)
+
             self.__publish(topic, collected)
 
     def __publish(self, topic, payload):
         result = (mqtt.MQTT_ERR_AGAIN, 0)
 
         while result[0] != mqtt.MQTT_ERR_SUCCESS:
-            result = self.__client.publish(topic=topic,
-                                           payload=payload,
-                                           qos=0,
-                                           retain=False)
+            mqtt_client = self.__mqtt.get_client()
+            result = mqtt_client.publish(topic=topic,
+                                         payload=payload,
+                                         qos=0,
+                                         retain=False)
 
             if(result[0] == mqtt.MQTT_ERR_NO_CONN):
                 logging.warn("MQTT bus unresponsive, reconnecting...")
