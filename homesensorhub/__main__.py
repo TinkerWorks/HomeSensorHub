@@ -1,13 +1,13 @@
 """Entry point for the application."""
 from routing.sensor_sink import SourceAndSink
-from routing.mqtt_sender import MQTTDataSender
+from routing.mqtt_sender import MQTTSender
 
 from sensors.BoschBME280.probe import ProbeBoschBME280
 from sensors.BoschBME680.probe import ProbeBoschBME680
 from sensors.TSL258x.probe import ProbeTSL258x
 from sensors.RCWL0515.probe import ProbeRCWL0515
 
-mds = MQTTDataSender()
+mds = MQTTSender()
 sender = [mds]
 
 probefunctions = []

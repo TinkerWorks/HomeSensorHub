@@ -12,7 +12,7 @@ logging.basicConfig(
     datefmt='%Y-%m-%d %H:%M:%S')
 
 
-class MQTTDataSender(DataSender):
+class MQTTSender(DataSender):
     """Class which implements data routing to MQTT."""
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
