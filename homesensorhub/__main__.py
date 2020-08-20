@@ -29,13 +29,7 @@ for function in probefunctions:
 
 
 def set_mqtt_subscribers():
-    print("Sensors found: {}".format(sensor_types))
-    sensors_properties = []
-    for sensor in sensor_types:
-        sensor_properties = sensor.get_properties()
-        sensors_properties.append(sensor_properties)
-
-    mqtt_subscriber.set_sensors_subscribe(sensors_properties)
+    mqtt_subscriber.set_sensors_subscribe(sensor_types)
 
 
 set_mqtt_subscribers()
