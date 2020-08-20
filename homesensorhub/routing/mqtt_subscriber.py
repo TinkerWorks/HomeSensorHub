@@ -16,24 +16,38 @@ class MQTTSubscriber():
         self.__mqtt = MQTT(broker_url, broker_port)
         self.__topics = []
 
-    def set_sensors_subscribe(self, sensors: list):
+    def set_sensors_subscribe_topics(self, sensors: list):
+        """Extract type and propetries from each sensor and build their subscribe topics."""
         for sensor in sensors:
             type = sensor.get_type()
-            self.set_sensor_subscribe(type=type, sensor_properties=sensor.get_properties())
+            self.set_sensor_subscribe_topic(type=type, sensor_properties=sensor.get_properties())
         print("Generated topics: {}".format(self.__topics))
 
-    def set_sensor_subscribe(self, type, sensor_properties):
+    def set_sensor_subscribe_topic(self, type, sensor_properties):
+        """
+        Build a sensor's subscribe topic based on its properties and type.
+
+        One topic will have the following structure:
+        /developer/hostname/sensor_type/property
+        /babycakes/sensors-office/temperature/pollrate
+
+        By calling mqtt publish for one of the sensor's build topics, one can send messages as
+        follows:
+        /developer/hostname/sensor_type/property 10
+        """
         for property in sensor_properties.keys():
             property_topic = property + "/"
             type_topic = type + "/"
-
             topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property_topic)
-            # from https://pypi.org/project/paho-mqtt/#subscribe-unsubscribe, both the topic and
-            # the qos are necessary to be present in the subscribe touple;
-            self.__topics.append(topic)
+
+            self.__topics.append((topic, self.__mqtt.get_qos()))
 
     def subscribe(self):
+        """Stop the mqtt subscribe loop to add the sensors properties subscribe topics."""
         client = self.__mqtt.get_client()
         client.loop_stop()
+
+        logging.info("Setting MQTT subscribers.")
         client.subscribe(self.__topics)
+
         client.loop_start()

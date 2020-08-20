@@ -22,6 +22,7 @@ class Singleton(type):
 
 class MQTT(metaclass=Singleton):
     """Create and hold connection through MQTT."""
+    QOS = 0
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__client = mqtt.Client()
@@ -65,3 +66,6 @@ class MQTT(metaclass=Singleton):
 
     def get_broker_url(self):
         return self.__broker_url
+
+    def get_qos(self):
+        return MQTT.QOS
