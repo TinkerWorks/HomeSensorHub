@@ -13,7 +13,7 @@ logging.basicConfig(
 
 
 class MQTTSender(DataSender):
-    """Class which implements data routing to MQTT."""
+    """Implement data routing to MQTT."""
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__mqtt = MQTT(broker_url, broker_port)
