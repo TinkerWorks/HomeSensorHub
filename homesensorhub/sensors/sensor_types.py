@@ -9,6 +9,9 @@ class SensorType:
     def get_properties(self) -> dict:
         return NotImplementedError("Proprieties function must be implemented by the child class.")
 
+    def get_type(self) -> str:
+        return self.TYPE
+
     def get_payload(self) -> Payload:
         """Collect payload for sensor measurement."""
         payload = Payload(self.TYPE,
