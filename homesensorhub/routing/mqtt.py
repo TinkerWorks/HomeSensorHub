@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import socket
 import os
 import getpass
+import time
 import logging
 
 logging.basicConfig(
@@ -26,13 +27,13 @@ class MQTT(metaclass=Singleton):
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__client = mqtt.Client()
-        self.__client.on_message = self.on_message
         self.__client.on_connect = self.on_connect
+        self.__client.on_log = self.on_log
 
         self.__broker_url = broker_url
         self.__broker_port = broker_port
 
-        self.__hostname = socket.gethostname() + "/"
+        self.__hostname = socket.gethostname()
         self.__dev = getpass.getuser() + "/"
         if os.getuid() == 0:
             self.__dev = ""
@@ -51,11 +52,37 @@ class MQTT(metaclass=Singleton):
             logging.error("MQTT connect refused: {}".format(error))
             return False
 
-    def on_message(self, client, userdata, message):
-        print("{}; {}; {}.".format(client, userdata, message))
+    def set_message_callback(self, callback):
+        self.__client.on_message = callback
+
+    def subscribe(self, topics):
+        """Stop the mqtt subscribe loop to add the sensors properties subscribe topics."""
+        self.__client.loop_stop()
+
+        logging.info("Setting MQTT subscribers.")
+        self.__client.subscribe(topics)
+
+        self.__client.loop_start()
+
+    def publish(self, topic, payload):
+        result = (mqtt.MQTT_ERR_AGAIN, 0)
+
+        while result[0] != mqtt.MQTT_ERR_SUCCESS:
+            result = self.__client.publish(topic=topic,
+                                           payload=payload,
+                                           qos=0,
+                                           retain=False)
+
+            if(result[0] == mqtt.MQTT_ERR_NO_CONN):
+                logging.warn("MQTT bus unresponsive, reconnecting...")
+                self.connect()
+                time.sleep(1)
 
     def on_connect(self, client, userdata, flags, rc):
         logging.info("Succesfully connected to {}".format(self.__broker_url))
+
+    def on_log(self, mqttc, obj, level, string):
+        logging.debug(string)
 
     def get_topic_base(self):
         """Return topic base used for publish."""
