@@ -19,6 +19,11 @@ class MQTTSubscriber():
         self.__mqtt.get_client().on_log = self.on_log
         self.__sensors = None
 
+    def subscribe_to_sensor_properties(self, sensors):
+        self.set_sensors(sensors)
+        self.set_sensors_subscribe_topics()
+        self.subscribe()
+
     def set_sensors(self, sensors):
         """Set sensors for topic set and message callbacks."""
         self.__sensors = sensors
