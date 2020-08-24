@@ -26,12 +26,19 @@ class SensorTypePolled(SensorType):
     """Type of sensor which is polled."""
 
     def __init__(self, pollrate=3):
-        self.pollrate = pollrate
+        self.__pollrate = pollrate
 
     def get_properties(self):
         return {
-            'pollrate': self.pollrate
+            'pollrate': CallbackPair(self.set_pollrate,
+                                     self.get_pollrate)
         }
+
+    def set_pollrate(self, pollrate):
+        self.__pollrate = pollrate
+
+    def get_pollrate(self):
+        return self.__pollrate
 
 
 class SensorTypeAsynchronous(SensorType):
@@ -67,3 +74,17 @@ class Temperature(SensorTypePolled):
 
 class Motion(SensorTypeAsynchronous):
     TYPE = 'motion'
+
+
+class CallbackPair:
+    """Create a setter getter object type for access to sensor properties."""
+
+    def __init__(self, setter, getter):
+        self.__setter = setter
+        self.__getter = getter
+
+    def get_setter(self):
+        return self.__setter
+
+    def get_getter(self):
+        return self.__getter

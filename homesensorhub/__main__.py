@@ -31,7 +31,8 @@ for function in probefunctions:
 # after the MQTT connection has been established and the sensors probed, the subscribe topics can
 # be built based on the sensors properties
 def set_mqtt_subscribers():
-    mqtt_subscriber.set_sensors_subscribe_topics(sensor_types)
+    mqtt_subscriber.set_sensors(sensor_types)
+    mqtt_subscriber.set_sensors_subscribe_topics()
     mqtt_subscriber.subscribe()
 
 

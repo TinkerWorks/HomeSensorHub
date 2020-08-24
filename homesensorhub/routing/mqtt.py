@@ -26,7 +26,6 @@ class MQTT(metaclass=Singleton):
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__client = mqtt.Client()
-        self.__client.on_message = self.on_message
         self.__client.on_connect = self.on_connect
 
         self.__broker_url = broker_url
@@ -50,9 +49,6 @@ class MQTT(metaclass=Singleton):
         except ConnectionRefusedError as error:
             logging.error("MQTT connect refused: {}".format(error))
             return False
-
-    def on_message(self, client, userdata, message):
-        print("{}; {}; {}.".format(client, userdata, message))
 
     def on_connect(self, client, userdata, flags, rc):
         logging.info("Succesfully connected to {}".format(self.__broker_url))
