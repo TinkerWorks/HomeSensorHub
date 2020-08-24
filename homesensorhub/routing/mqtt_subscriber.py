@@ -5,7 +5,7 @@ import logging
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
+    level=logging.DEBUG,
     datefmt='%Y-%m-%d %H:%M:%S')
 
 
@@ -16,6 +16,7 @@ class MQTTSubscriber():
         self.__mqtt = MQTT(broker_url, broker_port)
         self.__topics = []
         self.__mqtt.get_client().on_message = self.on_message
+        self.__mqtt.get_client().on_log = self.on_log
         self.__sensors = None
 
     def set_sensors(self, sensors):
@@ -23,7 +24,35 @@ class MQTTSubscriber():
         self.__sensors = sensors
 
     def on_message(self, client, userdata, message):
-        print("{};".format(dir(message)))
+        print("Message {}.\nTopics {}".format(message.payload, message.topic))
+        type, property = self.split_topic(message.topic)
+
+        self.search_for_type(type, property, message.payload)
+
+    def on_log(self, mqttc, obj, level, string):
+        logging.debug(string)
+
+    def search_for_type(self, type, property, payload):
+        for sensor in self.__sensors:
+            if sensor.get_type() == type:
+                self.set_property(sensor, property, payload)
+
+    def set_property(self, sensor, property, payload):
+        sensor_properties = sensor.get_properties()
+        for sp in sensor_properties:
+            if sp == property:
+                logging.info("Sensor properties of {} are {}".format(sensor_properties, sensor_properties[sp]))
+                sensor_properties[sp].setter(payload)
+
+    def split_topic(self, topic) -> tuple:
+        """Split the topic to obtain the type and property."""
+        baseless_topic = topic.replace(self.__mqtt.get_topic_base(), '')
+        split_topic = baseless_topic.split(sep='/')
+
+        type = split_topic[0]
+        property = split_topic[1]
+
+        return type, property
 
     def set_sensors_subscribe_topics(self):
         """Extract type and propetries from each sensor and build their subscribe topics."""
@@ -46,10 +75,8 @@ class MQTTSubscriber():
         /developer/hostname/sensor_type/property 10
         """
         for property in sensor_properties.keys():
-            property_topic = property + "/"
             type_topic = type + "/"
-            topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property_topic)
-
+            topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property)
             self.__topics.append((topic, self.__mqtt.get_qos()))
 
     def subscribe(self):

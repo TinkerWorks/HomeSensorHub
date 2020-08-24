@@ -35,6 +35,7 @@ class SensorTypePolled(SensorType):
         }
 
     def set_pollrate(self, pollrate):
+        print("Setting pollrate to {}".format(pollrate))
         self.__pollrate = pollrate
 
     def get_pollrate(self):
@@ -80,11 +81,5 @@ class CallbackPair:
     """Create a setter getter object type for access to sensor properties."""
 
     def __init__(self, setter, getter):
-        self.__setter = setter
-        self.__getter = getter
-
-    def get_setter(self):
-        return self.__setter
-
-    def get_getter(self):
-        return self.__getter
+        self.setter = setter
+        self.getter = getter
