@@ -39,7 +39,7 @@ class SensorTypePolled(SensorType):
         try:
             pollrate = int(pollrate)
             self.__pollrate = pollrate
-            print("Set the pollrate to {}".format(self.__pollrate))
+            print("Set the pollrate to the {} sensor to {}".format(self.TYPE, self.__pollrate))
         except ValueError:
             print("Cannot convert pollrate to integer. The value is not an integer.")
             return

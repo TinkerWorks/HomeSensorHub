@@ -23,32 +23,29 @@ class MQTTSubscriber():
         """Set sensors for topic set and message callbacks."""
         self.__sensors = sensors
 
-    def on_message(self, client, userdata, message):
-        print("Message {}.\nTopics {}".format(message.payload, message.topic))
-        type, property = self.split_topic(message.topic)
-
-        self.search_for_type(type, property, message.payload)
-
     def on_log(self, mqttc, obj, level, string):
         logging.debug(string)
 
-    def search_for_type(self, type, property, payload):
+    def on_message(self, client, userdata, message):
+        """Read message and set property based on the type and payload."""
+        type, property = self.get_type_and_property(message.topic)
+
         for sensor in self.__sensors:
             if sensor.get_type() == type:
-                self.set_property(sensor, property, payload)
+                self.set_property(sensor, property, message.payload)
 
     def set_property(self, sensor, property, payload):
+        """Call the setter of the sensor for the property with the read payload."""
         sensor_properties = sensor.get_properties()
+
         for sp in sensor_properties:
             if sp == property:
-                logging.info("Sensor properties of {} are {}".format(sensor_properties, sensor_properties[sp]))
                 sensor_properties[sp].setter(payload)
 
-    def split_topic(self, topic) -> tuple:
-        """Split the topic to obtain the type and property."""
+    def get_type_and_property(self, topic) -> tuple:
+        """Split the topic to extract the type and property."""
         baseless_topic = topic.replace(self.__mqtt.get_topic_base(), '')
         split_topic = baseless_topic.split(sep='/')
-
         type = split_topic[0]
         property = split_topic[1]
 
