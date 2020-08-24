@@ -3,8 +3,6 @@ from routing.data_sender import DataSender
 from routing.mqtt import MQTT
 
 import logging
-import paho.mqtt.client as mqtt
-import time
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -47,11 +45,11 @@ class MQTTSender(DataSender):
         }
         """
         json_payload = payload.get_json_payload()
-        type = payload.get_str_type() + "/"
+        type = "/" + payload.get_str_type()
         topic_base = self.__mqtt.get_topic_base()
-        topic = "{}{}current".format(topic_base, type)
+        topic = "{}{}".format(topic_base, type)
 
-        self.__publish(topic, json_payload)
+        self.__mqtt.publish(topic, json_payload)
 
     def __send_simple_values(self, payload):
         """
@@ -65,23 +63,9 @@ class MQTTSender(DataSender):
         payload_attributes = payload.get_string_payload()
 
         for attribute, collected in payload_attributes.items():
-            type = payload.get_str_type() + "/"
+            type = "/" + payload.get_str_type()
+            attribute = "/" + attribute
             topic_base = self.__mqtt.get_topic_base()
-            topic = "{}{}current/{}".format(topic_base, type, attribute)
+            topic = "{}{}{}".format(topic_base, type, attribute)
 
-            self.__publish(topic, collected)
-
-    def __publish(self, topic, payload):
-        result = (mqtt.MQTT_ERR_AGAIN, 0)
-
-        while result[0] != mqtt.MQTT_ERR_SUCCESS:
-            mqtt_client = self.__mqtt.get_client()
-            result = mqtt_client.publish(topic=topic,
-                                         payload=payload,
-                                         qos=0,
-                                         retain=False)
-
-            if(result[0] == mqtt.MQTT_ERR_NO_CONN):
-                logging.warn("MQTT bus unresponsive, reconnecting...")
-                self.__mqtt.connect()
-                time.sleep(1)
+            self.__mqtt.publish(topic, collected)

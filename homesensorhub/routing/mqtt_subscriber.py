@@ -29,6 +29,7 @@ class MQTTSubscriber():
 
     def on_message(self, client, userdata, message):
         """Read message and set property based on the type and payload."""
+        # print("Topic {}.\n Payload {}".format(message.topic, message.payload))
         type, property = self.get_type_and_property(message.topic)
 
         for sensor in self.__sensors:
@@ -47,8 +48,8 @@ class MQTTSubscriber():
         """Split the topic to extract the type and property."""
         baseless_topic = topic.replace(self.__mqtt.get_topic_base(), '')
         split_topic = baseless_topic.split(sep='/')
-        type = split_topic[0]
-        property = split_topic[1]
+        type = split_topic[1]
+        property = split_topic[2]
 
         return type, property
 
@@ -73,6 +74,7 @@ class MQTTSubscriber():
         /user/hostname/sensor_type/property 10
         """
         for property in sensor_properties.keys():
-            type_topic = type + "/"
-            topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property)
+            type_topic =  "/" + type
+            property_topic = "/" + property
+            topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property_topic)
             self.__topics.append((topic, self.__mqtt.get_qos()))

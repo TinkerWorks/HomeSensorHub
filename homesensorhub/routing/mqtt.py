@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import socket
 import os
 import getpass
+import time
 import logging
 
 logging.basicConfig(
@@ -32,7 +33,7 @@ class MQTT(metaclass=Singleton):
         self.__broker_url = broker_url
         self.__broker_port = broker_port
 
-        self.__hostname = socket.gethostname() + "/"
+        self.__hostname = socket.gethostname()
         self.__dev = getpass.getuser() + "/"
         if os.getuid() == 0:
             self.__dev = ""
@@ -62,6 +63,20 @@ class MQTT(metaclass=Singleton):
         self.__client.subscribe(topics)
 
         self.__client.loop_start()
+
+    def publish(self, topic, payload):
+        result = (mqtt.MQTT_ERR_AGAIN, 0)
+
+        while result[0] != mqtt.MQTT_ERR_SUCCESS:
+            result = self.__client.publish(topic=topic,
+                                           payload=payload,
+                                           qos=0,
+                                           retain=False)
+
+            if(result[0] == mqtt.MQTT_ERR_NO_CONN):
+                logging.warn("MQTT bus unresponsive, reconnecting...")
+                self.connect()
+                time.sleep(1)
 
     def on_connect(self, client, userdata, flags, rc):
         logging.info("Succesfully connected to {}".format(self.__broker_url))
