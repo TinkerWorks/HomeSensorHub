@@ -35,8 +35,14 @@ class SensorTypePolled(SensorType):
         }
 
     def set_pollrate(self, pollrate):
-        print("Setting pollrate to {}".format(pollrate))
-        self.__pollrate = pollrate
+        pollrate = pollrate.decode('utf-8')
+        try:
+            pollrate = int(pollrate)
+            self.__pollrate = pollrate
+            print("Set the pollrate to {}".format(self.__pollrate))
+        except ValueError:
+            print("Cannot convert pollrate to integer. The value is not an integer.")
+            return
 
     def get_pollrate(self):
         return self.__pollrate
