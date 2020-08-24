@@ -15,21 +15,17 @@ class MQTTSubscriber():
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__mqtt = MQTT(broker_url, broker_port)
         self.__topics = []
-        self.__mqtt.get_client().on_message = self.on_message
-        self.__mqtt.get_client().on_log = self.on_log
+        self.__mqtt.set_message_callback(self.on_message)
         self.__sensors = None
 
     def subscribe_to_sensor_properties(self, sensors):
         self.set_sensors(sensors)
         self.set_sensors_subscribe_topics()
-        self.subscribe()
+        self.__mqtt.subscribe(self.__topics)
 
     def set_sensors(self, sensors):
         """Set sensors for topic set and message callbacks."""
         self.__sensors = sensors
-
-    def on_log(self, mqttc, obj, level, string):
-        logging.debug(string)
 
     def on_message(self, client, userdata, message):
         """Read message and set property based on the type and payload."""
@@ -74,19 +70,9 @@ class MQTTSubscriber():
 
         By calling mqtt publish for one of the sensor's build topics, one can send messages as
         follows:
-        /developer/hostname/sensor_type/property 10
+        /user/hostname/sensor_type/property 10
         """
         for property in sensor_properties.keys():
             type_topic = type + "/"
             topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property)
             self.__topics.append((topic, self.__mqtt.get_qos()))
-
-    def subscribe(self):
-        """Stop the mqtt subscribe loop to add the sensors properties subscribe topics."""
-        client = self.__mqtt.get_client()
-        client.loop_stop()
-
-        logging.info("Setting MQTT subscribers.")
-        client.subscribe(self.__topics)
-
-        client.loop_start()

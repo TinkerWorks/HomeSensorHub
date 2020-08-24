@@ -27,6 +27,7 @@ class MQTT(metaclass=Singleton):
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__client = mqtt.Client()
         self.__client.on_connect = self.on_connect
+        self.__client.on_log = self.on_log
 
         self.__broker_url = broker_url
         self.__broker_port = broker_port
@@ -50,8 +51,23 @@ class MQTT(metaclass=Singleton):
             logging.error("MQTT connect refused: {}".format(error))
             return False
 
+    def set_message_callback(self, callback):
+        self.__client.on_message = callback
+
+    def subscribe(self, topics):
+        """Stop the mqtt subscribe loop to add the sensors properties subscribe topics."""
+        self.__client.loop_stop()
+
+        logging.info("Setting MQTT subscribers.")
+        self.__client.subscribe(topics)
+
+        self.__client.loop_start()
+
     def on_connect(self, client, userdata, flags, rc):
         logging.info("Succesfully connected to {}".format(self.__broker_url))
+
+    def on_log(self, mqttc, obj, level, string):
+        logging.debug(string)
 
     def get_topic_base(self):
         """Return topic base used for publish."""
