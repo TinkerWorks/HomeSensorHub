@@ -1,6 +1,7 @@
 """Module which implements the sensor type interface."""
 from routing.payload import Payload
 import datetime
+from threading import Thread, Event
 
 
 class SensorType:
@@ -22,11 +23,28 @@ class SensorType:
         return payload
 
 
-class SensorTypePolled(SensorType):
+class SensorTypePolled(Thread, SensorType):
     """Type of sensor which is polled."""
 
-    def __init__(self, pollrate=3):
+    def __init__(self, pollrate=3, send_payload_callback=None):
+        Thread.__init__(self)
+        SensorType.__init__(self)
+
         self.__pollrate = pollrate
+        self.send_payload_callback = send_payload_callback
+
+        self.__stopped = Event()
+        self.start()
+
+    def run(self):
+        while not self.__stopped.wait(self.__pollrate):
+            payload = self.get_payload()
+            if self.send_payload_callback:
+                self.send_payload_callback(payload)
+
+    def stop(self):
+        print("{} thread stopped.".format(self.get_type()))
+        self.__stopped.set()
 
     def get_properties(self):
         return {
@@ -37,7 +55,7 @@ class SensorTypePolled(SensorType):
     def set_pollrate(self, pollrate):
         pollrate = pollrate.decode('utf-8')
         try:
-            pollrate = int(pollrate)
+            pollrate = float(pollrate)
             self.__pollrate = pollrate
             print("Set the pollrate to the {} sensor to {}".format(self.TYPE, self.__pollrate))
         except ValueError:
@@ -51,6 +69,9 @@ class SensorTypePolled(SensorType):
 class SensorTypeAsynchronous(SensorType):
     """Type of sensor which is asynchronous."""
 
+    def stop(self):
+        pass
+
     def get_properties(self):
         return {}
 
@@ -58,29 +79,50 @@ class SensorTypeAsynchronous(SensorType):
 class Gas(SensorTypePolled):
     TYPE = 'gas'
 
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
+
 
 class Humidity(SensorTypePolled):
     TYPE = 'humidity'
+
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
 
 
 class Light(SensorTypePolled):
     TYPE = 'light'
 
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
+
 
 class Pressure(SensorTypePolled):
     TYPE = 'pressure'
+
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
 
 
 class Altitude(SensorTypePolled):
     TYPE = 'altitude'
 
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
+
 
 class Temperature(SensorTypePolled):
     TYPE = 'temperature'
 
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
+
 
 class Motion(SensorTypeAsynchronous):
     TYPE = 'motion'
+
+    def __init__(self, send_payload_callback):
+        super().__init__(send_payload_callback=send_payload_callback)
 
 
 class CallbackPair:

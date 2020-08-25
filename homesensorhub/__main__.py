@@ -37,3 +37,6 @@ mqtt_subscriber.subscribe_to_sensor_properties(sensor_types)
 
 sensor_sink = SourceAndSink(sensor_types, sender)
 sensor_sink.sink_and_send(3)
+
+for sensor in sensor_types:
+    sensor.stop()

@@ -4,7 +4,7 @@ import sys
 from mock import Mock
 if 'sensors.TSL258x.driver' not in sys.modules.keys():
     sys.modules['sensors.TSL258x.driver'] = Mock()
-    
+
 
 from sensors.TSL258x.driver import TSL258x
 from sensors.TSL258x.type import LightTSL258x
@@ -24,10 +24,9 @@ class TestLightSensors(unittest.TestCase):
 
         time_end = time.time() + 1
 
-        while time.time() < time_end:
-            # ls_probe = LightSensorProbe()
-            sensors = ProbeTSL258x().probe()
+        sensors = ProbeTSL258x().probe()
 
+        while time.time() < time_end:
             for sensor in sensors:
                 ls.read.return_value = random.randint(0, 200.000)
                 actual_data = str(sensor.get_sensor_value())
@@ -37,3 +36,6 @@ class TestLightSensors(unittest.TestCase):
 
         if len(actual_data) == 0:
             raise Exception("No value gathered from light sensor.")
+
+        for sensor in sensors:
+            sensor.stop()

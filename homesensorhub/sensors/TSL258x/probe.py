@@ -22,7 +22,7 @@ class ProbeTSL258x(Probe):
 
         logging.debug("Found {} sensor.".format(cls.SENSOR_NAME))
 
-        return cls.generate_sensor_types(sensor)
+        return cls.generate_sensor_types(sensor, send_payload_callback)
 
-    def generate_sensor_types(sensor):
-        return [LightTSL258x(sensor)]
+    def generate_sensor_types(sensor, send_payload_callback):
+        return [LightTSL258x(sensor, send_payload_callback)]
