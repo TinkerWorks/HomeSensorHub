@@ -43,4 +43,5 @@ class SourceAndSink:
         try:
             event.wait()
         except KeyboardInterrupt:
-            print("Bye.")
+            for sensor in self.__sensors:
+                sensor.stop()
