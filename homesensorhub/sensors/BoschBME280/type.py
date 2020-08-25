@@ -23,9 +23,9 @@ class BoschBME280Type:
 class HumidityBoschBME280(BoschBME280Type, Humidity):
     MEASURE = '% RH'
 
-    def __init__(self, sensor):
+    def __init__(self, sensor, send_payload_callback):
         BoschBME280Type.__init__(self, sensor)
-        Humidity.__init__(self)
+        Humidity.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> int:
         return self._sensor.humidity
@@ -37,9 +37,9 @@ class HumidityBoschBME280(BoschBME280Type, Humidity):
 class PressureBoschBME280(BoschBME280Type, Pressure):
     MEASURE = 'Celsius'
 
-    def __init__(self, sensor):
+    def __init__(self, sensor, send_payload_callback):
         BoschBME280Type.__init__(self, sensor)
-        Pressure.__init__(self)
+        Pressure.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> float:
         return self._sensor.pressure
@@ -51,9 +51,9 @@ class PressureBoschBME280(BoschBME280Type, Pressure):
 class AltitudeBoschBME280(BoschBME280Type, Altitude):
     MEASURE = 'Meters'
 
-    def __init__(self, sensor):
+    def __init__(self, sensor, send_payload_callback):
         BoschBME280Type.__init__(self, sensor)
-        Altitude.__init__(self)
+        Altitude.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> int:
         return self._sensor.altitude
@@ -65,9 +65,9 @@ class AltitudeBoschBME280(BoschBME280Type, Altitude):
 class TemperatureBoschBME280(BoschBME280Type, Temperature):
     MEASURE = 'Celsius'
 
-    def __init__(self, sensor):
+    def __init__(self, sensor, send_payload_callback):
         BoschBME280Type.__init__(self, sensor)
-        Temperature.__init__(self)
+        Temperature.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> float:
         return self._sensor.temperature

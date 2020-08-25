@@ -23,9 +23,9 @@ class TSL258xType:
 class LightTSL258x(TSL258xType, Light):
     MEASURE = 'Lux'
 
-    def __init__(self, sensor):
+    def __init__(self, sensor, send_payload_callback):
         TSL258xType.__init__(self, sensor)
-        Light.__init__(self)
+        Light.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> int:
         return self._sensor.read()

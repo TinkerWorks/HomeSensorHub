@@ -4,7 +4,7 @@ Module which implements the sensor hub.
 The sensor hub collects data from all connected sensors and transmits it to the data sender module.
 """
 import logging
-import time
+import threading
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -39,8 +39,9 @@ class SourceAndSink:
         """Sink all data from the sensors and send at a specified time interval."""
         logging.info("Sinking and sending data...")
 
-        while True:
-            for sender in self.__senders:
-                collected = self.sink()
-                sender.send(collected)
-                time.sleep(interval)
+        event = threading.Event()
+        try:
+            event.wait()
+        except KeyboardInterrupt:
+            for sensor in self.__sensors:
+                sensor.stop()

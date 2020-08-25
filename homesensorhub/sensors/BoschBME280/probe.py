@@ -33,7 +33,7 @@ class ProbeBoschBME280():
                                                          address)
                 logging.info("{} found at {}".format(cls.get_sensor_name(),
                                                      hex(address)))
-                return cls.generate_sensor_types(sensor)
+                return cls.generate_sensor_types(sensor, send_payload_callback)
             except ValueError:
                 logging.info("Found no {} sensor at address {}.".format(cls.get_sensor_name(),
                                                                         hex(address)))
@@ -52,8 +52,8 @@ class ProbeBoschBME280():
         return "BoschBME280"
 
     @staticmethod
-    def generate_sensor_types(sensor):
-        return [TemperatureBoschBME280(sensor),
-                AltitudeBoschBME280(sensor),
-                HumidityBoschBME280(sensor),
-                PressureBoschBME280(sensor)]
+    def generate_sensor_types(sensor, send_payload_callback):
+        return [TemperatureBoschBME280(sensor, send_payload_callback),
+                AltitudeBoschBME280(sensor, send_payload_callback),
+                HumidityBoschBME280(sensor, send_payload_callback),
+                PressureBoschBME280(sensor, send_payload_callback)]
