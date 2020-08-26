@@ -35,7 +35,7 @@ class SourceAndSink:
 
         return collected
 
-    def sink_and_send(self, interval: int) -> None:
+    def sink_and_send(self) -> None:
         """Sink all data from the sensors and send at a specified time interval."""
         logging.info("Sinking and sending data...")
 
