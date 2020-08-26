@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     options {
-        timeout(time: 10, unit: 'MINUTES') 
+        timeout(time: 10, unit: 'MINUTES')
     }
 
     stages {
@@ -12,15 +12,28 @@ pipeline {
             steps {
                 echo " ... cleaning up git repo ... "
                 sh "git clean -xdf"
-                echo "... preparing python environment required for project ..."
-                sh "make prepare-test"
             }
         }
         stage('UnitTest') {
+            agent {label 'master'}
             steps {
                 ansiColor('xterm') {
                     echo '... Testing ...'
-                    sh "make nosetest"
+                    sh "make mock-nosetest"
+                }
+            }
+            post {
+                always {
+                    junit 'nosetests.xml'
+                }
+            }
+        }
+        stage('IntegrationTest') {
+            agent { label 'raspberry-sensors' }
+            steps {
+                ansiColor('xterm') {
+                    echo '... Testing ...'
+                    sh "make real-nosetest"
                 }
             }
             post {
