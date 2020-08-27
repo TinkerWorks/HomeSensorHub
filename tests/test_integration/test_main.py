@@ -2,6 +2,9 @@ import unittest
 import subprocess
 import time
 import signal
+import paho.mqtt.client as mqtt
+import getpass
+import socket
 
 
 class TestMain(unittest.TestCase):
@@ -12,7 +15,7 @@ class TestMain(unittest.TestCase):
     START_STOP_DURATION_MAX_SECONDS = 4
     START_STOP_COUNT = 8
 
-    RUNTIME = 10
+    RUNTIME = 5
 
     def start_stop(self, callback, allowed_rc=[0]):
         """Test that main runs for five seconds without crashing."""
@@ -40,9 +43,33 @@ class TestMain(unittest.TestCase):
         print("Finish poll rc is ", proc.poll())
         self.assertIn(proc.returncode, allowed_rc)
 
+    def connect_mqtt(self):
+        client = mqtt.Client()
+        client.connect("mqtt.tinker.haus", 1883)
+        return client
+
+    def on_message(self, client, userdata, message):
+        print("Received message '" + str(message.payload) + "' on topic '"
+              + message.topic + "' with QoS " + str(message.qos))
+
     def test_1_runtime(self):
         def cb(proc):
-            time.sleep(self.RUNTIME)
+            print("LISTENIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIING")
+            client = self.connect_mqtt()
+            client.on_message = self.on_message
+
+            topic_prefix = getpass.getuser() + "/" + socket.gethostname()
+            topic = topic_prefix + "/temperature/value"
+            r = client.subscribe(topic)
+
+            print(r)
+
+            rt = self.RUNTIME
+            while rt > 0:
+                client.loop(timeout=10)
+                time.sleep(0.5)
+                rt -= 0.5
+            print("DOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOONE")
 
         self.start_stop(cb)
 
@@ -51,7 +78,7 @@ class TestMain(unittest.TestCase):
         for i in range(0, self.START_STOP_COUNT):
 
             def cb(proc):
-                print("Sleep for {} seconds".format(duration))
+                print("Run for {} seconds".format(duration))
                 time.sleep(duration)
 
             # Either normal, or keyboard interrupt stop
