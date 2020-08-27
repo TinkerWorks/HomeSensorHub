@@ -5,6 +5,7 @@ The sensor hub collects data from all connected sensors and transmits it to the 
 """
 import logging
 import threading
+from signal import signal, SIGINT, SIGTERM
 
 logging.basicConfig(
     format='%(asctime)s %(levelname)-8s %(message)s',
@@ -19,6 +20,8 @@ class SourceAndSink:
     Data collected from all sensors will be gathered here, organized and sent
     to the data sender class.
     """
+
+    running = True
 
     def __init__(self, type_sensors: list, senders: list) -> None:
         self.__sensors = type_sensors
@@ -39,9 +42,18 @@ class SourceAndSink:
         """Sink all data from the sensors and send at a specified time interval."""
         logging.info("Sinking and sending data...")
 
-        event = threading.Event()
-        try:
-            event.wait()
-        except KeyboardInterrupt:
-            for sensor in self.__sensors:
-                sensor.stop()
+        self.event = threading.Event()
+
+        signal(SIGINT, self.stop_everything)
+        signal(SIGTERM, self.stop_everything)
+
+        self.event.wait()
+
+        print("Quitting gracefully")
+        for sensor in self.__sensors:
+            sensor.stop()
+
+    def stop_everything(self, signal_received, frame) -> None:
+        print("stop caught")
+        self.event.set()
+        SourceAndSink.running = False
