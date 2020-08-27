@@ -9,12 +9,13 @@ class TestMain(unittest.TestCase):
     TIMEOUT_SECONDS = 30
     POLL_INTERVAL_SECONDS=0.1
 
-    START_STOP_DURATION_SECONDS=5
+    START_STOP_DURATION_SECONDS=2.5
 
-    def test_start_stop(self):
+    def start_stop(self, callback):
         """Test that main runs for five seconds without crashing."""
         proc = subprocess.Popen(["/usr/bin/python3", "homesensorhub/__main__.py"])
-        time.sleep(self.START_STOP_DURATION_SECONDS)
+        print("Running status is:", proc.poll())
+        callback()
         print("Running status is:", proc.poll())
         proc.send_signal(signal.SIGINT)
 
@@ -35,3 +36,18 @@ class TestMain(unittest.TestCase):
 
         print("Finish poll rc is ", proc.poll())
         self.assertEqual(0, proc.returncode)
+
+
+    def test_start_stop(self):
+        def cb():
+            time.sleep(self.START_STOP_DURATION_SECONDS)
+
+        self.start_stop(cb)
+
+
+
+    def test_start_stop_longer(self):
+        def cb():
+            time.sleep(self.START_STOP_DURATION_SECONDS * 2)
+
+        self.start_stop(cb)
