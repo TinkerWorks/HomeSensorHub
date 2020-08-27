@@ -6,7 +6,6 @@ pipeline {
     options {
         timeout(time: 10, unit: 'MINUTES')
     }
-
     stages {
         stage('... Environment preparation ...') {
             steps {
@@ -20,8 +19,15 @@ pipeline {
                     agent {
                         label 'master'
                     }
+                    environment {
+                        PATH = "$HOME/.local/bin:$PATH"
+                    }
                     steps {
                         ansiColor('xterm') {
+                            echo '... Environment HOST ...'
+                            sh "env"
+                            echo '... Cleaning ...'
+                            sh "git clean -xdf"
                             echo '... Testing ...'
                             sh "make mock-nosetest"
                         }
@@ -36,8 +42,15 @@ pipeline {
                     agent {
                         label 'raspberry-sensors'
                     }
+                    environment {
+                        PATH = "$HOME/.local/bin:$PATH"
+                    }
                     steps {
                         ansiColor('xterm') {
+                            echo '... Environment DEVICE ...'
+                            sh "env"
+                            echo '... Cleaning ...'
+                            sh "git clean -xdf"
                             echo '... Testing ...'
                             sh "make real-nosetest"
                         }

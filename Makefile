@@ -1,4 +1,4 @@
-NT=~/.local/bin/nosetests
+NT=nosetests
 
 MAINPACKAGE=homesensorhub
 MOCKED_TEST_FOLDER=tests/sensors
