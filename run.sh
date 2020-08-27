@@ -9,7 +9,7 @@ case "$2" in
         ssh -t $HOST PYTHONPATH=/home/$USER/HomeSensorHub python3 /home/$USER/HomeSensorHub/homesensorhub/__main__.py
         ;;
     "test")
-        ssh -t $HOST make real-nosetest -C /home/$USER/HomeSensorHub 
+        ssh -t $HOST "source ~/.profile ; make real-nosetest -C /home/$USER/HomeSensorHub"
         ;;
     "req")
         ssh -t $HOST pip3 install -r /home/$USER/HomeSensorHub/requirements.txt
