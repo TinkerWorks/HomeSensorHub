@@ -15,7 +15,7 @@ class TestMain(unittest.TestCase):
 
         proc.send_signal(signal.SIGINT)
         timeout = self.TIMEOUT
-        while not proc.poll() and timeout >= 0:
+        while proc.poll() is None and timeout >= 0:
             time.sleep(0.1)
             timeout -= 1
 
