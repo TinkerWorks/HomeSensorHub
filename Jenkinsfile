@@ -1,8 +1,9 @@
 #!/usr/bin/env groovy
 
 pipeline {
-    agent any
-
+    agent {
+        label 'master'
+    }
     options {
         timeout(time: 10, unit: 'MINUTES')
     }
