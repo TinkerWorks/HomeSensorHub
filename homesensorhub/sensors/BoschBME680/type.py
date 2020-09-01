@@ -6,7 +6,7 @@ class BoschBME680Type:
 
     SENSOR_NAME = 'BoschBME680'
 
-    def __init__(self, sensor, send_payload_callback):
+    def __init__(self, sensor):
         """Initialise the BoschBME680 type with the physical sensor."""
         self._sensor = sensor
         self._lock = FileLock("/var/tmp/hsh_" + self.SENSOR_NAME + ".lock")
