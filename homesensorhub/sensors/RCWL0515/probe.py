@@ -24,4 +24,4 @@ class ProbeRCWL0515(Probe):
         sensors of the type BoschBME. In case the sensor is not found at any
         of the specified I2C address, None is returned.
         """
-        return [MotionSensorRCWL0515(gpio=cls.GPIO, callback=send_payload_callback)]
+        return [MotionSensorRCWL0515(gpio=cls.GPIO, pollrate=1, callback=send_payload_callback)]

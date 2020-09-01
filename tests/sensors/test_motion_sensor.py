@@ -1,7 +1,7 @@
 import sys
 
-#TODO: This is a way, but overriding __import__ might be better
-from mock import Mock,MagicMock
+# TODO: This is a way, but overriding __import__ might be better
+from mock import Mock
 if 'RPi' not in sys.modules.keys():
     sys.modules['RPi'] = Mock()
 if 'RPi.GPIO' not in sys.modules.keys():
@@ -12,6 +12,7 @@ import RPi.GPIO as GPIO
 from sensors.RCWL0515.driver import MotionSensorRCWL0515
 
 import unittest
+
 
 class MotionSensorTests(unittest.TestCase):
 
@@ -29,23 +30,20 @@ class MotionSensorTests(unittest.TestCase):
 
             GPIO.input.return_value = gpio_value
             motionCallback = Mock()
-            ms = MotionSensorRCWL0515(self.PIN, motionCallback)
-            #Record GPIO callback method
-            GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
+            ms = MotionSensorRCWL0515(self.PIN, callback=motionCallback)
 
             self.assertEqual(ms.get(), get_value)
-
-
+            ms.stop()
 
     def test_NormalTransitions(self):
         # initial state is false
         GPIO.input.return_value = False
 
         motionCallback = Mock()
-        ms = MotionSensorRCWL0515(self.PIN, motionCallback)
+        ms = MotionSensorRCWL0515(self.PIN, callback=motionCallback)
 
-        #Record GPIO callback method
-        GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
+        # Record GPIO callback method
+        GPIOcallback = GPIO.add_event_detect.mock_calls[0][2]['callback']
 
         state_transition = [
             (1, True),
@@ -54,6 +52,8 @@ class MotionSensorTests(unittest.TestCase):
             (0, False),
         ]
 
+        ms.stop()
+        
         # Fake it .... till you make it ...
         for transition in state_transition:
             gpio_value = transition[0]
@@ -71,17 +71,19 @@ class MotionSensorTests(unittest.TestCase):
         GPIO.input.return_value = False
 
         motionCallback = Mock()
-        ms = MotionSensorRCWL0515(self.PIN, motionCallback)
+        ms = MotionSensorRCWL0515(self.PIN, callback=motionCallback)
 
-        #Record GPIO callback method
-        GPIOcallback=GPIO.add_event_detect.mock_calls[0][2]['callback']
+        # Record GPIO callback method
+        GPIOcallback = GPIO.add_event_detect.mock_calls[0][2]['callback']
 
         state_transition = [
-            (1, True),  # Normal Transition
-            (1, False), # Warning Transition (events were lost)
-            (0, True),  # Normal Transition
-            (0, False), # Warning Transition (events were lost)
+            (1, True),   # Normal Transition
+            (1, False),  # Warning Transition (events were lost)
+            (0, True),   # Normal Transition
+            (0, False),  # Warning Transition (events were lost)
         ]
+
+        ms.stop()
 
         # Fake it .... till you make it ...
         for transition in state_transition:

@@ -10,14 +10,14 @@ import RPi.GPIO as GPIO
 class MotionSensorRCWL0515(Motion):
     ms_dict = {}
 
-    def __init__(self, gpio, callback=None):
+    def __init__(self, gpio, pollrate=1, callback=None):
         self.logger = logging.getLogger(__name__)
         self.MOTION_GPIO = gpio
-        self.callback = callback
 
         # Read initial state
         self.motion = None
         self.initialize_gpio()
+        Motion.__init__(self, pollrate=pollrate, send_payload_callback=callback)
         self.__motionChanged(self.MOTION_GPIO)
 
         self.install_callback()
@@ -25,14 +25,35 @@ class MotionSensorRCWL0515(Motion):
     def get_sensor_name(self):
         return "RCWL-0515"
 
+    def __get_gpio_value(self):
+        if GPIO.input(self.MOTION_GPIO):
+            motion = True
+        else:
+            motion = False
+        return motion
+
     def get_sensor_value(self):
+        self.logger.debug("Motion value polled")
+
+        next_motion = self.__get_gpio_value()
+        if next_motion:
+            self.logger.debug("Motion is in progress")
+        else:
+            self.logger.debug("Motion is not happening")
+
+        if(next_motion != self.motion):
+            self.logger.error("Motion from {} to {} (IRQ skip detected)"
+                              .format(self.motion, next_motion))
+        else:
+            self.motion = next_motion
+
         return self.motion
 
     def get_sensor_measure(self):
         return "None"
 
     def get(self):
-        return self.motion
+        return self.get_sensor_value()
 
     def initialize_gpio(self):
         GPIO.setmode(GPIO.BCM)
@@ -47,18 +68,18 @@ class MotionSensorRCWL0515(Motion):
         MotionSensorRCWL0515.ms_dict[gpio].__motionChanged(gpio)
 
     def __motionChanged(self, gpio):
-        self.logger.debug("Motion Changed %d" % gpio)
-        if GPIO.input(self.MOTION_GPIO):
-            next_motion = True
-            self.logger.info("Motion Started %d" % gpio)
+        self.logger.debug("Motion Changed IRQ at GPIO %d" % gpio)
+        next_motion = self.__get_gpio_value()
+        if next_motion:
+            self.logger.debug("Motion Started")
         else:
-            next_motion = False
-            self.logger.info("Motion Ended %d" % gpio)
+            self.logger.debug("Motion Ended")
 
         if(next_motion == self.motion):
-            self.logger.error("Motion Transitioned from {} to {}".format(self.motion, next_motion))
+            self.logger.error("Motion from {} to {} (IRQ skipped)"
+                              .format(self.motion, next_motion))
         else:
             self.motion = next_motion
 
-            if(self.callback is not None):
-                self.callback(self.get_payload())
+            if(self.send_payload_callback is not None):
+                self.send_payload_callback(self.get_payload())

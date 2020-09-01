@@ -69,11 +69,30 @@ class SensorTypePolled(Thread, SensorType):
 class SensorTypeAsynchronous(SensorType):
     """Type of sensor which is asynchronous."""
 
+    def __init__(self):
+        pass
+
     def stop(self):
         pass
 
     def get_properties(self):
         return {}
+
+
+class SensorTypeAsyncAndPolled(SensorTypeAsynchronous, SensorTypePolled):
+    def __init__(self, pollrate=1, send_payload_callback=None):
+        SensorTypeAsynchronous.__init__(self)
+        SensorTypePolled.__init__(self, pollrate, send_payload_callback)
+
+    def stop(self):
+        SensorTypeAsynchronous.stop(self)
+        SensorTypePolled.stop(self)
+
+    def get_properties(self):
+        prop = {}
+        prop.update(SensorTypeAsynchronous.get_properties(self))
+        prop.update(SensorTypePolled.get_properties(self))
+        return prop
 
 
 class Gas(SensorTypePolled):
@@ -118,11 +137,11 @@ class Temperature(SensorTypePolled):
         super().__init__(send_payload_callback=send_payload_callback)
 
 
-class Motion(SensorTypeAsynchronous):
+class Motion(SensorTypeAsyncAndPolled):
     TYPE = 'motion'
 
-    def __init__(self, send_payload_callback):
-        super().__init__(send_payload_callback=send_payload_callback)
+    def __init__(self, pollrate, send_payload_callback):
+        SensorTypeAsyncAndPolled.__init__(self, pollrate=pollrate, send_payload_callback=send_payload_callback)
 
 
 class CallbackPair:
