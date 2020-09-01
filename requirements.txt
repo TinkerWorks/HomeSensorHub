@@ -2,3 +2,4 @@ paho-mqtt
 smbus
 adafruit-circuitpython-bme280
 adafruit-circuitpython-bme680
+filelock

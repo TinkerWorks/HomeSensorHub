@@ -1,4 +1,5 @@
 from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature, Gas
+from filelock import FileLock
 
 
 class BoschBME680Type:
@@ -8,6 +9,7 @@ class BoschBME680Type:
     def __init__(self, sensor, send_payload_callback):
         """Initialise the BoschBME680 type with the physical sensor."""
         self._sensor = sensor
+        self._lock = FileLock("/var/tmp/hsh_" + self.SENSOR_NAME + ".lock")
 
     def get_sensor_name(self):
         return self.SENSOR_NAME
@@ -28,7 +30,8 @@ class HumidityBoschBME680(BoschBME680Type, Humidity):
         Humidity.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> int:
-        return self._sensor.humidity
+        with self._lock:
+            return self._sensor.humidity
 
     def get_sensor_measure(self) -> str:
         return HumidityBoschBME680.MEASURE
@@ -42,7 +45,8 @@ class PressureBoschBME680(BoschBME680Type, Pressure):
         Pressure.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> float:
-        return self._sensor.pressure
+        with self._lock:
+            return self._sensor.pressure
 
     def get_sensor_measure(self) -> str:
         return PressureBoschBME680.MEASURE
@@ -56,7 +60,8 @@ class AltitudeBoschBME680(BoschBME680Type, Altitude):
         Altitude.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> int:
-        return self._sensor.altitude
+        with self._lock:
+            return self._sensor.altitude
 
     def get_sensor_measure(self) -> str:
         return AltitudeBoschBME680.MEASURE
@@ -70,7 +75,8 @@ class TemperatureBoschBME680(BoschBME680Type, Temperature):
         Temperature.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> float:
-        return self._sensor.temperature
+        with self._lock:
+            return self._sensor.temperature
 
     def get_sensor_measure(self) -> str:
         return TemperatureBoschBME680.MEASURE
@@ -84,7 +90,8 @@ class GasBoschBME680(BoschBME680Type, Gas):
         Gas.__init__(self, send_payload_callback)
 
     def get_sensor_value(self) -> float:
-        return self._sensor.gas
+        with self._lock:
+            return self._sensor.gas
 
     def get_sensor_measure(self) -> str:
         return GasBoschBME680.MEASURE
