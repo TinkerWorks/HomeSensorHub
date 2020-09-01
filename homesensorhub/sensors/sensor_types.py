@@ -3,6 +3,9 @@ from routing.payload import Payload
 import datetime
 from threading import Thread, Event
 
+from utils import logging
+logger = logging.getLogger(__name__)
+
 
 class SensorType:
     """Interface for creating a sensor type object."""
@@ -43,7 +46,7 @@ class SensorTypePolled(Thread, SensorType):
                 self.send_payload_callback(payload)
 
     def stop(self):
-        print("{} thread stopped.".format(self.get_type()))
+        logger.notice("{} thread stopped.".format(self.get_type()))
         self.__stopped.set()
 
     def get_properties(self):
@@ -57,9 +60,9 @@ class SensorTypePolled(Thread, SensorType):
         try:
             pollrate = float(pollrate)
             self.__pollrate = pollrate
-            print("Set the pollrate to the {} sensor to {}".format(self.TYPE, self.__pollrate))
+            logger.info("Set the pollrate to the {} sensor to {}".format(self.TYPE, self.__pollrate))
         except ValueError:
-            print("Cannot convert pollrate to integer. The value is not an integer.")
+            logger.info("Cannot convert pollrate to integer. The value is not an integer.")
             return
 
     def get_pollrate(self):

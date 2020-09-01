@@ -8,9 +8,14 @@ from sensors.BoschBME680.probe import ProbeBoschBME680
 from sensors.TSL258x.probe import ProbeTSL258x
 from sensors.RCWL0515.probe import ProbeRCWL0515
 
+from utils import logging
+
+logger = logging.getLogger(__name__)
+
 
 class HomeSensorHub:
     def __init__(self):
+        logger.success("Starting HomeSensorHub ...")
         self.__mqtt_subscriber = MQTTSubscriber()
 
         probe_functions = self.find_probe_functions()
@@ -20,8 +25,10 @@ class HomeSensorHub:
         self.__mqtt_subscriber.subscribe_to_sensor_properties(self.__sensors)
 
     def run(self):
+        logger.success("Running HomeSensorHub ...")
         sensor_sink = SourceAndSink(self.__sensors, self.__senders)
         sensor_sink.sink_and_send()
+        logger.success("Quitting gracefully")
 
     def find_probe_functions(self):
         probe_functions = []

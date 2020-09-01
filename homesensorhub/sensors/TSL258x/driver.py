@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
-import logging
 import smbus
+
+import logging
+logger = logging.getLogger(__name__)
 
 
 class TSL258x:
@@ -141,12 +143,12 @@ class TSL258x:
         ch0 = ch0 = data0high * 256 + data0low
         ch1 = ch1 = data1high * 256 + data1low
 
-        logging.debug("Channel ALL value: 0x%x " % ch0)
-        logging.debug("Channel  IR value: 0x%x " % ch1)
+        logger.debug("Channel ALL value: 0x%x " % ch0)
+        logger.debug("Channel  IR value: 0x%x " % ch1)
 
         Lux = self.calculateLux(ch0, ch1)
 
-        logging.debug("Light: %d lux" % Lux)
+        logger.debug("Light: %d lux" % Lux)
 
         return Lux
 

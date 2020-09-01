@@ -1,12 +1,7 @@
 from routing.mqtt import MQTT
 
-import logging
-
-
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.DEBUG,
-    datefmt='%Y-%m-%d %H:%M:%S')
+from utils import logging
+logger = logging.getLogger(__name__)
 
 
 class MQTTSubscriber():
@@ -29,7 +24,7 @@ class MQTTSubscriber():
 
     def on_message(self, client, userdata, message):
         """Read message and set property based on the type and payload."""
-        # print("Topic {}.\n Payload {}".format(message.topic, message.payload))
+        logger.debug("Topic {}.\n Payload {}".format(message.topic, message.payload))
         type, property = self.get_type_and_property(message.topic)
 
         for sensor in self.__sensors:
@@ -59,7 +54,9 @@ class MQTTSubscriber():
             type = sensor.get_type()
             self.__set_sensor_subscribe_topic(type=type, sensor_properties=sensor.get_properties())
 
-        print("Generated topics: {}".format(self.__topics))
+        logger.info("Generated subscribed topics:")
+        for t, v in self.__topics:
+            logger.info("    {}".format(t))
 
     def __set_sensor_subscribe_topic(self, type, sensor_properties):
         """

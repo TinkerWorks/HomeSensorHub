@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-import logging
-
 from sensors.sensor_types import Motion
-
 import RPi.GPIO as GPIO
+from utils import logging
 
 
 class MotionSensorRCWL0515(Motion):
