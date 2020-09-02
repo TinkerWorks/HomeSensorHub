@@ -4,9 +4,11 @@ from sensors.BoschBME280.type import AltitudeBoschBME280
 from sensors.BoschBME280.type import HumidityBoschBME280
 from sensors.BoschBME280.type import PressureBoschBME280
 
+from filelock import FileLock
 import adafruit_bme280
 import busio
 import board
+import os
 
 from utils import logging
 logger = logging.getLogger(__name__)
@@ -26,20 +28,30 @@ class ProbeBoschBME280():
         Function which iterates over multiple I2C addresses and looks for sensors of the type  
         BoschBME. In case the sensor is not found at the specified I2C address, None is returned.
         """
-        for address in ProbeBoschBME280.ADDRESSES:
+
+        lock_file = "/var/tmp/hsh_" + cls.get_sensor_name() + ".lock"
+        lock = FileLock(lock_file)
+
+        with lock:
             try:
-                sensor = cls.get_sensor_probe_function()(ProbeBoschBME280.I2C,
-                                                         address)
-                logger.success("{} found at {}".format(cls.get_sensor_name(),
-                                                       hex(address)))
-                return cls.generate_sensor_types(sensor, send_payload_callback)
-            except ValueError:
-                logger.verbose("Found no {} sensor at address {}."
-                               .format(cls.get_sensor_name(), hex(address)))
-            except RuntimeError:
-                logger.verbose("The chip found at {} address has a different ID than {}."
-                               .format(hex(address), cls.get_sensor_name()))
-                logger.verbose("These are not the sensors you're looking for.")
+                os.chmod(lock_file, 0o777)
+            except PermissionError:
+                pass
+
+            for address in ProbeBoschBME280.ADDRESSES:
+                try:
+                    sensor = cls.get_sensor_probe_function()(ProbeBoschBME280.I2C,
+                                                             address)
+                    logger.success("{} found at {}".format(cls.get_sensor_name(),
+                                                           hex(address)))
+                    return cls.generate_sensor_types(sensor, send_payload_callback, lock)
+                except ValueError:
+                    logger.verbose("Found no {} sensor at address {}."
+                                   .format(cls.get_sensor_name(), hex(address)))
+                except RuntimeError:
+                    logger.verbose("The chip found at {} address has a different ID than {}."
+                                   .format(hex(address), cls.get_sensor_name()))
+                    logger.verbose("These are not the sensors you're looking for.")
 
     @staticmethod
     def get_sensor_probe_function():
@@ -51,8 +63,8 @@ class ProbeBoschBME280():
         return "BoschBME280"
 
     @staticmethod
-    def generate_sensor_types(sensor, send_payload_callback):
-        return [TemperatureBoschBME280(sensor, send_payload_callback),
-                AltitudeBoschBME280(sensor, send_payload_callback),
-                HumidityBoschBME280(sensor, send_payload_callback),
-                PressureBoschBME280(sensor, send_payload_callback)]
+    def generate_sensor_types(sensor, send_payload_callback, lock):
+        return [TemperatureBoschBME280(sensor, send_payload_callback, lock),
+                AltitudeBoschBME280(sensor, send_payload_callback, lock),
+                HumidityBoschBME280(sensor, send_payload_callback, lock),
+                PressureBoschBME280(sensor, send_payload_callback, lock)]
