@@ -1,19 +1,11 @@
 #!/usr/bin/env groovy
 
 pipeline {
-    agent {
-        label 'master'
-    }
+    agent none
     options {
         timeout(time: 10, unit: 'MINUTES')
     }
     stages {
-        stage('... Environment preparation ...') {
-            steps {
-                echo " ... cleaning up git repo ... "
-                sh "git clean -xdf"
-            }
-        }
         stage('Testing') {
             parallel {
                 stage('UnitTest') {
@@ -65,6 +57,9 @@ pipeline {
             }
         }
         stage('Deploy') {
+            agent {
+                label 'master'
+            }
             steps {
                 echo 'Deploying....'
             }
