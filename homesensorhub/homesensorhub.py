@@ -33,7 +33,6 @@ class HomeSensorHub:
         signal(SIGTERM, self.stop_everything)
 
     def stop_everything(self, signal_received, frame) -> None:
-        logger.notice("QUIT signal received !")
         self.event.set()
 
     def run(self):
@@ -41,10 +40,11 @@ class HomeSensorHub:
 
         # just wait for the stop event
         self.event.wait()
+        logger.notice("QUIT signal received !")
         for sensor in self.__sensors:
             sensor.stop()
 
-        print("Quitting gracefully")
+        logger.notice("Quitting gracefully !")
 
     def find_probe_functions(self):
         probe_functions = []
@@ -59,6 +59,7 @@ class HomeSensorHub:
     def find_senders(self):
         senders = []
 
+        logger.info("Configuring senders ...")
         senders.append(MQTTSender())
 
         return senders
@@ -67,6 +68,7 @@ class HomeSensorHub:
         sensors = []
         mqtt_sender = self.__senders[0]
 
+        logger.info("Searching attached sensors ...")
         for function in probe_functions:
             sensor_list = function(mqtt_sender.send_payload)  # TODO: Send a generic sender callback. # noqa
             try:
