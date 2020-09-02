@@ -52,9 +52,10 @@ class SensorTypePolled(Thread, SensorType):
 
             if self.send_payload_callback:
                 self.send_payload_callback(payload)
+        logger.success("{} thread stopped.".format(self.get_type()))
 
     def stop(self):
-        logger.notice("{} thread stopped.".format(self.get_type()))
+        logger.notice("{} thread stopping.".format(self.get_type()))
         self.__stopped.set()
 
     def get_properties(self):
@@ -81,7 +82,7 @@ class SensorTypeAsynchronous(SensorType):
     """Type of sensor which is asynchronous."""
 
     def __init__(self):
-        pass
+        SensorType.__init__(self)
 
     def stop(self):
         pass
