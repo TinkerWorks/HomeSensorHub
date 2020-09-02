@@ -4,10 +4,6 @@
 from sensors.probe import Probe
 from sensors.RCWL0515.driver import MotionSensorRCWL0515
 
-import logging
-
-logging.basicConfig(level=logging.INFO)
-
 
 class ProbeRCWL0515(Probe):
     """Class which implements probing for BoschBME sensors."""

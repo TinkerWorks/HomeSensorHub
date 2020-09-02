@@ -2,12 +2,8 @@ from sensors.TSL258x.driver import TSL258x
 from sensors.TSL258x.type import LightTSL258x
 from sensors.probe import Probe
 
-import logging
-
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.DEBUG,
-    datefmt='%Y-%m-%d %H:%M:%S')
+from utils import logging
+logger = logging.getLogger(__name__)
 
 
 class ProbeTSL258x(Probe):
@@ -20,7 +16,7 @@ class ProbeTSL258x(Probe):
         sensor = TSL258x.probe()
         sensor.config()
 
-        logging.debug("Found {} sensor.".format(cls.SENSOR_NAME))
+        logger.debug("Found {} sensor.".format(cls.SENSOR_NAME))
 
         return cls.generate_sensor_types(sensor, send_payload_callback)
 

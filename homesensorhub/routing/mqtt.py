@@ -3,12 +3,9 @@ import socket
 import os
 import getpass
 import time
-import logging
 
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S')
+from utils import logging
+logger = logging.getLogger(__name__)
 
 
 class Singleton(type):
@@ -27,8 +24,8 @@ class MQTT(metaclass=Singleton):
 
     def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
         self.__client = mqtt.Client()
+        self.__client.enable_logger()
         self.__client.on_connect = self.on_connect
-        self.__client.on_log = self.on_log
 
         self.__broker_url = broker_url
         self.__broker_port = broker_port
@@ -43,13 +40,19 @@ class MQTT(metaclass=Singleton):
 
     def connect(self):
         try:
-            connection = self.__client.connect_async(self.__broker_url,
-                                                     self.__broker_port)
+            connection = self.__client.connect(self.__broker_url,
+                                               self.__broker_port)
+            if connection == 0:
+                logger.success("MQTT connected succesfully to {}"
+                               .format(self.__broker_url))
+            else:
+                logger.error("MQTT connection failed to {} with error code: {}"
+                             .format(self.__broker_url, connection))
+
             self.__client.loop_start()
-            logging.info("MQTT connection result: {}".format(connection))
             return True
         except ConnectionRefusedError as error:
-            logging.error("MQTT connect refused: {}".format(error))
+            logger.error("MQTT connect refused: {}".format(error))
             return False
 
     def set_message_callback(self, callback):
@@ -59,7 +62,7 @@ class MQTT(metaclass=Singleton):
         """Stop the mqtt subscribe loop to add the sensors properties subscribe topics."""
         self.__client.loop_stop()
 
-        logging.info("Setting MQTT subscribers.")
+        logger.info("Setting MQTT subscribers.")
         self.__client.subscribe(topics)
 
         self.__client.loop_start()
@@ -74,15 +77,12 @@ class MQTT(metaclass=Singleton):
                                            retain=False)
 
             if(result[0] == mqtt.MQTT_ERR_NO_CONN):
-                logging.warn("MQTT bus unresponsive, reconnecting...")
+                logger.warn("MQTT bus unresponsive, reconnecting...")
                 self.connect()
                 time.sleep(1)
 
     def on_connect(self, client, userdata, flags, rc):
-        logging.info("Succesfully connected to {}".format(self.__broker_url))
-
-    def on_log(self, mqttc, obj, level, string):
-        logging.debug(string)
+        logger.info("MQTT connect callback called with rc = {}".format(rc))
 
     def get_topic_base(self):
         """Return topic base used for publish."""

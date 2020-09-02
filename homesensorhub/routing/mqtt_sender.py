@@ -2,12 +2,8 @@
 from routing.data_sender import DataSender
 from routing.mqtt import MQTT
 
-import logging
-
-logging.basicConfig(
-    format='%(asctime)s %(levelname)-8s %(message)s',
-    level=logging.INFO,
-    datefmt='%Y-%m-%d %H:%M:%S')
+from utils import logging
+logger = logging.getLogger(__name__)
 
 
 class MQTTSender(DataSender):

@@ -7,10 +7,9 @@ from sensors.BoschBME280.type import PressureBoschBME280
 import adafruit_bme280
 import busio
 import board
-import logging
 
-
-logging.basicConfig(level=logging.INFO)
+from utils import logging
+logger = logging.getLogger(__name__)
 
 
 class ProbeBoschBME280():
@@ -24,23 +23,23 @@ class ProbeBoschBME280():
         """
         Probe for Bosch BME type sensors to the possible I2C addresses.
 
-        Function which iterates over multiple I2C addresses and looks for sensors of the type
+        Function which iterates over multiple I2C addresses and looks for sensors of the type  
         BoschBME. In case the sensor is not found at the specified I2C address, None is returned.
         """
         for address in ProbeBoschBME280.ADDRESSES:
             try:
                 sensor = cls.get_sensor_probe_function()(ProbeBoschBME280.I2C,
                                                          address)
-                logging.info("{} found at {}".format(cls.get_sensor_name(),
-                                                     hex(address)))
+                logger.success("{} found at {}".format(cls.get_sensor_name(),
+                                                       hex(address)))
                 return cls.generate_sensor_types(sensor, send_payload_callback)
             except ValueError:
-                logging.info("Found no {} sensor at address {}.".format(cls.get_sensor_name(),
-                                                                        hex(address)))
+                logger.verbose("Found no {} sensor at address {}."
+                               .format(cls.get_sensor_name(), hex(address)))
             except RuntimeError:
-                logging.info("The chip found at {} address has a different ID than {}."
-                             "These are not the sensors you're looking for."
-                             .format(address, cls.get_sensor_name()))
+                logger.verbose("The chip found at {} address has a different ID than {}."
+                               .format(hex(address), cls.get_sensor_name()))
+                logger.verbose("These are not the sensors you're looking for.")
 
     @staticmethod
     def get_sensor_probe_function():
