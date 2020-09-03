@@ -9,10 +9,7 @@ def initialize_logger():
 
     dateformat = "%H:%M:%S"
 
-    coloredlogs.install(level='INFO', milliseconds=True, datefmt=dateformat)
-
-    fl_lg = logging.getLogger('filelock')
-    fl_lg.setLevel('WARN')
+    coloredlogs.install(level='SPAM', milliseconds=True, datefmt=dateformat)
 
 
 def getLogger(name):
