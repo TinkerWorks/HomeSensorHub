@@ -1,10 +1,32 @@
 """Module which implements the sensor type interface."""
 from routing.payload import Payload
 import datetime
-from threading import Thread, Event
+from threading import Thread, Event, Timer
 
 from utils import logging
 logger = logging.getLogger(__name__)
+
+
+class TimedOutExc(Exception):
+    pass
+
+
+def deadline(timeout, *args):
+    def decorate(f):
+        def handler():
+            logger.critical("Function deadline {}s: {}".format(timeout, f))
+            raise TimedOutExc()
+
+        def new_f(*args):
+            alarm_timer = Timer(timeout, handler)
+            alarm_timer.start()
+            rv = f(*args)
+            alarm_timer.cancel()
+            return rv
+
+        new_f.__name__ = f.__name__
+        return new_f
+    return decorate
 
 
 class SensorType:

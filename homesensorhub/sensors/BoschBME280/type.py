@@ -1,7 +1,10 @@
-from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature
+from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature, deadline
+from threading import Lock
 
 from utils import logging
 logger = logging.getLogger(__name__)
+
+lock = Lock()
 
 
 class BoschBME280Type:
@@ -30,10 +33,12 @@ class HumidityBoschBME280(BoschBME280Type, Humidity):
         BoschBME280Type.__init__(self, sensor)
         Humidity.__init__(self, send_payload_callback, lock)
 
+    @deadline(5)
     def get_sensor_value(self) -> int:
-        logger.spam("Getting sensor humidity value")
-        h = self._sensor.humidity
-        logger.spam("Get sensor humidity value done")
+        with lock:
+            logger.spam("Getting sensor humidity value")
+            h = self._sensor.humidity
+            logger.spam("Get sensor humidity value done")
         return h
 
     def get_sensor_measure(self) -> str:
@@ -47,10 +52,12 @@ class PressureBoschBME280(BoschBME280Type, Pressure):
         BoschBME280Type.__init__(self, sensor)
         Pressure.__init__(self, send_payload_callback, lock)
 
+    @deadline(5)
     def get_sensor_value(self) -> float:
-        logger.spam("Getting sensor pressure value")
-        p = self._sensor.pressure
-        logger.spam("Get sensor pressure value done")
+        with lock:
+            logger.spam("Getting sensor pressure value")
+            p = self._sensor.pressure
+            logger.spam("Get sensor pressure value done")
         return p
 
     def get_sensor_measure(self) -> str:
@@ -64,10 +71,12 @@ class AltitudeBoschBME280(BoschBME280Type, Altitude):
         BoschBME280Type.__init__(self, sensor)
         Altitude.__init__(self, send_payload_callback, lock)
 
+    @deadline(5)
     def get_sensor_value(self) -> int:
-        logger.spam("Getting sensor altitude value")
-        a = self._sensor.altitude
-        logger.spam("Get sensor altitude value done")
+        with lock:
+            logger.spam("Getting sensor altitude value")
+            a = self._sensor.altitude
+            logger.spam("Get sensor altitude value done")
         return a
 
     def get_sensor_measure(self) -> str:
@@ -81,10 +90,12 @@ class TemperatureBoschBME280(BoschBME280Type, Temperature):
         BoschBME280Type.__init__(self, sensor)
         Temperature.__init__(self, send_payload_callback, lock)
 
+    @deadline(5)
     def get_sensor_value(self) -> float:
-        logger.spam("Getting sensor temperature value")
-        t = self._sensor.temperature
-        logger.spam("Get sensor temperature value done")
+        with lock:
+            logger.spam("Getting sensor temperature value")
+            t = self._sensor.temperature
+            logger.spam("Get sensor temperature value done")
         return t
 
     def get_sensor_measure(self) -> str:
