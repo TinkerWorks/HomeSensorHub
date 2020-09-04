@@ -53,7 +53,7 @@ class MotionSensorTests(unittest.TestCase):
         ]
 
         ms.stop()
-        
+
         # Fake it .... till you make it ...
         for transition in state_transition:
             gpio_value = transition[0]
@@ -88,13 +88,9 @@ class MotionSensorTests(unittest.TestCase):
         # Fake it .... till you make it ...
         for transition in state_transition:
             gpio_value = transition[0]
-            should_call = transition[1]
 
             motionCallback.reset_mock()
 
             GPIO.input.return_value = gpio_value
             GPIOcallback(self.PIN)
-            if should_call:
-                motionCallback.assert_called()
-            else:
-                motionCallback.assert_not_called()
+            motionCallback.assert_called()
