@@ -40,10 +40,14 @@ class ProbeBoschBME280():
 
             for address in ProbeBoschBME280.ADDRESSES:
                 try:
-                    sensor = cls.get_sensor_probe_function()(ProbeBoschBME280.I2C,
-                                                             address)
-                    logger.success("{} found at {}".format(cls.get_sensor_name(),
-                                                           hex(address)))
+                    sensor = cls.get_sensor_probe_function()(ProbeBoschBME280.I2C, address)
+                    logger.success("{} found at {}".format(cls.get_sensor_name(), hex(address)))
+                    # Initial read to re-initialize sensor.
+                    # Fixes bad state when it is run in multiple instances
+                    # ... sometimes ...
+                    sensor.temperature
+                    sensor.humidity
+                    sensor.pressure
                     return cls.generate_sensor_types(sensor, send_payload_callback, lock)
                 except ValueError:
                     logger.verbose("Found no {} sensor at address {}."
