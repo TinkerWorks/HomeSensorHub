@@ -40,8 +40,10 @@ class MQTT(metaclass=Singleton):
 
     def connect(self):
         try:
-            connection = self.__client.connect(self.__broker_url,
-                                               self.__broker_port)
+            # connect_async has to be used instead of connect
+            # otherwise it will not reconnect on server reboot
+            connection = self.__client.connect_async(self.__broker_url,
+                                                     self.__broker_port)
             if connection == 0:
                 logger.success("MQTT connected succesfully to {}"
                                .format(self.__broker_url))
