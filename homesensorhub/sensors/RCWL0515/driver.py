@@ -42,8 +42,9 @@ class MotionSensorRCWL0515(Motion):
         if(next_motion != self.motion):
             self.logger.error("Motion from {} to {} (IRQ skip detected)"
                               .format(self.motion, next_motion))
-        else:
-            self.motion = next_motion
+            self.install_callback()
+
+        self.motion = next_motion
 
         return self.motion
 
@@ -59,6 +60,7 @@ class MotionSensorRCWL0515(Motion):
 
     def install_callback(self):
         MotionSensorRCWL0515.ms_dict[self.MOTION_GPIO] = self
+        GPIO.remove_event_detect(self.MOTION_GPIO)
         GPIO.add_event_detect(self.MOTION_GPIO, GPIO.BOTH,
                               callback=MotionSensorRCWL0515.__motionChangedStatic)
 
@@ -76,8 +78,8 @@ class MotionSensorRCWL0515(Motion):
         if(next_motion == self.motion):
             self.logger.error("Motion from {} to {} (IRQ skipped)"
                               .format(self.motion, next_motion))
-        else:
-            self.motion = next_motion
 
-            if(self.send_payload_callback is not None):
-                self.send_payload_callback(self.get_payload())
+        self.motion = next_motion
+
+        if(self.send_payload_callback is not None):
+            self.send_payload_callback(self.get_payload())

@@ -1,10 +1,32 @@
 """Module which implements the sensor type interface."""
 from routing.payload import Payload
 import datetime
-from threading import Thread, Event
+from threading import Thread, Event, Timer
 
 from utils import logging
 logger = logging.getLogger(__name__)
+
+
+class TimedOutExc(Exception):
+    pass
+
+
+def deadline(timeout, *args):
+    def decorate(f):
+        def handler():
+            logger.critical("Function deadline {}s: {}".format(timeout, f))
+            raise TimedOutExc()
+
+        def new_f(*args):
+            alarm_timer = Timer(timeout, handler)
+            alarm_timer.start()
+            rv = f(*args)
+            alarm_timer.cancel()
+            return rv
+
+        new_f.__name__ = f.__name__
+        return new_f
+    return decorate
 
 
 class SensorType:
@@ -52,9 +74,10 @@ class SensorTypePolled(Thread, SensorType):
 
             if self.send_payload_callback:
                 self.send_payload_callback(payload)
+        logger.success("{} thread stopped.".format(self.get_type()))
 
     def stop(self):
-        logger.notice("{} thread stopped.".format(self.get_type()))
+        logger.notice("{} thread stopping.".format(self.get_type()))
         self.__stopped.set()
 
     def get_properties(self):
@@ -81,7 +104,7 @@ class SensorTypeAsynchronous(SensorType):
     """Type of sensor which is asynchronous."""
 
     def __init__(self):
-        pass
+        SensorType.__init__(self)
 
     def stop(self):
         pass
