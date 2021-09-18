@@ -10,15 +10,33 @@ pipeline {
             parallel {
                 stage('UnitTest') {
                     agent {
-                        label 'master'
+                        kubernetes {
+                            yaml '''
+apiVersion: v1
+kind: Pod
+metadata:
+  label: pythontest
+  namespace: jenkins
+spec:
+  containers:
+  - name: pythontest
+    image: python:latest
+    command:
+    - sleep
+    args:
+    - infinity
+'''
+                            defaultContainer 'pythontest'
+                        }
                     }
                     environment {
                         PATH = "$HOME/.local/bin:$PATH"
                     }
                     steps {
                         ansiColor('xterm') {
-                            echo '... Environment HOST ...'
                             sh "env"
+                            sh "pip install -r requirements.txt"
+                            sh "pip install -r tests/requirements.txt"
                             echo '... Cleaning ...'
                             sh "git clean -xdf"
                             echo '... Testing ...'
@@ -57,11 +75,8 @@ pipeline {
             }
         }
         stage('Deploy') {
-            agent {
-                label 'master'
-            }
             steps {
-                echo 'Deploying....'
+                echo 'Deploy ....'
             }
         }
     }
