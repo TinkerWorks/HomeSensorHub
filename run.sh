@@ -23,6 +23,9 @@ case "$2" in
     "copy")
         echo "Just copy and done"
         ;;
+    "copy")
+        echo "Copied files."
+        ;;
     *)
         exit 4
         ;;
