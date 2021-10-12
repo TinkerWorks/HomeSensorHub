@@ -4,15 +4,31 @@
     {% if title %}
     <title>{{ title  }}</title>
     {% else %}
-    <<title>Home</title>>
+    <title>Home</title>
     {% endif %}
   </head>
 
   <body>
+
     <div>
-      Tinker: <a href="/index">Home</a>
+      HomeSensorHub:
+      <a href="{{ url_for('index') }}">Home</a>
+      <a href="{{ url_for('login') }}">Login</a>
     </div>
+
     <hr>
-    {% block content %}{% endblock %}
+
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+      {% for message in messages %}
+      <li>{{ message  }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
+
+    {% block content %}
+    {% endblock %}
   </body>>
 </html>
