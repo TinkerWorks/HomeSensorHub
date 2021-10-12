@@ -252,3 +252,7 @@ poetry.toml
 .ionide
 
 # End of https://www.toptal.com/developers/gitignore/api/python,emacs,visualstudiocode,linux
+
+venv/
+# End of https://www.gitignore.io/api/vim,linux,emacs,python
+
