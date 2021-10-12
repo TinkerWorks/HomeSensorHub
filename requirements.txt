@@ -6,3 +6,4 @@ filelock
 coloredlogs
 verboselogs
 flask
+flask-wtf
