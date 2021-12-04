@@ -45,7 +45,7 @@ spec:
                     }
                     post {
                         always {
-                            junit 'nosetests.xml'
+                            junit 'nose2-junit.xml'
                         }
                     }
                 }
@@ -68,7 +68,7 @@ spec:
                     }
                     post {
                         always {
-                            junit 'nosetests.xml'
+                            junit 'nose2-junit.xml'
                         }
                     }
                 }
