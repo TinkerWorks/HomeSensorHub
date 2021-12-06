@@ -16,7 +16,7 @@ class ProbeTSL258x(Probe):
     def probe(cls, send_payload_callback=None) -> list:
         """Probe board for TSL258x sensor."""
 
-        lock_file = "/var/tmp/hsh_" + cls.SENSOR_NAME + ".lock"
+        lock_file = "/var/lock/hsh_" + cls.SENSOR_NAME + ".lock"
         lock = FileLock(lock_file)
 
         with lock:

@@ -31,7 +31,7 @@ class ProbeBoschBME680():
         of the specified I2C address, None is returned.
         """
 
-        lock_file = "/var/tmp/hsh_" + cls.get_sensor_name() + ".lock"
+        lock_file = "/var/lock/hsh_" + cls.get_sensor_name() + ".lock"
         lock = FileLock(lock_file)
 
         with lock:

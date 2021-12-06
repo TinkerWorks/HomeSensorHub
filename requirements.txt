@@ -1,6 +1,6 @@
 paho-mqtt
 smbus
-adafruit-circuitpython-bme280
+adafruit-circuitpython-bme280==2.6.4
 adafruit-circuitpython-bme680
 filelock
 coloredlogs
