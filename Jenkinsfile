@@ -1,10 +1,15 @@
 #!/usr/bin/env groovy
 
+String daily_cron_string = BRANCH_NAME == "master" ? "@daily" : ""
+
 pipeline {
     agent none
     options {
         timeout(time: 10, unit: 'MINUTES')
     }
+
+    triggers { cron(daily_cron_string) }
+
     stages {
         stage('Testing') {
             parallel {
@@ -49,34 +54,6 @@ spec:
                         }
                     }
                 }
-                stage('IntegrationTest') {
-                    agent {
-                        label 'raspberry-sensors'
-                    }
-                    environment {
-                        PATH = "$HOME/.local/bin:$PATH"
-                    }
-                    steps {
-                        ansiColor('xterm') {
-                            echo '... Environment DEVICE ...'
-                            sh "env"
-                            echo '... Cleaning ...'
-                            sh "git clean -xdf"
-                            echo '... Testing ...'
-                            sh "make real-nosetest"
-                        }
-                    }
-                    post {
-                        always {
-                            junit 'nose2-junit.xml'
-                        }
-                    }
-                }
-            }
-        }
-        stage('Deploy') {
-            steps {
-                echo 'Deploy ....'
             }
         }
     }
