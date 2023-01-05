@@ -1,10 +1,10 @@
-from sensors.TSL258x.driver import TSL258x
-from sensors.TSL258x.type import LightTSL258x
-from sensors.probe import Probe
+from homesensorhub.sensors.TSL258x.driver import TSL258x
+from homesensorhub.sensors.TSL258x.type import LightTSL258x
+from homesensorhub.sensors.probe import Probe
 from filelock import FileLock
 import os
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 

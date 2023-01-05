@@ -8,7 +8,7 @@ LOG_FORMAT="COLOREDLOGS_LOG_FORMAT=\"%(asctime)s %(name)s - %(levelname)s -> %(m
 
 case "$2" in
     "main")
-        ssh -t "${HOST}" "PYTHONPATH=/home/$USER/HomeSensorHub ${LOG_FORMAT} python3 /home/$USER/HomeSensorHub/homesensorhub/__main__.py"
+        ssh -t "${HOST}" "cd HomeSensorHub ; ${LOG_FORMAT} python3 -m homesensorhub"
         ;;
     "test")
         ssh -t "${HOST}" "source ~/.profile ; make real-nosetest -C /home/$USER/HomeSensorHub"

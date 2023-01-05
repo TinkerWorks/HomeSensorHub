@@ -1,0 +1,19 @@
+[project]
+name = "HomeSensorHub"
+version = "0.5.0"
+dependencies = [
+             "paho-mqtt",
+             "smbus",
+             "adafruit-circuitpython-bme280==2.6.4",
+             "adafruit-circuitpython-bme680",
+             "filelock",
+             "coloredlogs",
+             "verboselogs",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project.scripts]
+homesensorhub = "homesensorhub.homesensorhub:main"

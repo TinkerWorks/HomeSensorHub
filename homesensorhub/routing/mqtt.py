@@ -4,7 +4,7 @@ import os
 import getpass
 import time
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 

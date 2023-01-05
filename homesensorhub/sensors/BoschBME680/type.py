@@ -1,7 +1,7 @@
-from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature, Gas, deadline
+from homesensorhub.sensors.sensor_types import Humidity, Pressure, Altitude, Temperature, Gas, deadline
 from threading import Lock
 import time
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 thread_lock = Lock()

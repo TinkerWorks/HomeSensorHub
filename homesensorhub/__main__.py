@@ -1,5 +1,3 @@
-from homesensorhub import HomeSensorHub
+from homesensorhub.homesensorhub import main
 
-
-homesensorhub = HomeSensorHub()
-homesensorhub.run()
+main()

@@ -1,6 +1,6 @@
-from routing.mqtt import MQTT
+from homesensorhub.routing.mqtt import MQTT
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 

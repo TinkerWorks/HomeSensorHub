@@ -1,8 +1,8 @@
 """Module which implements the probing for the BoschBME280 sensor."""
-from sensors.BoschBME280.type import TemperatureBoschBME280
-from sensors.BoschBME280.type import AltitudeBoschBME280
-from sensors.BoschBME280.type import HumidityBoschBME280
-from sensors.BoschBME280.type import PressureBoschBME280
+from homesensorhub.sensors.BoschBME280.type import TemperatureBoschBME280
+from homesensorhub.sensors.BoschBME280.type import AltitudeBoschBME280
+from homesensorhub.sensors.BoschBME280.type import HumidityBoschBME280
+from homesensorhub.sensors.BoschBME280.type import PressureBoschBME280
 
 from filelock import FileLock
 import adafruit_bme280
@@ -10,7 +10,7 @@ import busio
 import board
 import os
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 

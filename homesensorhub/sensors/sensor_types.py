@@ -1,9 +1,9 @@
 """Module which implements the sensor type interface."""
-from routing.payload import Payload
+from homesensorhub.routing.payload import Payload
 import datetime
 from threading import Thread, Event, Timer
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 
