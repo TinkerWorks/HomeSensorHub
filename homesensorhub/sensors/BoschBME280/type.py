@@ -19,11 +19,13 @@ class BoschBME280Type:
         return self.SENSOR_NAME
 
     def get_sensor_value(self):
-        raise NotImplementedError("The value read for this sensor must be implemented.")
+        raise NotImplementedError(
+            "The value read for this sensor must be implemented.")
 
     def get_sensor_measure(self):
         """Return the measurement unit for the sensor."""
-        raise NotImplementedError("The measurement unit must be implemented by the child sensor.")
+        raise NotImplementedError(
+            "The measurement unit must be implemented by the child sensor.")
 
 
 class HumidityBoschBME280(BoschBME280Type, Humidity):

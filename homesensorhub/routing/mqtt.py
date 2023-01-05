@@ -78,7 +78,7 @@ class MQTT(metaclass=Singleton):
                                            qos=0,
                                            retain=False)
 
-            if(result[0] == mqtt.MQTT_ERR_NO_CONN):
+            if (result[0] == mqtt.MQTT_ERR_NO_CONN):
                 logger.warn("MQTT bus unresponsive, reconnecting...")
                 self.connect()
                 time.sleep(1)

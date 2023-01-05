@@ -25,7 +25,7 @@ class ProbeBoschBME280():
         """
         Probe for Bosch BME type sensors to the possible I2C addresses.
 
-        Function which iterates over multiple I2C addresses and looks for sensors of the type  
+        Function which iterates over multiple I2C addresses and looks for sensors of the type
         BoschBME. In case the sensor is not found at the specified I2C address, None is returned.
         """
 
