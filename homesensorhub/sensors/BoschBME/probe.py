@@ -1,20 +1,13 @@
-"""Module which implements the probing for the BoschBME280 sensor."""
-from homesensorhub.sensors.BoschBME280.type import TemperatureBoschBME280
-from homesensorhub.sensors.BoschBME280.type import AltitudeBoschBME280
-from homesensorhub.sensors.BoschBME280.type import HumidityBoschBME280
-from homesensorhub.sensors.BoschBME280.type import PressureBoschBME280
-from homesensorhub.sensors.probe import Probe
-
-from adafruit_bme280 import basic as adafruit_bme280
 import busio
 import board
+
+from homesensorhub.sensors.probe import Probe
 
 from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 
-class ProbeBoschBME280(Probe):
-    """Class which implements probing for BME280 sensor."""
+class ProbeBoschBME(Probe):
 
     ADDRESSES = [0x77, 0x76]
     I2C = busio.I2C(board.SCL, board.SDA)
@@ -27,6 +20,7 @@ class ProbeBoschBME280(Probe):
         Function which iterates over multiple I2C addresses and looks for sensors of the type
         BoschBME. In case the sensor is not found at the specified I2C address, None is returned.
         """
+
         for address in cls.ADDRESSES:
             try:
                 sensor = cls.get_sensor_probe_function()(cls.I2C, address)
@@ -45,19 +39,3 @@ class ProbeBoschBME280(Probe):
                 logger.verbose("The chip found at {} address has a different ID than {}."
                                .format(hex(address), cls.get_sensor_name()))
                 logger.verbose("These are not the sensors you're looking for.")
-
-    @staticmethod
-    def get_sensor_probe_function():
-        """Return the function used for probing the sensor."""
-        return adafruit_bme280.Adafruit_BME280_I2C
-
-    @staticmethod
-    def get_sensor_name():
-        return "BoschBME280"
-
-    @staticmethod
-    def generate_sensor_types(sensor, send_payload_callback, lock):
-        return [TemperatureBoschBME280(sensor, send_payload_callback, lock),
-                AltitudeBoschBME280(sensor, send_payload_callback, lock),
-                HumidityBoschBME280(sensor, send_payload_callback, lock),
-                PressureBoschBME280(sensor, send_payload_callback, lock)]

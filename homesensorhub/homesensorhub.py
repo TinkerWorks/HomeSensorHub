@@ -8,8 +8,8 @@ from signal import signal, SIGINT, SIGTERM
 from homesensorhub.routing.mqtt_sender import MQTTSender
 from homesensorhub.routing.mqtt_subscriber import MQTTSubscriber
 
-from homesensorhub.sensors.BoschBME280.probe import ProbeBoschBME280
-from homesensorhub.sensors.BoschBME680.probe import ProbeBoschBME680
+from homesensorhub.sensors.BoschBME.BoschBME280.probe import ProbeBoschBME280
+from homesensorhub.sensors.BoschBME.BoschBME680.probe import ProbeBoschBME680
 from homesensorhub.sensors.TSL258x.probe import ProbeTSL258x
 from homesensorhub.sensors.RCWL0515.probe import ProbeRCWL0515
 
