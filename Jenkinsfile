@@ -16,21 +16,7 @@ pipeline {
                 stage('UnitTest') {
                     agent {
                         kubernetes {
-                            yaml '''
-apiVersion: v1
-kind: Pod
-metadata:
-  label: pythontest
-  namespace: jenkins
-spec:
-  containers:
-  - name: pythontest
-    image: python:latest
-    command:
-    - sleep
-    args:
-    - infinity
-'''
+                            yamlFile 'kubepods.yaml'
                             defaultContainer 'pythontest'
                         }
                     }
@@ -45,7 +31,7 @@ spec:
                             echo '... Cleaning ...'
                             sh "git clean -xdf"
                             echo '... Testing ...'
-                            sh "make mock-nosetest"
+                            sh "nose2 --with-coverage --junit-xml"
                         }
                     }
                     post {

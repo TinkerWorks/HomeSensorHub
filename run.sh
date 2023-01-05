@@ -9,7 +9,7 @@ case "$2" in
         ssh -t "${HOST}" "cd HomeSensorHub ; python3 -m homesensorhub"
         ;;
     "test")
-        ssh -t "${HOST}" "source ~/.profile ; make real-nosetest -C /home/$USER/HomeSensorHub"
+        ssh -t "${HOST}" "cd HomeSensorHub ; nose2-3 "
         ;;
     "req")
         ssh -t "${HOST}" pip3 install -r /home/$USER/HomeSensorHub/tests/requirements.txt
