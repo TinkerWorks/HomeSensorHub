@@ -5,7 +5,7 @@ from homesensorhub.sensors.BoschBME280.type import HumidityBoschBME280
 from homesensorhub.sensors.BoschBME280.type import PressureBoschBME280
 
 from filelock import FileLock
-import adafruit_bme280
+from adafruit_bme280 import basic as adafruit_bme280
 import busio
 import board
 import os
