@@ -9,7 +9,7 @@ if 'RPi.GPIO' not in sys.modules.keys():
 
 import RPi.GPIO as GPIO
 
-from sensors.RCWL0515.driver import MotionSensorRCWL0515
+from homesensorhub.sensors.RCWL0515.driver import MotionSensorRCWL0515
 
 import unittest
 

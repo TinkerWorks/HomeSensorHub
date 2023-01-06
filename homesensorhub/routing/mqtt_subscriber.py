@@ -1,6 +1,6 @@
-from routing.mqtt import MQTT
+from homesensorhub.routing.mqtt import MQTT
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 
@@ -71,7 +71,7 @@ class MQTTSubscriber():
         /user/hostname/sensor_type/property 10
         """
         for property in sensor_properties.keys():
-            type_topic =  "/" + type
+            type_topic = "/" + type
             property_topic = "/" + property
             topic = "{}{}{}".format(self.__mqtt.get_topic_base(), type_topic, property_topic)
             self.__topics.append((topic, self.__mqtt.get_qos()))

@@ -2,11 +2,11 @@
 import sys
 
 from mock import Mock
-if 'sensors.TSL258x.driver' not in sys.modules.keys():
-    sys.modules['sensors.TSL258x.driver'] = Mock()
+if 'homesensorhub.sensors.TSL258x.driver' not in sys.modules.keys():
+    sys.modules['homesensorhub.sensors.TSL258x.driver'] = Mock()
 
-from sensors.TSL258x.driver import TSL258x  # noqa
-from sensors.TSL258x.probe import ProbeTSL258x  # noqa
+from homesensorhub.sensors.TSL258x.driver import TSL258x  # noqa
+from homesensorhub.sensors.TSL258x.probe import ProbeTSL258x  # noqa
 
 import unittest  # noqa
 import time  # noqa

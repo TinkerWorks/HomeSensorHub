@@ -1,7 +1,8 @@
-from sensors.sensor_types import Humidity, Pressure, Altitude, Temperature, Gas, deadline
+from homesensorhub.sensors.sensor_types import \
+    Humidity, Pressure, Altitude, Temperature, Gas, deadline
 from threading import Lock
-import time
-from utils import logging
+
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 thread_lock = Lock()
@@ -19,11 +20,13 @@ class BoschBME680Type:
         return self.SENSOR_NAME
 
     def get_sensor_value(self):
-        raise NotImplementedError("The value read for this sensor must be implemented.")
+        raise NotImplementedError(
+            "The value read for this sensor must be implemented.")
 
     def get_sensor_measure(self):
         """Return the measurement unit for the sensor."""
-        raise NotImplementedError("The measurement unit must be implemented by the child sensor.")
+        raise NotImplementedError(
+            "The measurement unit must be implemented by the child sensor.")
 
 
 class HumidityBoschBME680(BoschBME680Type, Humidity):

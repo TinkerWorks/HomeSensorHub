@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  label: pythontest
+  namespace: jenkins
+spec:
+  containers:
+  - name: python
+    image: python:latest
+    command:
+    - sleep
+    args:
+    - infinity
+  - name: flake8
+    image: alpine/flake8
+    command:
+    - sleep
+    args:
+    - infinity
+  - name: pylint
+    image: cytopia/pylint
+    command:
+    - sleep
+    args:
+    - infinity

@@ -1,0 +1,27 @@
+[project]
+name = "HomeSensorHub"
+version = "0.5.0"
+description = "Gather sensor data and send it to a centralized repository"
+authors = [
+    { name = "Maria-Minerva Vonica", email = "maria.vonica98@gmail.com" },
+    { name = "Alexandru-Sever Horin", email = "alex.sever.h@gmail.com" }
+]
+dependencies = [
+             "paho-mqtt",
+             "smbus",
+             "adafruit-circuitpython-bme280",
+             "adafruit-circuitpython-bme680",
+             "filelock",
+             "coloredlogs",
+             "verboselogs",
+]
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 99
+
+[project.scripts]
+homesensorhub = "homesensorhub.homesensorhub:main"

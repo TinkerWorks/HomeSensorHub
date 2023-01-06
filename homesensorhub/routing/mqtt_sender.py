@@ -1,8 +1,8 @@
 """Module which implements data routing to MQTT."""
-from routing.data_sender import DataSender
-from routing.mqtt import MQTT
+from homesensorhub.routing.data_sender import DataSender
+from homesensorhub.routing.mqtt import MQTT
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 

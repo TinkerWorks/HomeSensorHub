@@ -1,9 +1,9 @@
 """Module which implements the sensor type interface."""
-from routing.payload import Payload
+from homesensorhub.routing.payload import Payload
 import datetime
 from threading import Thread, Event, Timer
 
-from utils import logging
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
 
 
@@ -91,7 +91,8 @@ class SensorTypePolled(Thread, SensorType):
         try:
             pollrate = float(pollrate)
             self.__pollrate = pollrate
-            logger.info("Set the pollrate to the {} sensor to {}".format(self.TYPE, self.__pollrate))
+            logger.info("Set the pollrate to the {} sensor to {}".format(self.TYPE,
+                                                                         self.__pollrate))
         except ValueError:
             logger.info("Cannot convert pollrate to integer. The value is not an integer.")
             return
@@ -175,7 +176,9 @@ class Motion(SensorTypeAsyncAndPolled):
     TYPE = 'motion'
 
     def __init__(self, pollrate, send_payload_callback):
-        SensorTypeAsyncAndPolled.__init__(self, pollrate=pollrate, send_payload_callback=send_payload_callback)
+        SensorTypeAsyncAndPolled.__init__(self,
+                                          pollrate=pollrate,
+                                          send_payload_callback=send_payload_callback)
 
 
 class CallbackPair:

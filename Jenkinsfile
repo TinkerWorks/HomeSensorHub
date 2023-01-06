@@ -3,7 +3,12 @@
 String daily_cron_string = BRANCH_NAME == "master" ? "@daily" : ""
 
 pipeline {
-    agent none
+    agent {
+        kubernetes {
+            yamlFile 'kubepods.yaml'
+            defaultContainer 'python'
+        }
+    }
     options {
         timeout(time: 10, unit: 'MINUTES')
     }
@@ -11,29 +16,25 @@ pipeline {
     triggers { cron(daily_cron_string) }
 
     stages {
+        stage('flake8') {
+            steps{
+                container('flake8') {
+                    sh "flake8"
+                }
+            }
+        }
+
+        stage('pylint duplication') {
+            steps{
+                container('pylint') {
+                    sh "pylint --disable=all --enable=duplicate-code homesensorhub"
+                }
+            }
+        }
+
         stage('Testing') {
             parallel {
-                stage('UnitTest') {
-                    agent {
-                        kubernetes {
-                            yaml '''
-apiVersion: v1
-kind: Pod
-metadata:
-  label: pythontest
-  namespace: jenkins
-spec:
-  containers:
-  - name: pythontest
-    image: python:latest
-    command:
-    - sleep
-    args:
-    - infinity
-'''
-                            defaultContainer 'pythontest'
-                        }
-                    }
+                stage('Local Test') {
                     environment {
                         PATH = "$HOME/.local/bin:$PATH"
                     }
@@ -45,7 +46,7 @@ spec:
                             echo '... Cleaning ...'
                             sh "git clean -xdf"
                             echo '... Testing ...'
-                            sh "make mock-nosetest"
+                            sh "nose2 --with-coverage --junit-xml"
                         }
                     }
                     post {

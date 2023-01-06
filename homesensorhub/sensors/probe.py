@@ -1,4 +1,6 @@
 """Module which implements the interface for sensor probing."""
+from filelock import FileLock
+import os
 
 
 class Probe:
@@ -6,5 +8,14 @@ class Probe:
 
     @classmethod
     def probe(cls, send_payload_callback=None) -> list:
-        """Probe for a specific sensor on the board."""
-        raise NotImplementedError("Probing must be implemented in each child probe class.")
+
+        lock_file = "/tmp/hsh_" + cls.get_sensor_name() + ".lock"
+        lock = FileLock(lock_file)
+
+        with lock:
+            try:
+                os.chmod(lock_file, 0o777)
+            except PermissionError:
+                pass
+
+            return cls.functional_probe(cls, send_payload_callback, lock)

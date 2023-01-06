@@ -1,17 +1,22 @@
 """Entry point for the application."""
-from routing.mqtt_sender import MQTTSender
-from routing.mqtt_subscriber import MQTTSubscriber
 
-from sensors.BoschBME280.probe import ProbeBoschBME280
-from sensors.BoschBME680.probe import ProbeBoschBME680
-from sensors.TSL258x.probe import ProbeTSL258x
-from sensors.RCWL0515.probe import ProbeRCWL0515
+import sys
 
-from signal import signal, SIGINT, SIGTERM
 from threading import Event
+from signal import signal, SIGINT, SIGTERM
 
-from utils import logging
+from homesensorhub.routing.mqtt_sender import MQTTSender
+from homesensorhub.routing.mqtt_subscriber import MQTTSubscriber
+
+from homesensorhub.sensors.BoschBME.BoschBME280.probe import ProbeBoschBME280
+from homesensorhub.sensors.BoschBME.BoschBME680.probe import ProbeBoschBME680
+from homesensorhub.sensors.TSL258x.probe import ProbeTSL258x
+from homesensorhub.sensors.RCWL0515.probe import ProbeRCWL0515
+
+from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
+
+print(sys.path)
 
 
 class HomeSensorHub:
@@ -77,3 +82,12 @@ class HomeSensorHub:
                 pass
 
         return sensors
+
+
+def main():
+    homesensorhub = HomeSensorHub()
+    homesensorhub.run()
+
+
+if __name__ == "__main__":
+    main()

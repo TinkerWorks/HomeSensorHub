@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 """Module which contains sketch the probing the BoschBME sensors."""
-from sensors.probe import Probe
-from sensors.RCWL0515.driver import MotionSensorRCWL0515
+from homesensorhub.sensors.probe import Probe
+from homesensorhub.sensors.RCWL0515.driver import MotionSensorRCWL0515
 
 
 class ProbeRCWL0515(Probe):

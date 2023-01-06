@@ -2,19 +2,21 @@
 
 HOST=$1
 
-rsync -aAv --progress --delete "$(pwd)/" $HOST:~/HomeSensorHub/
-
-LOG_FORMAT="COLOREDLOGS_LOG_FORMAT=\"%(asctime)s %(name)s - %(levelname)s -> %(message)s\""
+rsync -rPv --delete "$(pwd)/" $HOST:~/HomeSensorHub/
 
 case "$2" in
     "main")
-        ssh -t "${HOST}" "PYTHONPATH=/home/$USER/HomeSensorHub ${LOG_FORMAT} python3 /home/$USER/HomeSensorHub/homesensorhub/__main__.py"
+        ssh -t "${HOST}" "cd HomeSensorHub ; python3 -m homesensorhub"
         ;;
     "test")
-        ssh -t "${HOST}" "source ~/.profile ; make real-nosetest -C /home/$USER/HomeSensorHub"
+        ssh -t "${HOST}" "cd HomeSensorHub ; nose2-3 "
         ;;
     "req")
+        ssh -t "${HOST}" pip3 install -r /home/$USER/HomeSensorHub/tests/requirements.txt
         ssh -t "${HOST}" pip3 install -r /home/$USER/HomeSensorHub/requirements.txt
+        ;;
+    "copy")
+        echo "Just copy and done"
         ;;
     *)
         exit 4
