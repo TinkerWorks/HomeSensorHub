@@ -23,11 +23,17 @@ pipeline {
                 }
             }
         }
-
         stage('pylint duplication') {
             steps{
                 container('pylint') {
                     sh "pylint --disable=all --enable=duplicate-code homesensorhub"
+                }
+            }
+        }
+        stage('Static code analysis') {
+            steps{
+                container('mypy') {
+                    sh "mypy --ignore-missing-imports homesensorhub"
                 }
             }
         }

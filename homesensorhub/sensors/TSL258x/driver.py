@@ -103,6 +103,7 @@ class TSL258x:
                                 148: self.INTEGRATIONTIME_400MS,
                                 255: self.INTEGRATIONTIME_688MS}
 
+    @staticmethod
     def probe():
         tsl = TSL258x()
         try:

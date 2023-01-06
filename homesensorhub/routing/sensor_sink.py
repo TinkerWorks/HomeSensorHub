@@ -19,7 +19,6 @@ class SourceAndSink:
     def __init__(self, type_sensors: list, senders: list) -> None:
         self.__sensors = type_sensors
         self.__senders = senders
-        self.initialize_stop()
 
     def sink(self) -> list:
         """Collect all the data from all the found sensors."""

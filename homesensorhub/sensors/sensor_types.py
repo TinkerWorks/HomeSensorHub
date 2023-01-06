@@ -33,7 +33,7 @@ class SensorType:
     """Interface for creating a sensor type object."""
 
     def get_properties(self) -> dict:
-        return NotImplementedError("Proprieties function must be implemented by the child class.")
+        raise NotImplementedError("Proprieties function must be implemented by the child class.")
 
     def get_type(self) -> str:
         return self.TYPE
