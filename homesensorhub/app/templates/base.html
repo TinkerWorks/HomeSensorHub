@@ -10,27 +10,22 @@
   </head>
 
   <body>
-
-    <!--<nav>
-      <div>
-        <h1>HomeSensorHub</h1>
-        {% import "macros.html" as macros %}
-        {{macros.build_site_navigation(pages=pages, selected="Page Name")}}
-      </div>
-    </nav>-->
-
     <nav>
-      <label for="check" class="checkbtn">
-        <i class="fas fa-bars"></i>
-      </label>
+      {% set navigation_bar = [
+        ('/', 'home', 'HOME'),
+        ('/login', 'login', 'LOGIN'),
+        ('/mqtt', 'mqtt', 'MQTT')
+      ] -%}
+      <!-- The active page will be changed from each url directly -->
+      {% set active_page = active_page|default('home') -%}
+
       <label class="logo">HomeSensorHub</label>
-      <ul>
-        <li><a class="active" href={{ url_for('home') }}>HOME</a></li>
-        <li><a href={{ url_for('login') }}>LOGIN</a></li>
-        <li><a href={{ url_for('mqtt') }}>MQTT</a></li>
+      <ul id="navigation">
+        {% for href, id, caption in navigation_bar %}
+          <li{% if id == active_page %} class="active" {% endif %}><a href="{{ href|e }}">{{ caption|e }}</a></li>
+        {% endfor %}
       </ul>
     </nav>
-    <!--<section></section>-->
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}

@@ -36,7 +36,7 @@
     border-radius: 3px;
     text-transform: uppercase;
   }
-  a.active,a:hover{
+  .active,a:hover{
     background: #1b9bff;
     transition: .5s;
   }
@@ -49,6 +49,18 @@
     cursor: pointer;
     display: none;
   }
+  .div_subtitle{
+    background: #091e2e;
+    height: 60px;
+    width: 100%;
+  }
+  .h_subtitle{
+    font-size: 20px;
+    color: white;
+    float: left;
+    line-height: 60px;
+  }
+
   #check{
     display: none;
   }

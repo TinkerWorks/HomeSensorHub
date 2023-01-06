@@ -1,6 +1,12 @@
 {% extends "base.html" %}
+{% set active_page = "login" %}
 
 {% block content %}
+
+<div class="div_subtitle">
+  <h1 class="h_subtitle">LOGIN - Login in order to edit data.</h1>
+</div>
+
 <h1>Sign In</h1>
 <form action="" method="post" novalidate>
   {{ form.hidden_tag() }}
