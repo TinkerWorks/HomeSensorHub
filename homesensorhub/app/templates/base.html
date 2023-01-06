@@ -25,11 +25,9 @@
       </label>
       <label class="logo">HomeSensorHub</label>
       <ul>
-        <li><a class="active" href="#">Home</a></li>
-        <li><a href="#">About</a></li>
-        <li><a href="#">Services</a></li>
-        <li><a href="#">Contact</a></li>
-        <li><a href="#">Feedback</a></li>
+        <li><a class="active" href={{ url_for('home') }}>HOME</a></li>
+        <li><a href={{ url_for('login') }}>LOGIN</a></li>
+        <li><a href={{ url_for('mqtt') }}>MQTT</a></li>
       </ul>
     </nav>
     <!--<section></section>-->
