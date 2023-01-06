@@ -51,6 +51,10 @@ class HomeSensorHub:
 
         logger.notice("Quitting gracefully !")
 
+    def start_flask_app(self) -> None:
+        # TODO start the flask application server here
+        pass
+
     def find_probe_functions(self):
         probe_functions = []
 

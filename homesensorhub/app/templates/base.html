@@ -6,17 +6,33 @@
     {% else %}
     <title>Home</title>
     {% endif %}
+    <link rel="stylesheet" href="{{url_for('static', filename= 'css/style.css')}}">
   </head>
 
   <body>
 
-    <div>
-      HomeSensorHub:
-      <a href="{{ url_for('index') }}">Home</a>
-      <a href="{{ url_for('login') }}">Login</a>
-    </div>
+    <!--<nav>
+      <div>
+        <h1>HomeSensorHub</h1>
+        {% import "macros.html" as macros %}
+        {{macros.build_site_navigation(pages=pages, selected="Page Name")}}
+      </div>
+    </nav>-->
 
-    <hr>
+    <nav>
+      <label for="check" class="checkbtn">
+        <i class="fas fa-bars"></i>
+      </label>
+      <label class="logo">HomeSensorHub</label>
+      <ul>
+        <li><a class="active" href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Services</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Feedback</a></li>
+      </ul>
+    </nav>
+    <!--<section></section>-->
 
     {% with messages = get_flashed_messages() %}
     {% if messages %}
@@ -30,5 +46,5 @@
 
     {% block content %}
     {% endblock %}
-  </body>>
+  </body>
 </html>
