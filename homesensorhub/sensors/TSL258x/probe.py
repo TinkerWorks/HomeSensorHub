@@ -13,11 +13,10 @@ class ProbeTSL258x(Probe):
     @staticmethod
     def functional_probe(cls, send_payload_callback=None, lock=None):
         sensor = TSL258x.probe()
-        sensor.config()
-
-        logger.debug("Found {} sensor.".format(cls.get_sensor_name()))
-
-        return cls.generate_sensor_types(sensor, send_payload_callback, lock)
+        if sensor:
+            logger.debug("Found {} sensor.".format(cls.get_sensor_name()))
+            sensor.config()
+            return cls.generate_sensor_types(sensor, send_payload_callback, lock)
 
     @staticmethod
     def get_sensor_name():

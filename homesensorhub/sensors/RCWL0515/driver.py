@@ -41,9 +41,8 @@ class MotionSensorRCWL0515(Motion):
             self.logger.debug("Motion is not happening")
 
         if (next_motion != self.motion):
-            self.logger.error("Motion from {} to {} (IRQ skip detected)"
+            self.logger.error("Motion from {} to {} (IRQ skip detected because of race condition)"
                               .format(self.motion, next_motion))
-            self.install_callback()
 
         self.motion = next_motion
 
@@ -83,4 +82,5 @@ class MotionSensorRCWL0515(Motion):
         self.motion = next_motion
 
         if (self.send_payload_callback is not None):
+            self.logger.debug("Will poll again from asynchronous callback : ....")
             self.send_payload_callback(self.get_payload())
