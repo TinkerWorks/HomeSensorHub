@@ -2,8 +2,30 @@
 {% set active_page = "mqtt" %}
 
 {% block content %}
-<div class="div_subtitle">
-    <h1 class="h_subtitle">MQTT - Configure the message broker that will be used to send and receive messages over the network.</h1>
+<div class="div-subtitle">
+    <h1 class="subtitle">MQTT - Configure the message broker that will be used to send and receive messages over the network.</h1>
+</div>
+
+<div id="forms">
+    <h2 class="form-title">Broker</h2><br><br>
+    <form class="form-wrapper" method="POST" action="{{ url_for('mqtt') }}">
+        <ul class="form-field-labels">
+            <li class="form-field-label">{{ form.address.label }}</li>
+            <li class="form-field-label">{{ form.port.label }}</li>
+            <li class="form-field-label">{{ form.client_id.label }}</li>
+            <li class="form-field-label">{{ form.root_topic.label }}</li>
+        </ul>
+
+        <uk class="form-field-inputs">
+            <li class="form-field-entry">{{ form.address(size=20) }}</li>
+            <p> TODO Description of the field </p>
+            <li class="form-field-entry">{{ form.port }}</li>
+            <li class="form-field-entry">{{ form.client_id }}</li>
+            <li class="form-field-entry">{{ form.root_topic }}</li>
+        </ul>
+
+        {{ form.submit }}
+    </form>
 </div>
 
 {% endblock %}
