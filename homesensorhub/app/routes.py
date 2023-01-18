@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from flask import render_template, flash, redirect, url_for
-from forms import LoginForm
+from forms import LoginForm, MQTTForm
 from flask import Flask
 import os
 
@@ -35,10 +35,11 @@ def create_routes(app) -> None:
     def home():
         user = {'username': 'Min'}
         return render_template('home.html', user=user)
-    
-    @app.route('/mqtt', methods=['GET'])
+
+    @app.route('/mqtt', methods=['GET', 'POST'])
     def mqtt():
-        return render_template('mqtt.html', pages=generate_page_list())
+        mqtt_form = MQTTForm()
+        return render_template('mqtt.html', title="mqtt", form=mqtt_form)
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
@@ -50,14 +51,6 @@ def create_routes(app) -> None:
             return redirect(url_for('home'))
 
         return render_template('login.html', title='Sign In', form=form)
-    
-    
-def generate_page_list():
-    return [
-        {"name": "HOME", "url": url_for("home")},
-        {"name": "LOGIN", "url": url_for("login")},
-        {"name": "MQTT", "url": url_for("mqtt")}
-    ]
 
 
 if __name__ == "__main__":
