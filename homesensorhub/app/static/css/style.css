@@ -1,66 +1,105 @@
 *{
-    padding: 0;
-    margin: 0;
-    text-decoration: none;
-    list-style: none;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  text-decoration: none;
+  list-style: none;
+  box-sizing: border-box;
   }
-  body{
-    font-family: montserrat;
+body, html {
+  height: 100%;
+  font-family: montserrat;
+}
+nav{
+  background: #0082e6;
+  height: 80px;
+  width: 100%;
+}
+label.logo{
+  color: white;
+  font-size: 35px;
+  line-height: 80px;
+  padding: 0 100px;
+  font-weight: bold;
+}
+nav ul{
+  float: right;
+  margin-right: 20px;
+}
+nav ul li{
+  display: inline-block;
+  line-height: 80px;
+  margin: 0 5px;
+}
+nav ul li a{
+  color: white;
+  font-size: 17px;
+  padding: 7px 13px;
+  border-radius: 3px;
+  text-transform: uppercase;
+}
+
+/* MQTT forms */ 
+  fieldset {
+    background-color: #ffffff;
   }
-  nav{
-    background: #0082e6;
-    height: 80px;
-    width: 100%;
+  input {
+    margin: 5px;
   }
-  label.logo{
-    color: white;
-    font-size: 35px;
-    line-height: 80px;
-    padding: 0 100px;
-    font-weight: bold;
-  }
-  nav ul{
-    float: right;
-    margin-right: 20px;
-  }
-  nav ul li{
-    display: inline-block;
-    line-height: 80px;
-    margin: 0 5px;
-  }
-  nav ul li a{
-    color: white;
-    font-size: 17px;
-    padding: 7px 13px;
-    border-radius: 3px;
-    text-transform: uppercase;
-  }
-  .active,a:hover{
+
+/* Classes */
+.active,a:hover{
     background: #1b9bff;
     transition: .5s;
-  }
-  .checkbtn{
-    font-size: 30px;
-    color: white;
-    float: right;
-    line-height: 80px;
-    margin-right: 40px;
-    cursor: pointer;
-    display: none;
-  }
-  .div_subtitle{
+}
+.div-subtitle{
     background: #091e2e;
     height: 60px;
     width: 100%;
-  }
-  .h_subtitle{
+}
+.subtitle{
     font-size: 20px;
     color: white;
     float: left;
     line-height: 60px;
-  }
+}
+.form-title{
+  background: #2c3e50;
+  font-size: 22px;
+  color: rgb(255, 255, 255);
+  float: left;
+  line-height: 60px;
+  padding: 7px 13px;
+  height: 100%;
+}
+.form-wrapper{
+  font-size:17px;
+  display: flex;
+  float: left;
+}
+.form-field-label{
+  color: rgb(70, 70, 70);
+  padding: 27px;
+}
+.form-field-entry{
+  color: rgb(70, 70, 70);
+  padding: 20px;
+}
 
+/*IDs*/
+#forms {
+  height: 100%;
+}
+
+/* Inputs */
+input[type=text] {
+  padding: 7px;
+}
+input, textarea {
+  font-family:inherit;
+  font-size: inherit;
+}
+
+/* Media */
   #check{
     display: none;
   }
@@ -102,9 +141,4 @@
     #check:checked ~ ul{
       left: 0;
     }
-  }
-  section{
-    background: url(bg1.jpg) no-repeat;
-    background-size: cover;
-    height: calc(100vh - 80px);
   }
