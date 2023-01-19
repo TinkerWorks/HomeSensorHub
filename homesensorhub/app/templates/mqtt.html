@@ -6,25 +6,57 @@
     <h1 class="subtitle">MQTT - Configure the message broker that will be used to send and receive messages over the network.</h1>
 </div>
 
-<div id="forms">
-    <h2 class="form-title">Broker</h2><br><br>
-    <form class="form-wrapper" method="POST" action="{{ url_for('mqtt') }}">
-        <ul class="form-field-labels">
-            <li class="form-field-label">{{ form.address.label }}</li>
-            <li class="form-field-label">{{ form.port.label }}</li>
-            <li class="form-field-label">{{ form.client_id.label }}</li>
-            <li class="form-field-label">{{ form.root_topic.label }}</li>
-        </ul>
+<div class="left-column">
+    <h2 class="form-title">Broker</h2>
+</div>
 
-        <uk class="form-field-inputs">
-            <li class="form-field-entry">{{ form.address(size=20) }}</li>
-            <p> TODO Description of the field </p>
-            <li class="form-field-entry">{{ form.port }}</li>
-            <li class="form-field-entry">{{ form.client_id }}</li>
-            <li class="form-field-entry">{{ form.root_topic }}</li>
-        </ul>
+<div class="middle-column">
+    <form class="form" method="POST" action="{{ url_for('mqtt') }}">
+        {{ form.csrf_token }}
 
-        {{ form.submit }}
+        <!-- Address -->
+        <div class="row">
+            <div class="col-25">
+                <p>{{ form.address.label }}</p>
+            </div>
+            <div class="col-75">
+                {{ form.address(size=20) }}
+            </div>
+        </div>
+
+        <!-- Port -->
+        <div class="row">
+            <div class="col-25">
+                <p class="form-label">{{ form.port.label }}</p>
+            </div>
+            <div class="col-75">
+                {{ form.port }}
+            </div>
+        </div>
+
+        <!-- Client ID -->
+        <div class="row">
+            <div class="col-25">
+                <p class="form-label">{{ form.client_id.label }}</p>
+            </div>
+            <div class="col-75">
+                {{ form.client_id }}
+            </div>
+        </div>
+
+        <!-- Root Topic -->
+        <div class="row">
+            <div class="col-25">
+                <p class="form-label">{{ form.root_topic.label }}</p>
+            </div>
+            <div class="col-75">
+                {{ form.root_topic }}
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-75">{{ form.submit }}</div>
+        </div>
     </form>
 </div>
 

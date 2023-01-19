@@ -38,7 +38,7 @@ nav ul li a{
   text-transform: uppercase;
 }
 
-/* MQTT forms */ 
+/* MQTT forms */
   fieldset {
     background-color: #ffffff;
   }
@@ -51,16 +51,49 @@ nav ul li a{
     background: #1b9bff;
     transition: .5s;
 }
+.left-column {
+  float: left;
+  color: rgb(70, 70, 70);
+  height: inherit;
+}
+.middle-column {
+  height: inherit;
+  float: left;
+  margin-top: 6px;
+  color: rgb(70, 70, 70);
+  padding: 20px;
+
+}
+.col-25 {
+  flex: 2;
+  float: left;
+  text-align: center;
+  white-space: nowrap;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+}
+.col-75 {
+  flex: 8;
+  width: 700px;
+}
 .div-subtitle{
-    background: #091e2e;
-    height: 60px;
-    width: 100%;
+  background: #091e2e;
+  height: 60px;
+  width: 100%;
 }
 .subtitle{
-    font-size: 20px;
-    color: white;
-    float: left;
-    line-height: 60px;
+  font-size: 20px;
+  color: white;
+  float: left;
+  line-height: 60px;
+}
+.row {
+  display: flex;
+}
+.row:after {
+  float: left;
+  clear: both;
 }
 .form-title{
   background: #2c3e50;
@@ -71,32 +104,39 @@ nav ul li a{
   padding: 7px 13px;
   height: 100%;
 }
-.form-wrapper{
-  font-size:17px;
-  display: flex;
-  float: left;
-}
-.form-field-label{
-  color: rgb(70, 70, 70);
-  padding: 27px;
-}
-.form-field-entry{
-  color: rgb(70, 70, 70);
-  padding: 20px;
-}
 
-/*IDs*/
-#forms {
-  height: 100%;
+.form{
+  font-size:17px;
 }
 
 /* Inputs */
-input[type=text] {
-  padding: 7px;
+input {
+  width: 100%;
 }
+input[type=text]:focus {
+  border: 2px solid rgb(158, 158, 158);
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  box-sizing: border-box;
+}
+
 input, textarea {
   font-family:inherit;
   font-size: inherit;
+}
+
+input[type=button], input[type=submit], input[type=reset] {
+  background-color: #12508a;
+  border: none;
+  color: white;
+  padding: 16px 32px;
+  text-decoration: none;
+  margin: 4px 2px;
+  cursor: pointer;
 }
 
 /* Media */
