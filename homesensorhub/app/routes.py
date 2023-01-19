@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 from flask import render_template, flash, redirect, url_for
-from forms import LoginForm, MQTTForm
-from flask import Flask
+from .forms import LoginForm, MQTTForm
+import flask
 import os
 
 def create_app(test_config=None):
     # create and configure the app
-    app = Flask(__name__, instance_relative_config=True)
+    app = flask.Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
@@ -38,7 +38,16 @@ def create_routes(app) -> None:
 
     @app.route('/mqtt', methods=['GET', 'POST'])
     def mqtt():
+        print(flask.request.method)
         mqtt_form = MQTTForm()
+
+        if mqtt_form.validate_on_submit():
+            address = mqtt_form.address.data
+            port = mqtt_form.port.data
+            client_id = mqtt_form.client_id.data
+            root_topic = mqtt_form.root_topic.data
+            print("Address: " + address, port, client_id, root_topic)
+
         return render_template('mqtt.html', title="mqtt", form=mqtt_form)
 
     @app.route('/login', methods=['GET', 'POST'])
