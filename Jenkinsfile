@@ -27,7 +27,7 @@ pipeline {
         stage('pylint duplication') {
             steps{
                 container('pylint') {
-                    sh "pylint --disable=all --enable=duplicate-code homesensorhub"
+                    sh "pylint --enable=duplicate-code homesensorhub"
                 }
             }
         }
