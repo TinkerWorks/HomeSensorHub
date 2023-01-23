@@ -5,10 +5,17 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Module",
+            "name": "Flask Only",
             "type": "python",
             "request": "launch",
             "module": "homesensorhub.app",
+            "justMyCode": true
+        },
+        {
+            "name": "HomeSensorHub",
+            "type": "python",
+            "request": "launch",
+            "module": "homesensorhub",
             "justMyCode": true
         }
     ]
