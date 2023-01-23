@@ -8,7 +8,7 @@
             "name": "Flask Only",
             "type": "python",
             "request": "launch",
-            "module": "homesensorhub.app",
+            "module": "homesensorhub.flask_data",
             "justMyCode": true
         },
         {
