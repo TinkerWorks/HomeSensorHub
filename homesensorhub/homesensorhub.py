@@ -5,6 +5,8 @@ import sys
 from threading import Event
 from signal import signal, SIGINT, SIGTERM
 
+from homesensorhub.app import routes
+
 from homesensorhub.routing.mqtt_sender import MQTTSender
 from homesensorhub.routing.mqtt_subscriber import MQTTSubscriber
 
@@ -20,27 +22,24 @@ print(sys.path)
 
 
 class HomeSensorHub:
+    """Configures and runs the homesensorhub module.
+
+    Starts the MQTT bus and configures the connected sensors.
+    """
     def __init__(self):
         logger.success("Starting HomeSensorHub ...")
-        self.initialize_stop()  # initialize stop here so we are prepared
+        self.__initialize_stop()  # initialize stop here so we are prepared
 
         self.__mqtt_subscriber = MQTTSubscriber()
 
-        probe_functions = self.find_probe_functions()
-        self.__senders = self.find_senders()
-        self.__sensors = self.find_sensors(probe_functions)
+        probe_functions = self.__find_probe_functions()
+        self.__senders = self.__find_senders()
+        self.__sensors = self.__find_sensors(probe_functions)
 
         self.__mqtt_subscriber.subscribe_to_sensor_properties(self.__sensors)
 
-    def initialize_stop(self):
-        self.event = Event()
-        signal(SIGINT, self.stop_everything)
-        signal(SIGTERM, self.stop_everything)
-
-    def stop_everything(self, signal_received, frame) -> None:
-        self.event.set()
-
     def run(self):
+        """Start the homesensorhub application."""
         logger.success("Running HomeSensorHub ...")
 
         # just wait for the stop event
@@ -51,11 +50,16 @@ class HomeSensorHub:
 
         logger.notice("Quitting gracefully !")
 
-    def start_flask_app(self) -> None:
-        # TODO start the flask application server here
-        pass
+    def __initialize_stop(self):
+        self.event = Event()
+        signal(SIGINT, self.__stop_everything)
+        signal(SIGTERM, self.__stop_everything)
 
-    def find_probe_functions(self):
+    def __stop_everything(self, signal_received, frame) -> None:
+        # pylint: disable=unused-argument
+        self.event.set()
+
+    def __find_probe_functions(self):
         probe_functions = []
 
         probe_functions.append(ProbeBoschBME280.probe)
@@ -65,7 +69,7 @@ class HomeSensorHub:
 
         return probe_functions
 
-    def find_senders(self):
+    def __find_senders(self):
         senders = []
 
         logger.info("Configuring senders ...")
@@ -73,12 +77,13 @@ class HomeSensorHub:
 
         return senders
 
-    def find_sensors(self, probe_functions):
+    def __find_sensors(self, probe_functions):
         sensors = []
         mqtt_sender = self.__senders[0]
 
         logger.info("Searching attached sensors ...")
         for function in probe_functions:
+            sensor_list = function(mqtt_sender.send_payload) # TODO: Send a generic sender callback. # noqa # pylint: disable=fixme
             try:
                 sensor_list = function(mqtt_sender.send_payload)  # TODO: Send a generic sender callback. # noqa
                 sensors += sensor_list
@@ -88,11 +93,13 @@ class HomeSensorHub:
         return sensors
 
     def start_flask(self):
-        from app import app
+        """Starts the Flask application."""
+        app = routes.create_app()
         app.run(host="0.0.0.0")
 
 
 def main():
+    """Sets up the main homesensorhub application, as well as the Flask one."""
     homesensorhub = HomeSensorHub()
     homesensorhub.run()
     homesensorhub.start_flask()
