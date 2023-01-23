@@ -5,7 +5,7 @@ import sys
 from threading import Event
 from signal import signal, SIGINT, SIGTERM
 
-from homesensorhub.app import routes
+from homesensorhub.flask_data.flask_application import FlaskApp
 
 from homesensorhub.routing.mqtt_sender import MQTTSender
 from homesensorhub.routing.mqtt_subscriber import MQTTSubscriber
@@ -94,8 +94,8 @@ class HomeSensorHub:
 
     def start_flask(self):
         """Starts the Flask application."""
-        app = routes.create_app()
-        app.run(host="0.0.0.0")
+        flask_application = FlaskApp()
+        flask_application.run()
 
 
 def main():
