@@ -83,10 +83,15 @@ class HomeSensorHub:
 
         return sensors
 
+    def start_flask(self):
+        from app import app
+        app.run(host="0.0.0.0")
+
 
 def main():
     homesensorhub = HomeSensorHub()
     homesensorhub.run()
+    homesensorhub.start_flask()
 
 
 if __name__ == "__main__":

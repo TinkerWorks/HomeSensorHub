@@ -5,3 +5,4 @@ adafruit-circuitpython-bme680
 filelock
 coloredlogs
 verboselogs
+flask
