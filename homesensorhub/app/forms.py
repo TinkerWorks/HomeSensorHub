@@ -16,4 +16,4 @@ class MQTTForm(FlaskForm):
     port = StringField('Port', validators=[DataRequired()])
     client_id = StringField('Client ID')
     root_topic = StringField('Root Topic', validators=[DataRequired()])
-    submit = SubmitField('Sign In')
+    submit = SubmitField('Save')
