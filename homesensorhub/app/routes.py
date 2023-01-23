@@ -1,11 +1,15 @@
-#!/usr/bin/env python3
+"""Configurations of the Flask application and its routes."""
+# !/usr/bin/env python3
+import os
+import flask
+
+
 from flask import render_template, flash, redirect, url_for
 from .forms import LoginForm, MQTTForm
-import flask
-import os
+
 
 def create_app(test_config=None):
-    # create and configure the app
+    """Configure the Flask application."""
     app = flask.Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -29,7 +33,7 @@ def create_app(test_config=None):
 
 
 def create_routes(app) -> None:
-    @app.route('/')
+    """Create the Flask application URL routes."""
 
     @app.route('/home', methods=['GET'])
     def home():
@@ -55,14 +59,14 @@ def create_routes(app) -> None:
         form = LoginForm()
 
         if form.validate_on_submit():
-            flash('Login requested for user {}, remember_me={}'.
-                  format(form.username.data, form.remember_me.data))
+            flash(f"Login requested for user {form.username.data},"
+                  "remember_me={form.remember_me.data}")
             return redirect(url_for('home'))
 
         return render_template('login.html', title='Sign In', form=form)
 
 
 if __name__ == "__main__":
-    app = create_app()
-    create_routes(app)
-    app.run(debug=True, host="0.0.0.0")
+    flask_application = create_app()
+    create_routes(flask_application)
+    flask_application.run(debug=True, host="0.0.0.0")
