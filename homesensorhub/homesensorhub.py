@@ -10,10 +10,13 @@ from homesensorhub.flask_data.flask_application import FlaskApp
 from homesensorhub.routing.mqtt_sender import MQTTSender
 from homesensorhub.routing.mqtt_subscriber import MQTTSubscriber
 
-from homesensorhub.sensors.BoschBME.BoschBME280.probe import ProbeBoschBME280
-from homesensorhub.sensors.BoschBME.BoschBME680.probe import ProbeBoschBME680
-from homesensorhub.sensors.TSL258x.probe import ProbeTSL258x
-from homesensorhub.sensors.RCWL0515.probe import ProbeRCWL0515
+try:
+    from homesensorhub.sensors.BoschBME.BoschBME280.probe import ProbeBoschBME280
+    from homesensorhub.sensors.BoschBME.BoschBME680.probe import ProbeBoschBME680
+    from homesensorhub.sensors.TSL258x.probe import ProbeTSL258x
+    from homesensorhub.sensors.RCWL0515.probe import ProbeRCWL0515
+except NotImplementedError:
+    print("Running on PC.")
 
 from homesensorhub.utils import logging
 logger = logging.getLogger(__name__)
@@ -30,6 +33,8 @@ class HomeSensorHub:
         logger.success("Starting HomeSensorHub ...")
         self.__initialize_stop()  # initialize stop here so we are prepared
 
+        self.__flask_application = FlaskApp()
+
         self.__mqtt_subscriber = MQTTSubscriber()
 
         probe_functions = self.__find_probe_functions()
@@ -40,6 +45,7 @@ class HomeSensorHub:
 
     def run(self):
         """Start the homesensorhub application."""
+        self.__flask_application.run()
         logger.success("Running HomeSensorHub ...")
 
         # just wait for the stop event
@@ -92,17 +98,11 @@ class HomeSensorHub:
 
         return sensors
 
-    def start_flask(self):
-        """Starts the Flask application."""
-        flask_application = FlaskApp()
-        flask_application.run()
-
 
 def main():
     """Sets up the main homesensorhub application, as well as the Flask one."""
     homesensorhub = HomeSensorHub()
     homesensorhub.run()
-    homesensorhub.start_flask()
 
 
 if __name__ == "__main__":

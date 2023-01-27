@@ -63,11 +63,7 @@ class FlaskApp:
             mqtt_form = MQTTForm()
 
             if mqtt_form.validate_on_submit():
-                address = mqtt_form.address.data
-                port = mqtt_form.port.data
-                client_id = mqtt_form.client_id.data
-                root_topic = mqtt_form.root_topic.data
-                print("Address: " + address, port, client_id, root_topic)
+                self.__configure_mqtt_data(mqtt_form)
 
             return render_template('mqtt.html', title="mqtt", form=mqtt_form)
 
@@ -81,6 +77,14 @@ class FlaskApp:
                 return redirect(url_for('home'))
 
             return render_template('login.html', title='Sign In', form=form)
+
+    def __configure_mqtt_data(self, mqtt_form: MQTTForm) -> None:
+        self.__mqtt_data = {
+            'address': mqtt_form.address.data,
+            'port': mqtt_form.port.data,
+            'client_id': mqtt_form.client_id.data,
+            'root_topic': mqtt_form.root_topic.data
+        }
 
 
 if __name__ == "__main__":
