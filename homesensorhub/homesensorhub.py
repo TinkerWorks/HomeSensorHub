@@ -68,10 +68,13 @@ class HomeSensorHub:
     def __find_probe_functions(self):
         probe_functions = []
 
-        probe_functions.append(ProbeBoschBME280.probe)
-        probe_functions.append(ProbeBoschBME680.probe)
-        probe_functions.append(ProbeTSL258x.probe)
-        probe_functions.append(ProbeRCWL0515.probe)
+        try:
+            probe_functions.append(ProbeBoschBME280.probe)
+            probe_functions.append(ProbeBoschBME680.probe)
+            probe_functions.append(ProbeTSL258x.probe)
+            probe_functions.append(ProbeRCWL0515.probe)
+        except NameError:
+            print("Running on PC")
 
         return probe_functions
 
