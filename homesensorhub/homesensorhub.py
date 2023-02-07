@@ -5,6 +5,10 @@ import sys
 from threading import Event
 from signal import signal, SIGINT, SIGTERM
 
+from homesensorhub.utils.configuration import Configuration
+from homesensorhub.utils import logging
+logger = logging.getLogger(__name__)
+
 from homesensorhub.flask_data.flask_application import FlaskApp
 
 from homesensorhub.routing.mqtt_sender import MQTTSender
@@ -18,8 +22,6 @@ try:
 except NotImplementedError:
     print("Running on PC.")
 
-from homesensorhub.utils import logging
-logger = logging.getLogger(__name__)
 
 print(sys.path)
 
