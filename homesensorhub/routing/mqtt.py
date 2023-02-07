@@ -5,6 +5,7 @@ import getpass
 import time
 
 from homesensorhub.utils import logging
+from homesensorhub.utils.configuration import Configuration
 logger = logging.getLogger(__name__)
 
 
@@ -22,13 +23,14 @@ class MQTT(metaclass=Singleton):
     """Create and hold connection through MQTT."""
     QOS = 0
 
-    def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
+    def __init__(self):
+        print("Chemat")
         self.__client = mqtt.Client()
         self.__client.enable_logger()
         self.__client.on_connect = self.on_connect
 
-        self.__broker_url = broker_url
-        self.__broker_port = broker_port
+        self.__broker_url = Configuration().entry('mqtt', 'address', default_entry_value="mqtt.tinker.haus")
+        self.__broker_port = Configuration().entry('mqtt', 'port', default_entry_value=1883)
 
         self.__hostname = socket.gethostname()
         self.__dev = getpass.getuser() + "/"
@@ -98,3 +100,4 @@ class MQTT(metaclass=Singleton):
 
     def get_qos(self):
         return MQTT.QOS
+

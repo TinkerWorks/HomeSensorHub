@@ -33,6 +33,9 @@ class HomeSensorHub:
     """
     def __init__(self):
         logger.success("Starting HomeSensorHub ...")
+        # instantiate the singleton object here
+        configuration = Configuration("./config.yaml")  # pylint:disable=unused-variable  # noqa: F841 E501
+        # TODO parametrise this as cmd argument
         self.__initialize_stop()  # initialize stop here so we are prepared
 
         self.__flask_application = FlaskApp()

@@ -7,8 +7,8 @@ logger = logging.getLogger(__name__)
 class MQTTSubscriber():
     """Implement MQTT subscribe for on the fly config."""
 
-    def __init__(self, broker_url="mqtt.tinker.haus", broker_port=1883):
-        self.__mqtt = MQTT(broker_url, broker_port)
+    def __init__(self):
+        self.__mqtt = MQTT()
         self.__topics = []
         self.__mqtt.set_message_callback(self.__on_message)
         self.__sensors = None
