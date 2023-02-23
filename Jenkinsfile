@@ -43,8 +43,6 @@ pipeline {
                             sh "env"
                             sh "pip install -r requirements.txt"
                             sh "pip install -r tests/requirements.txt"
-                            echo '... Cleaning ...'
-                            sh "git clean -xdf"
                             echo '... Testing ...'
                             sh "nose2 --with-coverage --junit-xml"
                         }
