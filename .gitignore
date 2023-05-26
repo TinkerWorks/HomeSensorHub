@@ -256,3 +256,4 @@ poetry.toml
 venv/
 # End of https://www.gitignore.io/api/vim,linux,emacs,python
 
+config.yaml
