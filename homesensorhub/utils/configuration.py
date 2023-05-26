@@ -15,7 +15,7 @@ class Singleton(type):
 class Configuration(metaclass=Singleton):
     """Implements the configuration file."""
 
-    def __init__(self, config_file: str) -> None:
+    def __init__(self, config_file: str = "./config.yaml") -> None:
         self.__config_file = config_file
         self.__config_data = self.__read()
 
@@ -64,7 +64,6 @@ class Configuration(metaclass=Singleton):
         """ Update the data in the configuration file. """
         with open(self.__config_file, "w", encoding="utf-8") as file:
             yaml.dump(self.__config_data, file, sort_keys=False)
-            print("Updated the data in the configuration file.")
 
     def __read(self) -> dict:
         """ Read the data from the configuration file.

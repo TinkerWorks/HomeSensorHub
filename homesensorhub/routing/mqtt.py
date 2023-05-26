@@ -24,14 +24,15 @@ class MQTT(metaclass=Singleton):
     QOS = 0
 
     def __init__(self):
-        print("Chemat")
         self.__client = mqtt.Client()
         self.__client.enable_logger()
         self.__client.on_connect = self.on_connect
 
-        self.__broker_url = Configuration().entry('mqtt', 'address', default_entry_value="mqtt.tinker.haus")
-        self.__broker_port = Configuration().entry('mqtt', 'port', default_entry_value=1883)
-
+        Configuration().set_callback_update('mqtt', self.update_connection)
+        self.__broker_url = Configuration().entry('mqtt', 'address',
+                                                  default_entry_value="mqtt.tinker.haus")
+        self.__broker_port = Configuration().entry('mqtt', 'port',
+                                                   default_entry_value=1883)
         self.__hostname = socket.gethostname()
         self.__dev = getpass.getuser() + "/"
         if os.getuid() == 0:
@@ -40,6 +41,12 @@ class MQTT(metaclass=Singleton):
 
         self.connect()
 
+    def update_connection(self):
+        """Update the values of the broker url and port with data from the configuration file."""
+        self.__broker_url = Configuration().entry('mqtt', 'address',
+                                                  default_entry_value="mqtt.tinker.haus")
+        self.__broker_port = Configuration().entry('mqtt', 'port',
+                                                   default_entry_value=1883)
     def connect(self):
         try:
             # connect_async has to be used instead of connect
