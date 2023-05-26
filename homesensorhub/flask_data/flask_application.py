@@ -6,6 +6,7 @@ import flask
 
 from flask import render_template, flash, redirect, url_for
 from .forms import LoginForm, MQTTForm
+from homesensorhub.utils.configuration import Configuration
 
 
 class FlaskApp:
@@ -64,6 +65,9 @@ class FlaskApp:
 
             if mqtt_form.validate_on_submit():
                 self.__configure_mqtt_data(mqtt_form)
+                flash("Succesfully updated MQTT form.", category="info")
+            else:
+                flash("Could not update MQTT form.", category="error")
 
             return render_template('mqtt.html', title="mqtt", form=mqtt_form)
 
@@ -79,12 +83,20 @@ class FlaskApp:
             return render_template('login.html', title='Sign In', form=form)
 
     def __configure_mqtt_data(self, mqtt_form: MQTTForm) -> None:
+        try:
+            validated_port = int(mqtt_form.port.data)
+        except ValueError:
+            print("The port is not an integer. Abort.")
+            #  send this message in the UI
+
         self.__mqtt_data = {
             'address': mqtt_form.address.data,
-            'port': mqtt_form.port.data,
+            'port': validated_port,
             'client_id': mqtt_form.client_id.data,
             'root_topic': mqtt_form.root_topic.data
         }
+        for section, entry in self.__mqtt_data.items():
+            Configuration().update_entry("mqtt", section, value=entry)
 
 
 if __name__ == "__main__":
