@@ -113,11 +113,11 @@ nav ul li a{
 input {
   width: 100%;
 }
-input[type=text]:focus {
+input[type=text]:focus, input[type=number]:focus {
   border: 2px solid rgb(158, 158, 158);
 }
 
-input[type=text] {
+input[type=text], input[type=number] {
   width: 100%;
   padding: 12px 20px;
   margin: 8px 0;
