@@ -88,22 +88,16 @@ class MQTT(metaclass=Singleton):
                                            retain=False)
 
             if (result[0] == mqtt.MQTT_ERR_NO_CONN):
-                logger.warn("MQTT bus unresponsive, reconnecting...")
+                logger.warning("MQTT bus unresponsive, reconnecting...")
                 self.connect()
                 time.sleep(1)
 
     def on_connect(self, client, userdata, flags, rc):
-        logger.info("MQTT connect callback called with rc = {}".format(rc))
+        logger.info("MQTT connect callback called with rc = %s", rc)
 
     def get_topic_base(self):
         """Return topic base used for publish."""
         return self.__topic_base
-
-    def get_client(self):
-        return self.__client
-
-    def get_broker_url(self):
-        return self.__broker_url
 
     def get_qos(self):
         return MQTT.QOS
