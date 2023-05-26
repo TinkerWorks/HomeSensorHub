@@ -19,7 +19,7 @@ try:
     from homesensorhub.sensors.BoschBME.BoschBME680.probe import ProbeBoschBME680
     from homesensorhub.sensors.TSL258x.probe import ProbeTSL258x
     from homesensorhub.sensors.RCWL0515.probe import ProbeRCWL0515
-except NotImplementedError:
+except (NotImplementedError, ModuleNotFoundError):
     print("Running on PC.")
 
 
