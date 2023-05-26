@@ -24,7 +24,7 @@ class FlaskApp:
         Args:
             host (str, optional): Host of the Flask application. Defaults to "0.0.0.0".
         """
-        self.__app.run(debug=True, host=host)
+        self.__app.run(debug=False, host=host)
 
     def mqtt_data(self) -> dict:
         """The MQTT configuration data extracted from the Flask application MQTT form.
