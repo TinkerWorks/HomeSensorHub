@@ -1,6 +1,9 @@
 """Module responsible with the implementation of the configuration file."""
 import yaml
 
+from homesensorhub.utils import logging
+logger = logging.getLogger(__name__)
+
 
 class Singleton(type):
     """ A metaclass that creates a Singleton base class when called. """
@@ -18,6 +21,10 @@ class Configuration(metaclass=Singleton):
     def __init__(self, config_file: str = "./config.yaml") -> None:
         self.__config_file = config_file
         self.__config_data = self.__read()
+        self.__sections_callback = {}
+
+    def set_callback_update(self, section: str, callback_function):
+        self.__sections_callback[section] = callback_function
 
     def update_entry(self, section: str, entry: str, value: str) -> None:
         """ Updates the value of the entry from the specified section.
@@ -30,6 +37,12 @@ class Configuration(metaclass=Singleton):
         # validate the entry
         self.__config_data[section][entry] = value
         self.__write()
+        logger.info("Updated %s with %s.", entry, value)
+
+        if section in self.__sections_callback:
+            self.__sections_callback[section]()
+        else:
+            logger.warning("Configuration update callback not implemented for %s", section)
 
     def section(self, section: str) -> dict:
         """ Returns the data from the requested section.

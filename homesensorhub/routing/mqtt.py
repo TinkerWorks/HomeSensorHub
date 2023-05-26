@@ -47,24 +47,24 @@ class MQTT(metaclass=Singleton):
                                                   default_entry_value="mqtt.tinker.haus")
         self.__broker_port = Configuration().entry('mqtt', 'port',
                                                    default_entry_value=1883)
-    def connect(self):
         try:
-            # connect_async has to be used instead of connect
-            # otherwise it will not reconnect on server reboot
-            connection = self.__client.connect_async(self.__broker_url,
-                                                     self.__broker_port)
-            if connection == 0:
-                logger.success("MQTT connected succesfully to {}"
-                               .format(self.__broker_url))
-            else:
-                logger.error("MQTT connection failed to {} with error code: {}"
-                             .format(self.__broker_url, connection))
+            self.__client.loop_stop()
+            self.connect()
+        except socket.gaierror as error:
+            logger.error(error)
 
+    def connect(self):
+        """Connect to the MQTT server."""
+        logger.info("Trying to connect to %s:%s...", self.__broker_url, self.__broker_port)
+        # connect_async has to be used instead of connect
+        # otherwise it will not reconnect on server reboot
+        try:
+            self.__client.connect_async(self.__broker_url,
+                                        self.__broker_port)
             self.__client.loop_start()
-            return True
-        except ConnectionRefusedError as error:
-            logger.error("MQTT connect refused: {}".format(error))
-            return False
+        except ValueError as error:
+            logger.error("MQTT connection failed to %s:%s.", self.__broker_url, self.__broker_port)
+            logger.error(error)
 
     def set_message_callback(self, callback):
         self.__client.on_message = callback
