@@ -24,6 +24,13 @@ class Configuration(metaclass=Singleton):
         self.__sections_callback = {}
 
     def set_callback_update(self, section: str, callback_function):
+        """Set the function which will be called for each section on an entry update.
+
+        Args:
+            section (str): name of the section for which the function will be called
+            callback_function (function): reference to the function which will be called when an
+                                          entry from the specified section is updated
+        """
         self.__sections_callback[section] = callback_function
 
     def update_entry(self, section: str, entry: str, value: str) -> None:
