@@ -41,8 +41,10 @@ class MQTT(metaclass=Singleton):
 
         self.connect()
 
-    def update_connection(self):
+    def update_connection(self, entry_name: str):
         """Update the values of the broker url and port with data from the configuration file."""
+        # TODO set timer
+        logger.debug("Update connection MQTT")
         self.__broker_url = Configuration().entry('mqtt', 'address',
                                                   default_entry_value="mqtt.tinker.haus")
         self.__broker_port = Configuration().entry('mqtt', 'port',

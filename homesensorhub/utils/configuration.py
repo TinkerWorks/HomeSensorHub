@@ -1,4 +1,5 @@
 """Module responsible with the implementation of the configuration file."""
+import threading
 import yaml
 
 from homesensorhub.utils import logging
@@ -18,10 +19,13 @@ class Singleton(type):
 class Configuration(metaclass=Singleton):
     """Implements the configuration file."""
 
+    UPDATE_ENTRY_COUNTDOWN = 1.0
+
     def __init__(self, config_file: str = "./config.yaml") -> None:
         self.__config_file = config_file
         self.__config_data = self.__read()
         self.__sections_callback = {}
+        self.__sections_callback_timer = {}
 
     def set_callback_update(self, section: str, callback_function):
         """Set the function which will be called for each section on an entry update.
@@ -46,8 +50,20 @@ class Configuration(metaclass=Singleton):
         self.__write()
         logger.info("Updated %s with %s.", entry, value)
 
+        # only call the section callback after a sequence of entries has been written in
+        # fast succession
+        # this is required because we don't want to spam the section callback when multiple entries
+        # have been updated at the same time
         if section in self.__sections_callback:
-            self.__sections_callback[section]()
+            logger.debug("Timer started")
+            if self.__sections_callback_timer.get(section):
+                self.__sections_callback_timer[section].cancel()
+
+            timer = threading.Timer(Configuration.UPDATE_ENTRY_COUNTDOWN,
+                                    self.__sections_callback[section],
+                                    [entry])
+            self.__sections_callback_timer[section] = timer
+            timer.start()
         else:
             logger.warning("Configuration update callback not implemented for %s", section)
 
