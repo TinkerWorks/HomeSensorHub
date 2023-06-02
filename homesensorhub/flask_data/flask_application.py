@@ -61,7 +61,8 @@ class FlaskApp:
 
         @app.route('/mqtt', methods=['GET', 'POST'])
         def mqtt():
-            mqtt_form = MQTTForm()
+            data = Configuration().section("mqtt")
+            mqtt_form = MQTTForm(data=data)
 
             if mqtt_form.validate_on_submit():
                 self.__configure_mqtt_data(mqtt_form)
