@@ -75,11 +75,11 @@ class HomeSensorHub:
 
         logger.info("Searching attached sensors ...")
         for function in probe_functions:
-            sensor_list = function(mqtt_sender.send_payload)  # TODO: Send a generic sender callback. # noqa
             try:
+                sensor_list = function(mqtt_sender.send_payload)  # TODO: Send a generic sender callback. # noqa
                 sensors += sensor_list
-            except TypeError:
-                pass
+            except Exception as e:
+                logger.error(e)
 
         return sensors
 
