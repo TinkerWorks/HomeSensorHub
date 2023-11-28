@@ -7,18 +7,21 @@ spec:
   containers:
   - name: python
     image: python:latest
+    imagePullPolicy: Always
     command:
     - sleep
     args:
     - infinity
   - name: flake8
     image: alpine/flake8
+    imagePullPolicy: Always
     command:
     - sleep
     args:
     - infinity
   - name: pylint
     image: cytopia/pylint
+    imagePullPolicy: Always
     command:
     - sleep
     args:
