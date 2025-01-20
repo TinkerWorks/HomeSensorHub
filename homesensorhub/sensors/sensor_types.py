@@ -51,7 +51,7 @@ class SensorType:
 class SensorTypePolled(Thread, SensorType):
     """Type of sensor which is polled."""
 
-    def __init__(self, pollrate=3, send_payload_callback=None, lock=None):
+    def __init__(self, pollrate=60, send_payload_callback=None, lock=None):
         Thread.__init__(self)
         SensorType.__init__(self)
 
@@ -115,7 +115,7 @@ class SensorTypeAsynchronous(SensorType):
 
 
 class SensorTypeAsyncAndPolled(SensorTypeAsynchronous, SensorTypePolled):
-    def __init__(self, pollrate=1, send_payload_callback=None):
+    def __init__(self, pollrate, send_payload_callback=None):
         SensorTypeAsynchronous.__init__(self)
         SensorTypePolled.__init__(self, pollrate, send_payload_callback)
 
@@ -133,49 +133,49 @@ class SensorTypeAsyncAndPolled(SensorTypeAsynchronous, SensorTypePolled):
 class Gas(SensorTypePolled):
     TYPE = 'gas'
 
-    def __init__(self, send_payload_callback, lock):
-        super().__init__(send_payload_callback=send_payload_callback, lock=lock)
+    def __init__(self, send_payload_callback, lock, pollrate=60):
+        super().__init__(pollrate=pollrate, send_payload_callback=send_payload_callback, lock=lock)
 
 
 class Humidity(SensorTypePolled):
     TYPE = 'humidity'
 
-    def __init__(self, send_payload_callback, lock):
-        super().__init__(send_payload_callback=send_payload_callback, lock=lock)
+    def __init__(self, send_payload_callback, lock, pollrate=60):
+        super().__init__(pollrate=pollrate, send_payload_callback=send_payload_callback, lock=lock)
 
 
 class Light(SensorTypePolled):
     TYPE = 'light'
 
-    def __init__(self, send_payload_callback, lock):
-        super().__init__(send_payload_callback=send_payload_callback, lock=lock)
+    def __init__(self, send_payload_callback, lock, pollrate=1):
+        super().__init__(pollrate=pollrate, send_payload_callback=send_payload_callback, lock=lock)
 
 
 class Pressure(SensorTypePolled):
     TYPE = 'pressure'
 
-    def __init__(self, send_payload_callback, lock):
-        super().__init__(send_payload_callback=send_payload_callback, lock=lock)
+    def __init__(self, send_payload_callback, lock, pollrate=60):
+        super().__init__(pollrate=pollrate, send_payload_callback=send_payload_callback, lock=lock)
 
 
 class Altitude(SensorTypePolled):
     TYPE = 'altitude'
 
-    def __init__(self, send_payload_callback, lock):
-        super().__init__(send_payload_callback=send_payload_callback, lock=lock)
+    def __init__(self, send_payload_callback, lock, pollrate=600):
+        super().__init__(pollrate=pollrate, send_payload_callback=send_payload_callback, lock=lock)
 
 
 class Temperature(SensorTypePolled):
     TYPE = 'temperature'
 
-    def __init__(self, send_payload_callback, lock):
-        super().__init__(send_payload_callback=send_payload_callback, lock=lock)
+    def __init__(self, send_payload_callback, lock, pollrate=60):
+        super().__init__(pollrate=pollrate, send_payload_callback=send_payload_callback, lock=lock)
 
 
 class Motion(SensorTypeAsyncAndPolled):
     TYPE = 'motion'
 
-    def __init__(self, pollrate, send_payload_callback):
+    def __init__(self, send_payload_callback, pollrate=1):
         SensorTypeAsyncAndPolled.__init__(self,
                                           pollrate=pollrate,
                                           send_payload_callback=send_payload_callback)

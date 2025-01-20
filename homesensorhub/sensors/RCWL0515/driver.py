@@ -9,14 +9,14 @@ from homesensorhub.utils import logging
 class MotionSensorRCWL0515(Motion):
     ms_dict = {}
 
-    def __init__(self, gpio, pollrate=1, callback=None):
+    def __init__(self, gpio, callback=None):
         self.logger = logging.getLogger(__name__)
         self.MOTION_GPIO = gpio
 
         # Read initial state
         self.motion = None
         self.initialize_gpio()
-        Motion.__init__(self, pollrate=pollrate, send_payload_callback=callback)
+        Motion.__init__(self, send_payload_callback=callback)
         self.__motionChanged(self.MOTION_GPIO)
 
         self.install_callback()
